@@ -18,6 +18,20 @@ public class PopupDialogAction extends AnAction {
         // Using the event, evaluate the context, and enable or disable the action.
     }
 
+    /*
+
+    Spikes
+
+    - Create
+    - Update
+    - refactor (rename of field type)
+    - Rename
+    - Delete
+       - Delete and create with same name
+    - Test Run Listener
+
+     */
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
 
@@ -29,8 +43,11 @@ public class PopupDialogAction extends AnAction {
             @Override
             public void after(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event: events) {
-                    if (event.isFromSave())
+                    if (event.isFromSave()) {
                         System.out.println("event = " + event);
+                        System.out.println("event = " + event);
+                        event.getFile();
+                    }
                 }
             }
         });
