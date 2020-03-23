@@ -87,11 +87,7 @@ https://junit.org/junit5/docs/5.4.0-RC2/user-guide/index.html#extensions-registr
  Package org.junit.jupiter.api.extension
 Interface TestWatcher
 
-in plugin.xml there is this
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
-    </extensions>
 
      */
 
@@ -115,107 +111,6 @@ in plugin.xml there is this
                 }
             }
         });
-
-        final IDEAJUnitListener junitListener = new IDEAJUnitListener() {
-            @Override
-            public void testStarted(String s, String s1) {
-
-            }
-
-            @Override
-            public void testFinished(String s, String s1) {
-                System.out.println("Spike Test run - arg 1: " + s);
-                System.out.println("Spike Test run - arg 2: " + s1);
-            }
-        };
-
-        final SMTRunnerEventsListener smtRunnerEventsListener = new SMTRunnerEventsListener() {
-            @Override
-            public void onTestingStarted(@NotNull SMTestProxy.SMRootTestProxy smRootTestProxy) {
-
-            }
-
-            @Override
-            public void onTestingFinished(@NotNull SMTestProxy.SMRootTestProxy smRootTestProxy) {
-                System.out.println("Spike testproxy:" + smRootTestProxy);
-                for (SMTestProxy test: smRootTestProxy.getAllTests()) {
-                    System.out.println("Spike Test: " + test.getName() + ", Pass: " + test.isPassed());
-                }
-            }
-
-            @Override
-            public void onTestsCountInSuite(int i) {
-
-            }
-
-            @Override
-            public void onTestStarted(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onTestFinished(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onTestFailed(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onTestIgnored(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onSuiteFinished(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onSuiteStarted(@NotNull SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onCustomProgressTestsCategory(@Nullable String s, int i) {
-
-            }
-
-            @Override
-            public void onCustomProgressTestStarted() {
-
-            }
-
-            @Override
-            public void onCustomProgressTestFailed() {
-
-            }
-
-            @Override
-            public void onCustomProgressTestFinished() {
-
-            }
-
-            @Override
-            public void onSuiteTreeNodeAdded(SMTestProxy smTestProxy) {
-
-            }
-
-            @Override
-            public void onSuiteTreeStarted(SMTestProxy smTestProxy) {
-
-            }
-        };
-
-        connection.subscribe(SMTRunnerEventsListener.TEST_STATUS, new SMTRunnerEventsAdapter() {
-                    @Override
-                    public void onTestFinished(@NotNull SMTestProxy test) {
-                        System.out.println("Spike Test: " + test.getName() + ", Pass: " + test.isPassed());
-                    }
-                }
-            );
 
     }
 
