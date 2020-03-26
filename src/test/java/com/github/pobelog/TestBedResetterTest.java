@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class TestBedResetterTest {
 
     @Test
-    public void testbedIsResetToBeAnEmptyDirectory() {
+    public void testbedIsAnEmptyDirectory() {
 
         File testbed = resetTestBed();
         assertTrue(testbed.getPath().endsWith("src/test/testbed"));
