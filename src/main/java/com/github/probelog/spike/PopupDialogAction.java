@@ -78,17 +78,6 @@ public class PopupDialogAction extends AnAction {
     public class VFileCopyEvent
   public VirtualFile getNewParent()
 
-
-  Test Run Listener
-
- junit 5 extensions - https://junit.org/junit5/docs/5.4.0-RC2/user-guide/index.html
-
-https://junit.org/junit5/docs/5.4.0-RC2/user-guide/index.html#extensions-registration-automatic
- Package org.junit.jupiter.api.extension
-Interface TestWatcher
-
-
-
      */
 
     @Override
@@ -99,11 +88,21 @@ Interface TestWatcher
         MessageBusConnection connection = ApplicationManager.getApplication().getMessageBus().connect();
 
         connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
+
+            @Override
+            public void before(@NotNull List<? extends VFileEvent> events) {
+                for (VFileEvent event : events) {
+                    System.out.println("Spike event before = " + event);
+                    VirtualFile file = event.getFile();
+                    System.out.println("Spike length before  = " + file.getLength());
+                }
+            }
             @Override
             public void after(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
-                    System.out.println("Spike event = " + event);
+                    System.out.println("Spike event after = " + event);
                     VirtualFile file = event.getFile();
+                    System.out.println("Spike length after  = " + file.getLength());
                     System.out.println("Spike canonicalPath = " + file.getCanonicalPath());
                     System.out.println("Spike name          = " + file.getName());
                     System.out.println("Spike path          = " + file.getPath());
