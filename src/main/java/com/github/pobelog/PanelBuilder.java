@@ -1,15 +1,18 @@
 package com.github.pobelog;
 
 public class PanelBuilder {
-    public void introduce(String file, String state) {
 
+    private String file, fromState, toState;
+    public void introduce(String file, String state) {
+        this.file=file;
+        fromState=state;
     }
 
     public void position(String file, String state) {
-
+        toState=state;
     }
 
     public Movement getPanel() {
-        return null;
+        return new Movement(file, fromState, toState);
     }
 }
