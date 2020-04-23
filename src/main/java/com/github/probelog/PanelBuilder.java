@@ -5,7 +5,7 @@ import java.util.*;
 public class PanelBuilder {
 
     private Map<String, String> introducedFileStates = new HashMap<>();
-    private List<String> updatedFiles = new ArrayList<>();
+    private Set<String> updatedFiles = new HashSet<>();
 
     public void introduceFile(String file, String state) {
         introducedFileStates.put(file,state);

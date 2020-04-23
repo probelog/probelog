@@ -21,6 +21,7 @@ public class PanelBuilderTest {
         builder.notifyFileChanged("file1");
         builder.introduceFile("file2","state3");
         builder.notifyFileChanged("file2");
+        builder.notifyFileChanged("file2");
         assertEquals(new HashSet(asList(new Movement("file1","state1","state2"),
                 new Movement("file2","state3","state4"))),
                 builder.getPanel(createStateRetriever(new FileState("file1", "state2"),
