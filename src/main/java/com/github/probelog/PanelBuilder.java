@@ -1,42 +1,28 @@
 package com.github.probelog;
 
-import com.github.probelog.Movement;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PanelBuilder {
 
-    private Map<String, FromTo> fileStates = new HashMap<>();
+    private Map<String, String> introducedFileStates = new HashMap<>();
+    private List<String> updatedFiles = new ArrayList<>();
 
-    public void introduce(String file, String state) {
-        fileStates.put(file,new FromTo(state));
+    public void introduceFile(String file, String state) {
+        introducedFileStates.put(file,state);
     }
 
-    public void position(String file, String state) {
-        fileStates.get(file).to=state;
+    public void notifyFileChanged(String file) {
+        updatedFiles.add(file);
     }
 
-    public Set<Movement> getPanel() {
+    public Set<Movement> getPanel(StateRetriever stateRetriever) {
 
         Set<Movement> result = new HashSet<>();
-        for (String file : fileStates.keySet()) {
-            FromTo fromTo = fileStates.get(file);
-            result.add(new Movement(file, fromTo.from, fromTo.to));
+        for (String file : updatedFiles) {
+            result.add(new Movement(file, introducedFileStates.get(file), stateRetriever.getStateForFile(file)));
         }
         return result;
 
     }
 
-    private static class FromTo{
-
-        String from, to;
-
-        public FromTo(String from) {
-            this.from = from;
-        }
-
-    }
 }
