@@ -1,4 +1,4 @@
-package com.github.pobelog;
+package com.github.probelog;
 
 import java.util.Objects;
 

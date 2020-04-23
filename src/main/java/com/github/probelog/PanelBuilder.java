@@ -1,4 +1,6 @@
-package com.github.pobelog;
+package com.github.probelog;
+
+import com.github.probelog.Movement;
 
 public class PanelBuilder {
 

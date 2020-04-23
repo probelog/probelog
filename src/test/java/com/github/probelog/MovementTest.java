@@ -1,5 +1,6 @@
-package com.github.pobelog;
+package com.github.probelog;
 
+import com.github.probelog.Movement;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
