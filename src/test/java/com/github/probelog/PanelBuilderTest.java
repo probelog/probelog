@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class PanelBuilderTest {
 
     @Test
-    public void test() {
+    public void testSinglePanel() {
 
         PanelBuilder builder = new PanelBuilder();
         builder.introduceFile("file1","state1");
@@ -22,10 +22,28 @@ public class PanelBuilderTest {
         builder.introduceFile("file2","state3");
         builder.notifyFileChanged("file2");
         builder.notifyFileChanged("file2");
-        assertEquals(new HashSet(asList(new Movement("file1","state1","state2"),
-                new Movement("file2","state3","state4"))),
+        assertEquals(createMovementSet(new Movement("file1","state1","state2"),
+                new Movement("file2","state3","state4")),
                 builder.getPanel(createStateRetriever(new FileState("file1", "state2"),
                         new FileState("file2", "state4"))));
+
+    }
+
+    private HashSet createMovementSet(Movement... movements) {
+        return new HashSet(asList(movements));
+    }
+
+    @Test
+    public void testTwoPanels() {
+
+        PanelBuilder builder = new PanelBuilder();
+        builder.introduceFile("file1","state1");
+        builder.notifyFileChanged("file1");
+        builder.getPanel(createStateRetriever(new FileState("file1", "state2")));
+
+        builder.notifyFileChanged("file1");
+        assertEquals(new HashSet(asList(new Movement("file1","state2","state3"))),
+                builder.getPanel(createStateRetriever(new FileState("file1", "state3"))));
 
     }
 

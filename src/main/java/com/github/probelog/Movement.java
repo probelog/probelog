@@ -27,4 +27,15 @@ public class Movement {
         return Objects.hash(file, fromState, toState);
     }
 
+    public String getFile() {
+        return file;
+    }
+
+    String getToState() {
+        return toState;
+    }
+
+    public String toString() {
+        return file+","+fromState+","+toState;
+    }
 }
