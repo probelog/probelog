@@ -19,4 +19,11 @@ public class Panel {
     public Panel getPrevious() {
         return previous;
     }
+
+    public String getState(String file) {
+        for(Movement movement: movements) {
+            if (movement.getFile().equals(file))
+                return
+        }
+    }
 }

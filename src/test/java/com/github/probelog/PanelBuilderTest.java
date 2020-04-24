@@ -50,6 +50,26 @@ public class PanelBuilderTest {
 
     }
 
+    @Test
+    public void testThreePanels() {
+
+        PanelBuilder builder = new PanelBuilder();
+        builder.introduceFile("file1","state1");
+        builder.notifyFileChanged("file1");
+        Panel panel1 = builder.getPanel(createStateRetriever(new FileState("file1", "state2")));
+
+        Panel panel2 = builder.getPanel(createStateRetriever(new FileState[]{}));
+        assertEquals(panel1, panel2.getPrevious());
+
+        builder.notifyFileChanged("file1");
+        Panel panel3 = builder.getPanel(createStateRetriever(new FileState("file1", "state3")));
+        assertEquals(new HashSet(asList(new Movement("file1","state2","state3"))),
+                panel2.getMovements());
+
+        assertEquals(panel2, panel3.getPrevious());
+
+    }
+
     private StubStateRetriever createStateRetriever(FileState... fileStates) {
         return new StubStateRetriever(fileStates);
     }
