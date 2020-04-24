@@ -7,6 +7,7 @@ public class PanelBuilder {
     private Map<String, String> introducedFileStates = new HashMap<>();
     private Map<String, String> previousFileStates = new HashMap<>();
     private Set<String> updatedFiles = new HashSet<>();
+    private Panel previous;
 
     public void introduceFile(String file, String state) {
         introducedFileStates.put(file, state);
@@ -16,18 +17,20 @@ public class PanelBuilder {
         updatedFiles.add(file);
     }
 
-    public Set<Movement> getPanel(StateRetriever stateRetriever) {
+    public Panel getPanel(StateRetriever stateRetriever) {
 
-        Set<Movement> result = new HashSet<>();
+        Set<Movement> movements = new HashSet<>();
         for (String file : updatedFiles) {
             if (previousFileStates.containsKey(file))
-                result.add(new Movement(file, previousFileStates.get(file), stateRetriever.getStateForFile(file)));
+                movements.add(new Movement(file, previousFileStates.get(file), stateRetriever.getStateForFile(file)));
             else
-                result.add(new Movement(file, introducedFileStates.get(file), stateRetriever.getStateForFile(file)));
+                movements.add(new Movement(file, introducedFileStates.get(file), stateRetriever.getStateForFile(file)));
         }
-        for (Movement movement: result)
+        for (Movement movement: movements)
             previousFileStates.put(movement.getFile(), movement.getToState());
         updatedFiles.clear();
+        Panel result = new Panel(previous, movements);
+        previous=result;
         return result;
 
     }

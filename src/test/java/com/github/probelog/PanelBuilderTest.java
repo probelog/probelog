@@ -22,10 +22,10 @@ public class PanelBuilderTest {
         builder.introduceFile("file2","state3");
         builder.notifyFileChanged("file2");
         builder.notifyFileChanged("file2");
+        Panel panel = builder.getPanel(createStateRetriever(new FileState("file1", "state2"),
+                new FileState("file2", "state4")));
         assertEquals(createMovementSet(new Movement("file1","state1","state2"),
-                new Movement("file2","state3","state4")),
-                builder.getPanel(createStateRetriever(new FileState("file1", "state2"),
-                        new FileState("file2", "state4"))));
+                new Movement("file2","state3","state4")),panel.getMovements());
 
     }
 
@@ -39,11 +39,14 @@ public class PanelBuilderTest {
         PanelBuilder builder = new PanelBuilder();
         builder.introduceFile("file1","state1");
         builder.notifyFileChanged("file1");
-        builder.getPanel(createStateRetriever(new FileState("file1", "state2")));
+        Panel panel1 = builder.getPanel(createStateRetriever(new FileState("file1", "state2")));
 
         builder.notifyFileChanged("file1");
+        Panel panel2 = builder.getPanel(createStateRetriever(new FileState("file1", "state3")));
         assertEquals(new HashSet(asList(new Movement("file1","state2","state3"))),
-                builder.getPanel(createStateRetriever(new FileState("file1", "state3"))));
+                panel2.getMovements());
+
+        assertEquals(panel1, panel2.getPrevious());
 
     }
 
