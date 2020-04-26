@@ -3,6 +3,7 @@ package com.github.probelog;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class FileEventTest {
 
@@ -19,6 +20,7 @@ public class FileEventTest {
         file2event2.setPrevious(file1event2);
         assertEquals(file1event1, file1event2.getOlderSibling());
         assertEquals(file2event1, file2event2.getOlderSibling());
+        assertNull(file2event1.getOlderSibling());
 
     }
 

@@ -18,7 +18,7 @@ public class FileEvent {
     }
 
     private FileEvent findOlderSibling(String file) {
-        return this.file.equals(file) ? this : previous.findOlderSibling(file);
+        return this.file.equals(file) ? this : previous!=null ? previous.findOlderSibling(file) : null;
     }
 
 }
