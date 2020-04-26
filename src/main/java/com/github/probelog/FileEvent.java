@@ -2,7 +2,7 @@ package com.github.probelog;
 
 public class FileEvent {
 
-    FileEvent previous;
+    private FileEvent previous;
 
     public FileEvent(String file) {
 
@@ -13,6 +13,7 @@ public class FileEvent {
     }
 
     public FileEvent getOlderSibling() {
-        return previous;
+        return previous==null ? this : previous.getOlderSibling();
     }
+
 }
