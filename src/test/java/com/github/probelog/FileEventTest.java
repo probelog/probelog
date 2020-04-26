@@ -21,6 +21,7 @@ public class FileEventTest {
         assertEquals(file1event1, file1event2.getOlderSibling());
         assertEquals(file2event1, file2event2.getOlderSibling());
         assertNull(file2event1.getOlderSibling());
+        assertNull(file1event1.getOlderSibling());
 
     }
 
