@@ -21,7 +21,7 @@ public class FileStateTest {
         file2state1.setPrevious(file1state1);
         file1state2.setPrevious(file2state1);
         file2state2.setPrevious(file1state2);
-        assertEquals(new HashSet<>(asList(file2state2, file1state2)),file2state2.findLatestVersions());
+        assertEquals(asList(file2state2, file1state2),file2state2.findLatestVersions());
 
     }
 
