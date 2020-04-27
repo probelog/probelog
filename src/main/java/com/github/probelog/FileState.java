@@ -19,42 +19,17 @@ public class FileState {
 
     public List<FileState> findLatestVersions() {
 
-        Map<String, OrderedFileState> youngestVersionsMap = new HashMap<>();
+        LinkedHashMap<String, FileState> youngestVersionsMap = new LinkedHashMap<>();
         collectYoungestVersions(youngestVersionsMap, 1);
-        return sortChronologically(youngestVersionsMap);
+        return new ArrayList<>(youngestVersionsMap.values());
 
     }
 
-    @NotNull
-    private List<FileState> sortChronologically(Map<String, OrderedFileState> youngestVersionsMap) {
-        List<OrderedFileState> orderedFileStates = new ArrayList<>(youngestVersionsMap.values());
-        Collections.sort(orderedFileStates);
-        List<FileState> result = new ArrayList<>();
-        for (OrderedFileState orderedFileState : orderedFileStates)
-            result.add(orderedFileState.fileState);
-        return result;
-    }
-
-    private void collectYoungestVersions(Map<String, OrderedFileState> youngestVersionsMap, int order) {
+    private void collectYoungestVersions(Map<String, FileState> youngestVersionsMap, int order) {
         if (!youngestVersionsMap.containsKey(file))
-            youngestVersionsMap.put(file, new OrderedFileState(order++, this));
+            youngestVersionsMap.put(file, this);
         if (previous != null)
             previous.collectYoungestVersions(youngestVersionsMap, order);
     }
 
-    private static class OrderedFileState implements Comparable<OrderedFileState> {
-
-        Integer order;
-        FileState fileState;
-
-        public OrderedFileState(int order, FileState fileState) {
-            this.order = order;
-            this.fileState = fileState;
-        }
-
-        @Override
-        public int compareTo(@NotNull OrderedFileState o) {
-            return order.compareTo(o.order);
-        }
-    }
 }
