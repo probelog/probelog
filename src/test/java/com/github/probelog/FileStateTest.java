@@ -2,9 +2,9 @@ package com.github.probelog;
 
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -21,7 +21,7 @@ public class FileStateTest {
         file2state1.setPrevious(file1state1);
         file1state2.setPrevious(file2state1);
         file2state2.setPrevious(file1state2);
-        assertEquals(new HashSet<FileState>(Arrays.asList(file2state2, file1state2)),file2state2.findYoungestVersions());
+        assertEquals(new HashSet<>(asList(file2state2, file1state2)),file2state2.findLatestVersions());
 
     }
 

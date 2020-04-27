@@ -18,7 +18,7 @@ public class FileState {
         this.previous=previous;
     }
 
-    public Set<FileState> findYoungestVersions() {
+    public Set<FileState> findLatestVersions() {
         Map<String, FileState> youngestVersionsMap = new HashMap<>();
         collectYoungestVersions(youngestVersionsMap);
         return new HashSet<>(youngestVersionsMap.values());
