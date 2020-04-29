@@ -11,4 +11,8 @@ public class FileEvent {
     public FileEvent previousEvent() {
         return previous;
     }
+
+    public FileEvent previousEventForFile() {
+        return previous.previousEvent();
+    }
 }
