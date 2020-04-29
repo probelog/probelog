@@ -9,37 +9,45 @@ import static org.junit.Assert.assertNull;
 public class Linking {
 
     private Linker linker;
-    private FileEvent event1__UpdateToFileA;
-    private FileEvent event2__UpdateToFileB;
-    private FileEvent event3__UpdateToFileA;
+    private FileEvent event1__Update1__ToFileA;
+    private FileEvent event2__Update1__ToFileB;
+    private FileEvent event3__Update2__ToFileA;
 
     @Before
     public void setUp() {
+
         linker = new Linker();
 
-        event1__UpdateToFileA = linker.addFileUpdate("fileA");
-        event2__UpdateToFileB = linker.addFileUpdate("fileB");
-        event3__UpdateToFileA = linker.addFileUpdate("fileA");
+        event1__Update1__ToFileA = linker.addFileUpdate("fileA");
+        event2__Update1__ToFileB = linker.addFileUpdate("fileB");
+        event3__Update2__ToFileA = linker.addFileUpdate("fileA");
 
     }
 
     @Test
     public void basicLinking() {
 
-        assertNull(event1__UpdateToFileA.previousEvent());
-        assertEquals(event1__UpdateToFileA,event2__UpdateToFileB.previousEvent());
+        assertNull(event1__Update1__ToFileA.previousEvent());
+        assertEquals(event1__Update1__ToFileA,event2__Update1__ToFileB.previousEvent());
 
     }
 
     @Test
     public void linkedUpdates() {
 
-        assertEquals(event1__UpdateToFileA,event3__UpdateToFileA.previousEventForFile());
+        assertEquals(event1__Update1__ToFileA,event3__Update2__ToFileA.previousEventForFile());
 
     }
 
+    @Test
+    public void initialStates() {
 
-    // Initial State Event
+/*        FileEvent intialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
+        assertEquals("fileB", intialEventForFileB.subject());
+        assertEquals(FileEvent.INITIAL, intialEventForFileB.type());*/
+
+    }
+
     // Linking a rename
     // Create
     // Recreate (Delete then Create)
