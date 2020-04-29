@@ -2,9 +2,11 @@ package com.github.probelog;
 
 public class FileEvent {
 
+    String file;
     FileEvent previous;
 
-    FileEvent(FileEvent previous) {
+    FileEvent(String file, FileEvent previous) {
+        this.file=file;
         this.previous = previous;
     }
 
@@ -13,6 +15,10 @@ public class FileEvent {
     }
 
     public FileEvent previousEventForFile() {
-        return previous.previousEvent();
+        return previous.findEventForFile(file);
+    }
+
+    private FileEvent findEventForFile(String file) {
+        return this.file.equals(file) ? this : previous.findEventForFile(file);
     }
 }

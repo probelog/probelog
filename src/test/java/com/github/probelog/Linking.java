@@ -13,7 +13,6 @@ public class Linking {
     private FileEvent event2__UpdateToFileB;
     private FileEvent event3__UpdateToFileA;
 
-
     @Before
     public void setUp() {
         linker = new Linker();
@@ -36,6 +35,7 @@ public class Linking {
     public void linkedUpdates() {
 
         assertEquals(event1__UpdateToFileA,event3__UpdateToFileA.previousEventForFile());
+        assertEquals(event3__UpdateToFileA,linker.addFileUpdate("fileA").previousEventForFile());
 
     }
 
