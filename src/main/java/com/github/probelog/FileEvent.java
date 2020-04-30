@@ -14,13 +14,18 @@ public class FileEvent {
     private Type type;
     private FileEvent previousEventForFile;
 
-    FileEvent(String file, FileEvent previous) {
-        this(file, previous, Type.UPDATE);
+    FileEvent(String file) {
+        this(file, null, null, Type.INITIAL);
     }
 
-    FileEvent(String file, FileEvent previous, Type type) {
+    FileEvent(String file, FileEvent previous, FileEvent previousEventForFile) {
+        this(file, previous, previousEventForFile, Type.UPDATE);
+    }
+
+    FileEvent(String file, FileEvent previous, FileEvent previousEventForFile, Type type) {
         this.file=file;
         this.previous = previous;
+        this.previousEventForFile = previousEventForFile;
         this.type= type;
     }
 
@@ -29,19 +34,11 @@ public class FileEvent {
     }
 
     public FileEvent previousEventForFile() {
-        if (previousEventForFile!=null)
-            return previousEventForFile;
-        previousEventForFile = previous==null ? getInitialState(file) : previous.findEventForFile(file);
         return previousEventForFile;
     }
 
-    private FileEvent findEventForFile(String file) {
-        return this.file.equals(file) ? this : previous == null ? getInitialState(file) : previous.findEventForFile(file);
-    }
-
-    @NotNull
-    private FileEvent getInitialState(String file) {
-        return new FileEvent(file, null, Type.INITIAL);
+    public FileEvent findEventForFile(String file) {
+        return this.file.equals(file) ? this : previous == null ? null : previous.findEventForFile(file);
     }
 
     public String subject() {
