@@ -55,14 +55,6 @@ public class Linking {
     }
 
     @Test
-    public void initialStateForInitialEvent() {
-
-        FileEvent initialEventForFileA = event1__Update1__ToFileA.previousEventForFile();
-        assertEquals(INITIAL, initialEventForFileA.type());
-
-    }
-
-    @Test
     public void initialStatesArePermenant() {
 
         assertEquals(event1__Update1__ToFileA.previousEventForFile(), event1__Update1__ToFileA.previousEventForFile());
