@@ -1,8 +1,10 @@
 package com.github.probelog;
 
+import com.github.probelog.FileEvent.Type;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.github.probelog.FileEvent.Type.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -42,11 +44,15 @@ public class Linking {
     @Test
     public void initialStates() {
 
-/*        FileEvent intialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
+        FileEvent intialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
         assertEquals("fileB", intialEventForFileB.subject());
-        assertEquals(FileEvent.INITIAL, intialEventForFileB.type());*/
+        assertEquals(INITIAL, intialEventForFileB.type());
 
     }
+
+    // Initial for very first event
+    // Not all events are initial !
+    // Make initial permanent
 
     // Linking a rename
     // Create
