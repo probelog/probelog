@@ -1,7 +1,5 @@
 package com.github.probelog;
 
-import org.jetbrains.annotations.NotNull;
-
 public class FileEvent {
 
     enum Type {
@@ -10,21 +8,15 @@ public class FileEvent {
     }
 
     private int sequence;
-    private Type type;
     private FileEvent previousEventForFile;
 
     FileEvent() {
-        this( 0, null, Type.INITIAL);
+        this( 0, null);
     }
 
     FileEvent(int sequence, FileEvent previousEventForFile) {
-        this(sequence, previousEventForFile, Type.UPDATE);
-    }
-
-    FileEvent(int sequence, FileEvent previousEventForFile, Type type) {
         this.sequence = sequence;
         this.previousEventForFile = previousEventForFile;
-        this.type= type;
     }
 
     public FileEvent previousEventForFile() {
@@ -32,7 +24,7 @@ public class FileEvent {
     }
 
     public Type type() {
-        return type;
+        return sequence==0 ? Type.INITIAL : Type.UPDATE;
     }
 
     public int sequence() {
