@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class Linker {
 
-    private FileEvent head;
+    private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
 
     public FileEvent addFileUpdate(String file) {
 
         FileEvent previousEventForFile = fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : createInitialState(file);
-        head = new FileEvent(head, previousEventForFile!=null ? previousEventForFile : createInitialState(file));
-        fileEventsMap.put(file, head);
-        return head;
+        FileEvent result = new FileEvent(sequence++, previousEventForFile!=null ? previousEventForFile : createInitialState(file));
+        fileEventsMap.put(file, result);
+        return result;
 
     }
 

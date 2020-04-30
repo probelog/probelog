@@ -9,26 +9,22 @@ public class FileEvent {
         UPDATE
     }
 
-    private FileEvent previous;
+    private int sequence;
     private Type type;
     private FileEvent previousEventForFile;
 
     FileEvent() {
-        this( null, null, Type.INITIAL);
+        this( 0, null, Type.INITIAL);
     }
 
-    FileEvent(FileEvent previous, FileEvent previousEventForFile) {
-        this(previous, previousEventForFile, Type.UPDATE);
+    FileEvent(int sequence, FileEvent previousEventForFile) {
+        this(sequence, previousEventForFile, Type.UPDATE);
     }
 
-    FileEvent(FileEvent previous, FileEvent previousEventForFile, Type type) {
-        this.previous = previous;
+    FileEvent(int sequence, FileEvent previousEventForFile, Type type) {
+        this.sequence = sequence;
         this.previousEventForFile = previousEventForFile;
         this.type= type;
-    }
-
-    public FileEvent previousEvent() {
-        return previous;
     }
 
     public FileEvent previousEventForFile() {
@@ -37,5 +33,9 @@ public class FileEvent {
 
     public Type type() {
         return type;
+    }
+
+    public int sequence() {
+        return sequence;
     }
 }

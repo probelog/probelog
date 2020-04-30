@@ -32,10 +32,10 @@ public class Linking {
     }
 
     @Test
-    public void basicLinking() {
+    public void sequencing() {
 
-        assertNull(event1__Update1__ToFileA.previousEvent());
-        assertEquals(event1__Update1__ToFileA,event2__Update1__ToFileB.previousEvent());
+        assertEquals(1,event1__Update1__ToFileA.sequence());
+        assertEquals(2,event2__Update1__ToFileB.sequence());
 
     }
 
