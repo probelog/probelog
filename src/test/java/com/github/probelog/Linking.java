@@ -42,11 +42,20 @@ public class Linking {
     }
 
     @Test
-    public void initialStates() {
+    public void initialState() {
 
-        FileEvent intialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
-        assertEquals("fileB", intialEventForFileB.subject());
-        assertEquals(INITIAL, intialEventForFileB.type());
+        FileEvent initialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
+        assertEquals("fileB", initialEventForFileB.subject());
+        assertEquals(INITIAL, initialEventForFileB.type());
+
+    }
+
+    @Test
+    public void initialForInitialEvent() {
+
+        FileEvent initialEventForFileA = event1__Update1__ToFileA.previousEventForFile();
+        assertEquals("fileA", initialEventForFileA.subject());
+        assertEquals(INITIAL, initialEventForFileA.type());
 
     }
 

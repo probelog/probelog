@@ -21,7 +21,7 @@ public class FileEvent {
     }
 
     public FileEvent previousEventForFile() {
-        FileEvent previousEventForFile = previous.findEventForFile(file);
+        FileEvent previousEventForFile = previous==null ? null : previous.findEventForFile(file);
         return previousEventForFile != null ? previousEventForFile : new FileEvent(file, null);
     }
 
