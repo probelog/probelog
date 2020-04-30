@@ -66,4 +66,6 @@ public class Linking {
     // Recreate (Delete then Create)
     // Create a file name that existed before it was renamed
 
+    // linker creates TestRun with fileeventmap elements that have been added/change since last testrun creation - testrun has link to previoustestrun
+
 }
