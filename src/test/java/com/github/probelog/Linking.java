@@ -51,7 +51,7 @@ public class Linking {
     }
 
     @Test
-    public void initialForInitialEvent() {
+    public void initialStateForInitialEvent() {
 
         FileEvent initialEventForFileA = event1__Update1__ToFileA.previousEventForFile();
         assertEquals("fileA", initialEventForFileA.subject());
@@ -59,7 +59,13 @@ public class Linking {
 
     }
 
-    // Initial for very first event
+    @Test
+    public void initialStatesArePermenant() {
+
+        assertEquals(event1__Update1__ToFileA.previousEventForFile(), event1__Update1__ToFileA.previousEventForFile());
+
+    }
+
     // Not all events are initial !
     // Make initial permanent
 

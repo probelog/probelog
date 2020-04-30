@@ -1,5 +1,7 @@
 package com.github.probelog;
 
+import org.jetbrains.annotations.NotNull;
+
 public class FileEvent {
 
     enum Type {
@@ -9,6 +11,7 @@ public class FileEvent {
     private String file;
     private FileEvent previous;
     private Type type;
+    private FileEvent initialState;
 
     FileEvent(String file, FileEvent previous) {
         this.file=file;
@@ -22,7 +25,14 @@ public class FileEvent {
 
     public FileEvent previousEventForFile() {
         FileEvent previousEventForFile = previous==null ? null : previous.findEventForFile(file);
-        return previousEventForFile != null ? previousEventForFile : new FileEvent(file, null);
+        return previousEventForFile != null ? previousEventForFile : getInitialState();
+    }
+
+    @NotNull
+    private FileEvent getInitialState() {
+        if (initialState==null)
+            initialState = new FileEvent(file, null);
+        return initialState;
     }
 
     private FileEvent findEventForFile(String file) {
