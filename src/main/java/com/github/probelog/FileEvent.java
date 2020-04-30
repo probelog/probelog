@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 public class FileEvent {
 
     enum Type {
-        INITIAL
+        INITIAL,
+        UPDATE
     }
 
     private String file;
@@ -14,9 +15,13 @@ public class FileEvent {
     private FileEvent initialState;
 
     FileEvent(String file, FileEvent previous) {
+        this(file, previous, Type.UPDATE);
+    }
+
+    FileEvent(String file, FileEvent previous, Type type) {
         this.file=file;
         this.previous = previous;
-        type= Type.INITIAL;
+        this.type= type;
     }
 
     public FileEvent previousEvent() {
@@ -28,15 +33,15 @@ public class FileEvent {
         return previousEventForFile != null ? previousEventForFile : getInitialState();
     }
 
+    private FileEvent findEventForFile(String file) {
+        return this.file.equals(file) ? this : previous == null ? null : previous.findEventForFile(file);
+    }
+
     @NotNull
     private FileEvent getInitialState() {
         if (initialState==null)
-            initialState = new FileEvent(file, null);
+            initialState = new FileEvent(file, null, Type.INITIAL);
         return initialState;
-    }
-
-    private FileEvent findEventForFile(String file) {
-        return this.file.equals(file) ? this : previous == null ? null : previous.findEventForFile(file);
     }
 
     public String subject() {

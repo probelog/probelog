@@ -27,6 +27,11 @@ public class Linking {
     }
 
     @Test
+    public void updateEvent() {
+        assertEquals(UPDATE, event1__Update1__ToFileA.type());
+    }
+
+    @Test
     public void basicLinking() {
 
         assertNull(event1__Update1__ToFileA.previousEvent());
@@ -65,9 +70,6 @@ public class Linking {
         assertEquals(event1__Update1__ToFileA.previousEventForFile(), event1__Update1__ToFileA.previousEventForFile());
 
     }
-
-    // Not all events are initial !
-    // Make initial permanent
 
     // Linking a rename
     // Create
