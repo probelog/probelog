@@ -50,7 +50,6 @@ public class Linking {
     public void initialState() {
 
         FileEvent initialEventForFileB = event2__Update1__ToFileB.previousEventForFile();
-        assertEquals("fileB", initialEventForFileB.subject());
         assertEquals(INITIAL, initialEventForFileB.type());
 
     }
@@ -59,7 +58,6 @@ public class Linking {
     public void initialStateForInitialEvent() {
 
         FileEvent initialEventForFileA = event1__Update1__ToFileA.previousEventForFile();
-        assertEquals("fileA", initialEventForFileA.subject());
         assertEquals(INITIAL, initialEventForFileA.type());
 
     }
