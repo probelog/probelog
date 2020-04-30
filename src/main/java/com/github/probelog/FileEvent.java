@@ -31,20 +31,17 @@ public class FileEvent {
     public FileEvent previousEventForFile() {
         if (previousEventForFile!=null)
             return previousEventForFile;
-
-        previousEventForFile = previous==null ? null : previous.findEventForFile(file);
-        return previousEventForFile != null ? previousEventForFile : getInitialState();
+        previousEventForFile = previous==null ? getInitialState(file) : previous.findEventForFile(file);
+        return previousEventForFile;
     }
 
     private FileEvent findEventForFile(String file) {
-        return this.file.equals(file) ? this : previous == null ? null : previous.findEventForFile(file);
+        return this.file.equals(file) ? this : previous == null ? getInitialState(file) : previous.findEventForFile(file);
     }
 
     @NotNull
-    private FileEvent getInitialState() {
-        if (previousEventForFile ==null)
-            previousEventForFile = new FileEvent(file, null, Type.INITIAL);
-        return previousEventForFile;
+    private FileEvent getInitialState(String file) {
+        return new FileEvent(file, null, Type.INITIAL);
     }
 
     public String subject() {
