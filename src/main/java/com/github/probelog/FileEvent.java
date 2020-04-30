@@ -12,7 +12,7 @@ public class FileEvent {
     private String file;
     private FileEvent previous;
     private Type type;
-    private FileEvent initialState;
+    private FileEvent previousEventForFile;
 
     FileEvent(String file, FileEvent previous) {
         this(file, previous, Type.UPDATE);
@@ -29,7 +29,10 @@ public class FileEvent {
     }
 
     public FileEvent previousEventForFile() {
-        FileEvent previousEventForFile = previous==null ? null : previous.findEventForFile(file);
+        if (previousEventForFile!=null)
+            return previousEventForFile;
+
+        previousEventForFile = previous==null ? null : previous.findEventForFile(file);
         return previousEventForFile != null ? previousEventForFile : getInitialState();
     }
 
@@ -39,9 +42,9 @@ public class FileEvent {
 
     @NotNull
     private FileEvent getInitialState() {
-        if (initialState==null)
-            initialState = new FileEvent(file, null, Type.INITIAL);
-        return initialState;
+        if (previousEventForFile ==null)
+            previousEventForFile = new FileEvent(file, null, Type.INITIAL);
+        return previousEventForFile;
     }
 
     public String subject() {
