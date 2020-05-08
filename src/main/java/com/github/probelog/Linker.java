@@ -25,10 +25,7 @@ public class Linker {
     }
 
     private FileEvent getPreviousEventForFile(String file) {
-        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : createInitialState();
+        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent();
     }
 
-    private static FileEvent createInitialState() {
-        return new FileEvent();
-    }
 }
