@@ -20,4 +20,10 @@ public class Linker {
     private static FileEvent createInitialState(String file) {
         return new FileEvent();
     }
+
+    public FileEvent addFileRename(String fromFile, String toFile) {
+        FileEvent result = new FileEvent(sequence++, fileEventsMap.get(fromFile));
+        fileEventsMap.put(toFile, result);
+        return result;
+    }
 }

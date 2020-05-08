@@ -15,6 +15,7 @@ public class Linking {
     private FileEvent event2__Update1__ToFileB;
     private FileEvent event3__Update2__ToFileA;
 
+
     @Before
     public void setUp() {
 
@@ -61,7 +62,16 @@ public class Linking {
 
     }
 
-    // Linking a rename
+    @Test
+    public void rename() {
+
+        FileEvent event4__RenameFileBtoFileC = linker.addFileRename("fileB","fileC");
+        FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
+        assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.previousEventForFile());
+        assertEquals(event4__RenameFileBtoFileC, event5__Update2_ToFileC.previousEventForFile());
+
+    }
+
     // Create
     // Recreate (Delete then Create)
     // Create a file name that existed before it was renamed
