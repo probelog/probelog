@@ -72,6 +72,13 @@ public class Linking {
 
     }
 
+    @Test
+    public void renameIsFirstEventForFileCausesInitialEventCreation() {
+
+        assertEquals(INITIAL, linker.addFileRename("fileC","fileD").previousEventForFile().type());
+
+    }
+
     // Create
     // Recreate (Delete then Create)
     // Create a file name that existed before it was renamed

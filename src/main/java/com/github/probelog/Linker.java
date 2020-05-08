@@ -10,20 +10,25 @@ public class Linker {
 
     public FileEvent addFileUpdate(String file) {
 
-        FileEvent previousEventForFile = fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : createInitialState(file);
-        FileEvent result = new FileEvent(sequence++, previousEventForFile!=null ? previousEventForFile : createInitialState(file));
+        FileEvent result = new FileEvent(sequence++, getPreviousEventForFile(file));
         fileEventsMap.put(file, result);
         return result;
 
     }
 
-    private static FileEvent createInitialState(String file) {
-        return new FileEvent();
-    }
-
     public FileEvent addFileRename(String fromFile, String toFile) {
-        FileEvent result = new FileEvent(sequence++, fileEventsMap.get(fromFile));
+
+        FileEvent result = new FileEvent(sequence++, getPreviousEventForFile(fromFile));
         fileEventsMap.put(toFile, result);
         return result;
+
+    }
+
+    private FileEvent getPreviousEventForFile(String file) {
+        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : createInitialState();
+    }
+
+    private static FileEvent createInitialState() {
+        return new FileEvent();
     }
 }
