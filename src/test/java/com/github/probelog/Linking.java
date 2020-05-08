@@ -79,6 +79,7 @@ public class Linking {
 
     }
 
+    // Add in RENAME event type
     // Create
     // Recreate (Delete then Create)
     // Create a file name that existed before it was renamed
