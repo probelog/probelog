@@ -67,6 +67,7 @@ public class Linking {
 
         FileEvent event4__RenameFileBtoFileC = linker.addFileRename("fileB","fileC");
         FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
+        assertEquals(RENAME, event4__RenameFileBtoFileC.type());
         assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.previousEventForFile());
         assertEquals(event4__RenameFileBtoFileC, event5__Update2_ToFileC.previousEventForFile());
 
@@ -89,10 +90,8 @@ public class Linking {
         catch(IllegalStateException e) {
             assertEquals("fileB " + Linker.ALREADY_EXISTS,e.getMessage());
         }
+
     }
-
-
-    // So rename expect the the to file not to be there (throw exception if not), move expects the file to be there and if not creates an initial state
     // Rename Type
 
     // Move

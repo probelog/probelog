@@ -11,7 +11,7 @@ public class Linker {
 
     public FileEvent addFileUpdate(String file) {
 
-        FileEvent result = new FileEvent(sequence++, getPreviousEventForFile(file));
+        FileEvent result = new FileEvent(file, sequence++, getPreviousEventForFile(file));
         fileEventsMap.put(file, result);
         return result;
 
@@ -22,7 +22,7 @@ public class Linker {
         if (fileEventsMap.containsKey(toFile))
             throw new IllegalStateException(toFile + " " + ALREADY_EXISTS);
 
-        FileEvent result = new FileEvent(sequence++, getPreviousEventForFile(fromFile));
+        FileEvent result = new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile));
         fileEventsMap.put(toFile, result);
         return result;
 

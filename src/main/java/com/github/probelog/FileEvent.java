@@ -4,17 +4,20 @@ public class FileEvent {
 
     enum Type {
         INITIAL,
+        RENAME,
         UPDATE
     }
 
+    private String file;
     private int sequence;
     private FileEvent previousEventForFile;
 
     FileEvent() {
-        this( 0, null);
+        this(null,  0, null);
     }
 
-    FileEvent(int sequence, FileEvent previousEventForFile) {
+    FileEvent(String file, int sequence, FileEvent previousEventForFile) {
+        this.file=file;
         this.sequence = sequence;
         this.previousEventForFile = previousEventForFile;
     }
@@ -24,7 +27,7 @@ public class FileEvent {
     }
 
     public Type type() {
-        return sequence==0 ? Type.INITIAL : Type.UPDATE;
+        return sequence==0 ? Type.INITIAL : !(file.equals(previousEventForFile.file)) ? Type.RENAME : Type.UPDATE;
     }
 
     public int sequence() {
