@@ -79,14 +79,29 @@ public class Linking {
 
     }
 
+    @Test
+    public void invalidRename() {
+
+        try {
+            linker.addFileRename("fileD","fileB");
+            assert false;
+        }
+        catch(IllegalStateException e) {
+            assertEquals("fileB " + Linker.ALREADY_EXISTS,e.getMessage());
+        }
+    }
+
 
     // So rename expect the the to file not to be there (throw exception if not), move expects the file to be there and if not creates an initial state
-    // move/rename causes 2 initial file states if both files have not been mentioned to date
+    // Rename Type
 
-    // Add in RENAME event type
+    // Move
+    // movecauses 2 initial file states if both files have not been mentioned to date
+
     // Create
+    // Delete
     // Recreate (Delete then Create)
-    // Create a file name that existed before it was renamed
+    // Recreate through Rename(Delete then Rename to deleted name)
 
     // linker creates TestRun with fileeventmap elements that have been added/change since last testrun creation - testrun has link to previoustestrun
 

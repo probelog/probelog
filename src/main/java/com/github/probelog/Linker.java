@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Linker {
 
+    public static final String ALREADY_EXISTS = "already exists";
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
 
@@ -17,6 +18,9 @@ public class Linker {
     }
 
     public FileEvent addFileRename(String fromFile, String toFile) {
+
+        if (fileEventsMap.containsKey(toFile))
+            throw new IllegalStateException(toFile + " " + ALREADY_EXISTS);
 
         FileEvent result = new FileEvent(sequence++, getPreviousEventForFile(fromFile));
         fileEventsMap.put(toFile, result);
