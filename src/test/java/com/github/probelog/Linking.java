@@ -95,13 +95,27 @@ public class Linking {
 
     }
 
-    // Move
+    @Test
+    public void move() {
+
+/*
+        FileEvent event4__MoveFileBtoFileA = linker.addFileMove("fileB","fileA");
+        assertEquals(MOVE, event4__MoveFileBtoFileA.type());
+        assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
+        assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
+*/
+
+    }
+
+
     // movecauses 2 initial file states if both files have not been mentioned to date
 
     // Create
+    // Create After Moving/Renaming the file - previous event is the move rename
     // Delete
     // Recreate (Delete then Create)
     // Recreate through Rename(Delete then Rename to deleted name)
+
 
     // linker creates TestRun with fileeventmap elements that have been added/change since last testrun creation - testrun has link to previoustestrun
 
