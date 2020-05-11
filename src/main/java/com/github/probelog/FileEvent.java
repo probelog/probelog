@@ -12,8 +12,8 @@ public class FileEvent {
     private int sequence;
     private FileEvent previousEventForFile;
 
-    FileEvent() {
-        this(null,  0, null);
+    FileEvent(String file) {
+        this(file,  0, null);
     }
 
     FileEvent(String file, int sequence, FileEvent previousEventForFile) {

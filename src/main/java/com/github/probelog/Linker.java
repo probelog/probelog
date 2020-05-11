@@ -29,7 +29,7 @@ public class Linker {
     }
 
     private FileEvent getPreviousEventForFile(String file) {
-        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent();
+        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent(file);
     }
 
 }
