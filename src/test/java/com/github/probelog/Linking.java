@@ -76,7 +76,9 @@ public class Linking {
     @Test
     public void renameIsFirstEventForFileCausesInitialEventCreation() {
 
-        assertEquals(INITIAL, linker.addFileRename("fileC","fileD").previousEventForFile().type());
+        FileEvent renameEvent = linker.addFileRename("fileC","fileD");
+        assertEquals(RENAME, renameEvent.type());
+        assertEquals(INITIAL, renameEvent.previousEventForFile().type());
 
     }
 
@@ -92,7 +94,6 @@ public class Linking {
         }
 
     }
-    // Rename Type
 
     // Move
     // movecauses 2 initial file states if both files have not been mentioned to date
