@@ -80,9 +80,9 @@ public class Linking {
     }
 
 
-
-
     // So rename expect the the to file not to be there (throw exception if not), move expects the file to be there and if not creates an initial state
+    // move/rename causes 2 initial file states if both files have not been mentioned to date
+
     // Add in RENAME event type
     // Create
     // Recreate (Delete then Create)
