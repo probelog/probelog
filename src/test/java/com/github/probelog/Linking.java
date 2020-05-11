@@ -79,6 +79,15 @@ public class Linking {
 
     }
 
+    // The semantics of move and rename only make sense in light of to file existing (move) or not existing (rename)
+    // You have to pass in state if first time file is being referenced, e.g. on first update
+    // Rename V Move (rename throws exception if to file already exists, move throws exception if to file does not exist and no state passed for to file)
+
+    // So key thing - state not needed for all FileEvents but for the thing to work need a starting state for each file and that should
+    // enforced/very clear from interface
+    // so client needs a query to check if file is in log and we need an initialise State for file method
+
+    // So rename expect the the to file not to be there, move expects the file to be there or else state to be passed through
     // Add in RENAME event type
     // Create
     // Recreate (Delete then Create)
