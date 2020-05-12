@@ -108,6 +108,7 @@ public class Linking {
     }
 
 
+    // 1. Complete Linking
     // movecauses 2 initial file states if both files have not been mentioned to date
 
     // Create
@@ -116,7 +117,8 @@ public class Linking {
     // Recreate (Delete then Create)
     // Recreate through Rename(Delete then Rename to deleted name)
 
+    // 2. linker can return all the FileEvents from its map (i.e. all the heads) that have been created since a certain sequence number (time) - thats all Test Run needs
 
-    // linker creates TestRun with fileeventmap elements that have been added/change since last testrun creation - testrun has link to previoustestrun
 
+    // 3. Change Algebra - Change fileEvent.change(sequence) includes file states (i.e. if state same after a sequence of file Events then no change!)
 }
