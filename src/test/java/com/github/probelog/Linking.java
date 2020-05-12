@@ -105,6 +105,21 @@ public class Linking {
 
     }
 
+    @Test
+    public void moveToEventlessFile() {
+
+        assertEquals(INITIAL, linker.addFileMove("fileB","fileC").previousEventForFile().type());
+
+    }
+
+    @Test
+    public void moveFromEventlessFile() {
+
+        assertEquals(INITIAL, linker.addFileMove("fileZ","fileC").movedFromFile().type());
+
+    }
+
+
 
     // 1. Complete Linking
     // movecauses 2 initial file states if both files have not been mentioned to date
