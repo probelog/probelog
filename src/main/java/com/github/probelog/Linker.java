@@ -32,4 +32,9 @@ public class Linker {
         return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent(file);
     }
 
+    public FileEvent addFileMove(String fromFile, String toFile) {
+        FileEvent result = new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile));
+        fileEventsMap.put(toFile, result);
+        return result;
+    }
 }

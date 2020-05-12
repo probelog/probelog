@@ -98,12 +98,10 @@ public class Linking {
     @Test
     public void move() {
 
-/*
         FileEvent event4__MoveFileBtoFileA = linker.addFileMove("fileB","fileA");
         assertEquals(MOVE, event4__MoveFileBtoFileA.type());
         assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
-*/
 
     }
 
