@@ -122,13 +122,19 @@ public class Linking {
 
 
     // 1. Complete Linking
-    // movecauses 2 initial file states if both files have not been mentioned to date
 
     // Create
-    // Create After Moving/Renaming the file - previous event is the move rename
+    // Create after update, moved to, renamed to  -> IllegalState
+    // Frankenstein Create - create for a moved from , renamed from is good
+
     // Delete
-    // Recreate (Delete then Create)
-    // Recreate through Rename(Delete then Rename to deleted name)
+    // Update, move from, rename from  after delete - illegalState
+    // Rename To after delete is good
+    // Move To after a delete is illegalState (should be a rename)
+
+    // Frankenstein Create - create for a deleted is good
+
+
 
     // 2. linker can return all the FileEvents from its map (i.e. all the heads) that have been created since a certain sequence number (time) - thats all Test Run needs
 
