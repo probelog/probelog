@@ -1,5 +1,7 @@
 package com.github.probelog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +13,7 @@ public class Linker {
 
     public FileEvent addFileUpdate(String file) {
 
-        FileEvent result = new FileEvent(file, sequence++, getPreviousEventForFile(file));
-        fileEventsMap.put(file, result);
-        return result;
+        return addToFileEventMap(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
 
     }
 
@@ -21,26 +21,24 @@ public class Linker {
 
         if (fileEventsMap.containsKey(toFile))
             throw new IllegalStateException(toFile + " " + ALREADY_EXISTS);
+        return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
-        FileEvent result = new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile));
-        fileEventsMap.put(toFile, result);
-        return result;
+    }
 
+    public FileEvent addFileMove(String fromFile, String toFile) {
+        return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
+    }
+
+    public FileEvent addFileCreate(String file) {
+        return addToFileEventMap(file, new FileEvent(file, sequence++, null));
     }
 
     private FileEvent getPreviousEventForFile(String file) {
         return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent(file);
     }
 
-    public FileEvent addFileMove(String fromFile, String toFile) {
-        FileEvent result = new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile));
-        fileEventsMap.put(toFile, result);
-        return result;
-    }
-
-    public FileEvent addFileCreate(String file) {
-        FileEvent result = new FileEvent(file, sequence++, null);
-        fileEventsMap.put(file, result);
-        return result;
+    private FileEvent addToFileEventMap(String file, FileEvent fileEvent) {
+        fileEventsMap.put(file, fileEvent);
+        return fileEvent;
     }
 }
