@@ -99,9 +99,11 @@ public class Linking {
     public void move() {
 
         FileEvent event4__MoveFileBtoFileA = linker.addFileMove("fileB","fileA");
+        FileEvent event5__Update2_ToFileA = linker.addFileUpdate("fileA");
         assertEquals(MOVE, event4__MoveFileBtoFileA.type());
         assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
+        assertEquals(event4__MoveFileBtoFileA, event5__Update2_ToFileA.previousEventForFile());
 
     }
 
