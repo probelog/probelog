@@ -34,7 +34,7 @@ public class Linker {
 
     public FileEvent addFileMove(String fromFile, String toFile) {
         FileEvent result = new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile));
-        fileEventsMap.put(toFile, result);
+        //fileEventsMap.put(toFile, result);
         return result;
     }
 }
