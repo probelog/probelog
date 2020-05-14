@@ -37,6 +37,7 @@ public class Linking {
 
         assertEquals(1,event1__Update1__ToFileA.sequence());
         assertEquals(2,event2__Update1__ToFileB.sequence());
+        assertEquals(3,event3__Update2__ToFileA.sequence());
 
     }
 
@@ -68,6 +69,7 @@ public class Linking {
         FileEvent event4__RenameFileBtoFileC = linker.addFileRename("fileB","fileC");
         FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
         assertEquals(RENAME, event4__RenameFileBtoFileC.type());
+        assertEquals(4, event4__RenameFileBtoFileC.sequence());
         assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.previousEventForFile());
         assertEquals(event4__RenameFileBtoFileC, event5__Update2_ToFileC.previousEventForFile());
 
@@ -101,6 +103,7 @@ public class Linking {
         FileEvent event4__MoveFileBtoFileA = linker.addFileMove("fileB","fileA");
         FileEvent event5__Update2_ToFileA = linker.addFileUpdate("fileA");
         assertEquals(MOVE, event4__MoveFileBtoFileA.type());
+        assertEquals(4, event4__MoveFileBtoFileA.sequence());
         assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
         assertEquals(event4__MoveFileBtoFileA, event5__Update2_ToFileA.previousEventForFile());
@@ -125,7 +128,9 @@ public class Linking {
     public void create() {
 
         FileEvent createFileX = linker.addFileCreate("fileX");
+
         assertNull(createFileX.previousEventForFile());
+        assertEquals(4, createFileX.sequence());
 
     }
 
@@ -134,7 +139,6 @@ public class Linking {
     // 1. Complete Linking
 
     // Create
-    // Add in sequence tests
     // Create after update, moved to, renamed to  -> IllegalState
     // Frankenstein Create - create for a moved from , renamed from is good
 
