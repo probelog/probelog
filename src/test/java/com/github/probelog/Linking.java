@@ -121,11 +121,20 @@ public class Linking {
 
     }
 
+    @Test
+    public void create() {
+
+        FileEvent createFileX = linker.addFileCreate("fileX");
+        assertNull(createFileX.previousEventForFile());
+
+    }
+
 
 
     // 1. Complete Linking
 
     // Create
+    // Add in sequence tests
     // Create after update, moved to, renamed to  -> IllegalState
     // Frankenstein Create - create for a moved from , renamed from is good
 
