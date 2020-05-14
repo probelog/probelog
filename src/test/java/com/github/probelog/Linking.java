@@ -128,7 +128,7 @@ public class Linking {
     public void create() {
 
         FileEvent createFileX = linker.addFileCreate("fileX");
-
+        assertEquals(createFileX, linker.addFileUpdate("fileX").previousEventForFile());
         assertNull(createFileX.previousEventForFile());
         assertEquals(4, createFileX.sequence());
 

@@ -39,6 +39,8 @@ public class Linker {
     }
 
     public FileEvent addFileCreate(String file) {
-        return new FileEvent(file, sequence++, null);
+        FileEvent result = new FileEvent(file, sequence++, null);
+        fileEventsMap.put(file, result);
+        return result;
     }
 }
