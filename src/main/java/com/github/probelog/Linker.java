@@ -19,8 +19,7 @@ public class Linker {
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
-        if (fileEventsMap.containsKey(toFile))
-            throw new IllegalStateException(toFile + " " + ALREADY_EXISTS);
+        checkFileExistence(toFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
@@ -30,6 +29,7 @@ public class Linker {
     }
 
     public FileEvent addFileCreate(String file) {
+        checkFileExistence(file);
         return addToFileEventMap(file, new FileEvent(file, sequence++, null));
     }
 
@@ -40,5 +40,10 @@ public class Linker {
     private FileEvent addToFileEventMap(String file, FileEvent fileEvent) {
         fileEventsMap.put(file, fileEvent);
         return fileEvent;
+    }
+
+    private void checkFileExistence(String file) {
+        if (fileEventsMap.containsKey(file))
+            throw new IllegalStateException(file + " " + ALREADY_EXISTS);
     }
 }

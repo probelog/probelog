@@ -134,12 +134,24 @@ public class Linking {
 
     }
 
+    @Test
+    public void invalidCreate() {
+
+        try {
+            linker.addFileCreate("fileB");
+            assert false;
+        }
+        catch(IllegalStateException e) {
+            assertEquals("fileB " + Linker.ALREADY_EXISTS,e.getMessage());
+        }
+
+    }
+
 
 
     // 1. Complete Linking
 
-    // Create
-    // Create after update, moved to, renamed to  -> IllegalState
+    // Create moved to, renamed to  -> IllegalState
     // Frankenstein Create - create for a moved from , renamed from is good
 
     // Delete
