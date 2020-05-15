@@ -135,7 +135,7 @@ public class Linking {
     }
 
     @Test
-    public void invalidCreate() {
+    public void invalidCreateAfterUpdate() {
 
         try {
             linker.addFileCreate("fileB");
@@ -147,9 +147,40 @@ public class Linking {
 
     }
 
+    @Test
+    public void invalidCreateAfterRenameTo() {
+
+        linker.addFileRename("fileB","fileX");
+        try {
+            linker.addFileCreate("fileX");
+            assert false;
+        }
+        catch(IllegalStateException e) {
+            assertEquals("fileX " + Linker.ALREADY_EXISTS,e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void invalidCreateAfterMoveTo() {
+
+        linker.addFileMove("fileB","fileX");
+        try {
+            linker.addFileCreate("fileX");
+            assert false;
+        }
+        catch(IllegalStateException e) {
+            assertEquals("fileX " + Linker.ALREADY_EXISTS,e.getMessage());
+        }
+
+    }
+
 
 
     // 1. Complete Linking
+
+    // invalid rename after moveFrom, renameFrom
+    // invalid move after renameFrom, moveFrom
 
     // Create moved to, renamed to  -> IllegalState
     // Frankenstein Create - create for a moved from , renamed from is good
