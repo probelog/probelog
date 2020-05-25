@@ -87,13 +87,9 @@ public class Linking {
     @Test
     public void invalidRename() {
 
-        try {
+        throwsIllegalState(() -> {
             linker.addFileRename("fileD","fileB");
-            assert false;
-        }
-        catch(IllegalStateException e) {
-            assertEquals("fileB " + Linker.ALREADY_EXISTS,e.getMessage());
-        }
+        }, "fileB");
 
     }
 
@@ -137,13 +133,9 @@ public class Linking {
     @Test
     public void invalidCreateAfterUpdate() {
 
-        try {
+        throwsIllegalState(() -> {
             linker.addFileCreate("fileB");
-            assert false;
-        }
-        catch(IllegalStateException e) {
-            assertEquals("fileB " + Linker.ALREADY_EXISTS,e.getMessage());
-        }
+        }, "fileB");
 
     }
 
@@ -151,13 +143,9 @@ public class Linking {
     public void invalidCreateAfterRenameTo() {
 
         linker.addFileRename("fileB","fileX");
-        try {
+        throwsIllegalState(() -> {
             linker.addFileCreate("fileX");
-            assert false;
-        }
-        catch(IllegalStateException e) {
-            assertEquals("fileX " + Linker.ALREADY_EXISTS,e.getMessage());
-        }
+        }, "fileX");
 
     }
 
@@ -165,12 +153,32 @@ public class Linking {
     public void invalidCreateAfterMoveTo() {
 
         linker.addFileMove("fileB","fileX");
-        try {
+
+        throwsIllegalState(() -> {
             linker.addFileCreate("fileX");
+        }, "fileX");
+
+    }
+
+    @Test
+    public void invalidRenameAfterMoveTo() {
+
+        linker.addFileMove("fileB","fileX");
+
+        throwsIllegalState(() -> {
+            linker.addFileCreate("fileX");
+        }, "fileX");
+
+    }
+
+    private void throwsIllegalState(Runnable runnable, String file) {
+
+        try {
+            runnable.run();
             assert false;
         }
         catch(IllegalStateException e) {
-            assertEquals("fileX " + Linker.ALREADY_EXISTS,e.getMessage());
+            assertEquals(file + " " + Linker.ALREADY_EXISTS,e.getMessage());
         }
 
     }
@@ -182,7 +190,6 @@ public class Linking {
     // invalid rename after moveFrom, renameFrom
     // invalid move after renameFrom, moveFrom
 
-    // Create moved to, renamed to  -> IllegalState
     // Frankenstein Create - create for a moved from , renamed from is good
 
     // Delete
