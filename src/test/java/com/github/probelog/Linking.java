@@ -186,7 +186,7 @@ public class Linking {
     // invalid rename after renameFrom
     // invalid move after renameFrom, moveFrom
 
-    // Frankenstein Create - create for a moved from , renamed from is good
+    // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
 
     // Delete
     // Update, move from, rename from  after delete - illegalState

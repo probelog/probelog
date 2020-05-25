@@ -1,7 +1,5 @@
 package com.github.probelog;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,7 +11,7 @@ public class Linker {
     public static final String NO_LONGER_EXISTS = "no longer exists";
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
-    private Set<String> movedFiles = new HashSet<>();
+    private Set<String> noLongerExists = new HashSet<>();
 
     public FileEvent addFileUpdate(String file) {
 
@@ -23,14 +21,14 @@ public class Linker {
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
-        checkIfAlreadyMoved(fromFile);
+        checkIfNoLongerExists(fromFile);
         checkFileExistence(toFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
 
     public FileEvent addFileMove(String fromFile, String toFile) {
-        movedFiles.add(fromFile);
+        noLongerExists.add(fromFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
     }
 
@@ -48,8 +46,8 @@ public class Linker {
         return fileEvent;
     }
 
-    private void checkIfAlreadyMoved(String fromFile) {
-        if (movedFiles.contains(fromFile))
+    private void checkIfNoLongerExists(String fromFile) {
+        if (noLongerExists.contains(fromFile))
             throw new IllegalStateException(fromFile + " " + NO_LONGER_EXISTS);
     }
 
