@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.probelog.FileEvent.Type.*;
+import static com.github.probelog.Linker.*;
+import static com.github.probelog.Linker.ALREADY_EXISTS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -87,9 +89,7 @@ public class Linking {
     @Test
     public void invalidRename() {
 
-        throwsIllegalState(() -> {
-            linker.addFileRename("fileD","fileB");
-        }, "fileB");
+        throwsIllegalState(() -> linker.addFileRename("fileD","fileB"), "fileB");
 
     }
 
@@ -133,9 +133,7 @@ public class Linking {
     @Test
     public void invalidCreateAfterUpdate() {
 
-        throwsIllegalState(() -> {
-            linker.addFileCreate("fileB");
-        }, "fileB");
+        throwsIllegalState(() -> linker.addFileCreate("fileB"), "fileB");
 
     }
 
@@ -143,9 +141,7 @@ public class Linking {
     public void invalidCreateAfterRenameTo() {
 
         linker.addFileRename("fileB","fileX");
-        throwsIllegalState(() -> {
-            linker.addFileCreate("fileX");
-        }, "fileX");
+        throwsIllegalState(() -> linker.addFileCreate("fileX"), "fileX");
 
     }
 
@@ -154,31 +150,31 @@ public class Linking {
 
         linker.addFileMove("fileB","fileX");
 
-        throwsIllegalState(() -> {
-            linker.addFileCreate("fileX");
-        }, "fileX");
+        throwsIllegalState(() -> linker.addFileCreate("fileX"), "fileX");
 
     }
 
     @Test
-    public void invalidRenameAfterMoveTo() {
+    public void invalidRenameAfterMoveFrom() {
 
         linker.addFileMove("fileB","fileX");
 
-        throwsIllegalState(() -> {
-            linker.addFileCreate("fileX");
-        }, "fileX");
+        throwsIllegalState(() -> linker.addFileRename("fileB", "fileY"), "fileB", NO_LONGER_EXISTS);
 
     }
 
     private void throwsIllegalState(Runnable runnable, String file) {
+        throwsIllegalState(runnable, file, ALREADY_EXISTS );
+    }
+
+    private void throwsIllegalState(Runnable runnable, String file, String reason) {
 
         try {
             runnable.run();
             assert false;
         }
         catch(IllegalStateException e) {
-            assertEquals(file + " " + Linker.ALREADY_EXISTS,e.getMessage());
+            assertEquals(file + " " + reason,e.getMessage());
         }
 
     }
@@ -187,7 +183,7 @@ public class Linking {
 
     // 1. Complete Linking
 
-    // invalid rename after moveFrom, renameFrom
+    // invalid rename after renameFrom
     // invalid move after renameFrom, moveFrom
 
     // Frankenstein Create - create for a moved from , renamed from is good

@@ -3,13 +3,17 @@ package com.github.probelog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Linker {
 
     public static final String ALREADY_EXISTS = "already exists";
+    public static final String NO_LONGER_EXISTS = "no longer exists";
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
+    private Set<String> movedFiles = new HashSet<>();
 
     public FileEvent addFileUpdate(String file) {
 
@@ -19,12 +23,14 @@ public class Linker {
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
+        checkIfAlreadyMoved(fromFile);
         checkFileExistence(toFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
 
     public FileEvent addFileMove(String fromFile, String toFile) {
+        movedFiles.add(fromFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
     }
 
@@ -40,6 +46,11 @@ public class Linker {
     private FileEvent addToFileEventMap(String file, FileEvent fileEvent) {
         fileEventsMap.put(file, fileEvent);
         return fileEvent;
+    }
+
+    private void checkIfAlreadyMoved(String fromFile) {
+        if (movedFiles.contains(fromFile))
+            throw new IllegalStateException(fromFile + " " + NO_LONGER_EXISTS);
     }
 
     private void checkFileExistence(String file) {
