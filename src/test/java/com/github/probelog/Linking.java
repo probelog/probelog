@@ -183,6 +183,8 @@ public class Linking {
 
     // 1. Complete Linking
 
+    // Write a new Test Class for Illegal DiscardedName Use
+
     // invalid rename after renameFrom
     // invalid move after renameFrom, moveFrom
 
