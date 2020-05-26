@@ -1,9 +1,12 @@
 package com.github.probelog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import static com.github.probelog.DiscardedNameUseException.illegalSource;
 
@@ -16,22 +19,30 @@ public class Linker {
     private Set<String> discardedNames = new HashSet<>();
 
     public FileEvent addFileUpdate(String file) {
-
         return addToFileEventMap(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
-
     }
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
-        checkIfNoLongerExists(fromFile, toFile);
         checkFileExistence(toFile);
-        return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
+        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
 
     public FileEvent addFileMove(String fromFile, String toFile) {
+        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
+    }
+
+    @NotNull
+    private FileEvent doMove(String fromFile, String toFile, Callable<FileEvent> fileEventCreator) {
+        checkFromFileNotDiscarded(fromFile, toFile);
         discardedNames.add(fromFile);
-        return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
+        try {
+            return addToFileEventMap(toFile, fileEventCreator.call());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public FileEvent addFileCreate(String file) {
@@ -48,7 +59,7 @@ public class Linker {
         return fileEvent;
     }
 
-    private void checkIfNoLongerExists(String fromFile, String toFile) {
+    private void checkFromFileNotDiscarded(String fromFile, String toFile) {
         if (discardedNames.contains(fromFile))
             throw illegalSource(fromFile, toFile);
     }

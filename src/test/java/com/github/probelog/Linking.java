@@ -155,9 +155,27 @@ public class Linking {
     }
 
     @Test
-    public void invalidRenameAfterMoveFrom() {
+    public void nonsense_RenameAfterMove() {
         linker.addFileMove("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
+    }
+
+    @Test
+    public void nonsense_RenameAfterRename() {
+        linker.addFileRename("fileB","fileX");
+        throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
+    }
+
+    @Test
+    public void nonsense_MoveAfterMove() {
+        linker.addFileMove("fileB","fileX");
+        throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
+    }
+
+    @Test
+    public void nonsense_MoveAfterRename() {
+        linker.addFileRename("fileB","fileX");
+        throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
 
     private void throwsIllegalState(Runnable runnable, String file) {
@@ -192,8 +210,7 @@ public class Linking {
 
     // 1. Complete Linking
 
-    // invalid rename after renameFrom
-    // invalid move after renameFrom, moveFrom
+    // invalid update of discardedname
 
     // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
 
