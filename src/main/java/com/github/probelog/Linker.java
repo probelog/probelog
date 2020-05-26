@@ -5,13 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static com.github.probelog.DiscardedNameUseException.illegalSource;
+
 public class Linker {
 
     public static final String ALREADY_EXISTS = "already exists";
     public static final String NO_LONGER_EXISTS = "no longer exists";
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
-    private Set<String> noLongerExists = new HashSet<>();
+    private Set<String> discardedNames = new HashSet<>();
 
     public FileEvent addFileUpdate(String file) {
 
@@ -21,14 +23,14 @@ public class Linker {
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
-        checkIfNoLongerExists(fromFile);
+        checkIfNoLongerExists(fromFile, toFile);
         checkFileExistence(toFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
 
     public FileEvent addFileMove(String fromFile, String toFile) {
-        noLongerExists.add(fromFile);
+        discardedNames.add(fromFile);
         return addToFileEventMap(toFile, new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
     }
 
@@ -46,9 +48,9 @@ public class Linker {
         return fileEvent;
     }
 
-    private void checkIfNoLongerExists(String fromFile) {
-        if (noLongerExists.contains(fromFile))
-            throw new IllegalStateException(fromFile + " " + NO_LONGER_EXISTS);
+    private void checkIfNoLongerExists(String fromFile, String toFile) {
+        if (discardedNames.contains(fromFile))
+            throw illegalSource(fromFile, toFile);
     }
 
     private void checkFileExistence(String file) {

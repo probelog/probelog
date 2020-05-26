@@ -156,11 +156,8 @@ public class Linking {
 
     @Test
     public void invalidRenameAfterMoveFrom() {
-
         linker.addFileMove("fileB","fileX");
-
-        throwsIllegalState(() -> linker.addFileRename("fileB", "fileY"), "fileB", NO_LONGER_EXISTS);
-
+        throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
 
     private void throwsIllegalState(Runnable runnable, String file) {
@@ -179,11 +176,21 @@ public class Linking {
 
     }
 
+    private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
+
+        try {
+            runnable.run();
+            assert false;
+        }
+        catch(DiscardedNameUseException e) {
+            assertEquals(expectedReason,e.getMessage());
+        }
+
+    }
+
 
 
     // 1. Complete Linking
-
-    // Write a new Test Class for Illegal DiscardedName Use
 
     // invalid rename after renameFrom
     // invalid move after renameFrom, moveFrom
