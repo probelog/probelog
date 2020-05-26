@@ -9,13 +9,11 @@ public class DiscardedNameUseException extends IllegalStateException {
     }
 
     static DiscardedNameUseException illegalSource(String fromName, String toName) {
-        return new DiscardedNameUseException("Trying to use discarded name: " + fromName + " as source for: " +toName);
+        throw new DiscardedNameUseException("Trying to use discarded name: " + fromName + " as source for: " +toName);
     }
 
-    static DiscardedNameUseException illegalDelete(String name) {
-        return new DiscardedNameUseException("Trying to delete a discarded name: " + name);
+    static DiscardedNameUseException illegalUpdate(String name) {
+        throw new DiscardedNameUseException("Trying to update using a discarded name: " + name);
     }
-
-
 
 }

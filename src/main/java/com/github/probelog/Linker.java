@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static com.github.probelog.DiscardedNameUseException.illegalSource;
+import static com.github.probelog.DiscardedNameUseException.*;
 
 public class Linker {
 
@@ -19,6 +19,7 @@ public class Linker {
     private Set<String> discardedNames = new HashSet<>();
 
     public FileEvent addFileUpdate(String file) {
+        checkFileNotDiscarded(file, ()->illegalUpdate(file));
         return addToFileEventMap(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
     }
 
@@ -35,7 +36,7 @@ public class Linker {
 
     @NotNull
     private FileEvent doMove(String fromFile, String toFile, Callable<FileEvent> fileEventCreator) {
-        checkFromFileNotDiscarded(fromFile, toFile);
+        checkFileNotDiscarded(fromFile, ()->illegalSource(fromFile, toFile));
         discardedNames.add(fromFile);
         try {
             return addToFileEventMap(toFile, fileEventCreator.call());
@@ -59,9 +60,9 @@ public class Linker {
         return fileEvent;
     }
 
-    private void checkFromFileNotDiscarded(String fromFile, String toFile) {
-        if (discardedNames.contains(fromFile))
-            throw illegalSource(fromFile, toFile);
+    private void checkFileNotDiscarded(String file, Runnable exceptionThrower) {
+        if (discardedNames.contains(file))
+            exceptionThrower.run();
     }
 
     private void checkFileExistence(String file) {
