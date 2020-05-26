@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import static com.github.probelog.ActiveFileException.illegalCreate;
+import static com.github.probelog.ActiveFileException.illegalRename;
 import static com.github.probelog.DiscardedNameUseException.*;
 
 public class Linker {
@@ -25,7 +27,7 @@ public class Linker {
 
     public FileEvent addFileRename(String fromFile, String toFile) {
 
-        checkFileExistence(toFile);
+        checkFileExistence(toFile, ()->illegalRename(fromFile, toFile));
         return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
@@ -47,7 +49,7 @@ public class Linker {
     }
 
     public FileEvent addFileCreate(String file) {
-        checkFileExistence(file);
+        checkFileExistence(file, ()->illegalCreate(file));
         return addToFileEventMap(file, new FileEvent(file, sequence++, null));
     }
 
@@ -65,8 +67,8 @@ public class Linker {
             exceptionThrower.run();
     }
 
-    private void checkFileExistence(String file) {
+    private void checkFileExistence(String file, Runnable exceptionThrower) {
         if (fileEventsMap.containsKey(file))
-            throw new IllegalStateException(file + " " + ALREADY_EXISTS);
+            exceptionThrower.run();
     }
 }

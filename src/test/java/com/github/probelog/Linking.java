@@ -87,13 +87,6 @@ public class Linking {
     }
 
     @Test
-    public void invalidRename() {
-
-        throwsIllegalState(() -> linker.addFileRename("fileD","fileB"), "fileB");
-
-    }
-
-    @Test
     public void move() {
 
         FileEvent event4__MoveFileBtoFileA = linker.addFileMove("fileB","fileA");
@@ -131,49 +124,59 @@ public class Linking {
     }
 
     @Test
-    public void invalidCreateAfterUpdate() {
-
-        throwsIllegalState(() -> linker.addFileCreate("fileB"), "fileB");
-
+    public void nonsense_RenameAfterUpdate() {
+        throwsActiveFileException(() -> linker.addFileRename("fileD","fileA"), "Trying to rename: fileD to an active name: fileA");
     }
 
     @Test
-    public void invalidCreateAfterRenameTo() {
+    public void nonsense_RenameAfterRenameTo() {
+        linker.addFileRename("fileA","fileX");
+        throwsActiveFileException(() -> linker.addFileRename("fileD","fileX"), "Trying to rename: fileD to an active name: fileX");
+    }
 
+    @Test
+    public void nonsense_RenameAfterMoveTo() {
+        linker.addFileMove("fileA","fileX");
+        throwsActiveFileException(() -> linker.addFileRename("fileD","fileX"), "Trying to rename: fileD to an active name: fileX");
+    }
+
+    @Test
+    public void nonsense_CreateAfterUpdate() {
+        throwsActiveFileException(() -> linker.addFileCreate("fileB"), "Trying to create using an active name: fileB");
+    }
+
+    @Test
+    public void nonsense_CreateAfterRename() {
         linker.addFileRename("fileB","fileX");
-        throwsIllegalState(() -> linker.addFileCreate("fileX"), "fileX");
-
+        throwsActiveFileException(() -> linker.addFileCreate("fileX"), "Trying to create using an active name: fileX");
     }
 
     @Test
-    public void invalidCreateAfterMoveTo() {
-
+    public void nonsense_CreateAfterMove() {
         linker.addFileMove("fileB","fileX");
-
-        throwsIllegalState(() -> linker.addFileCreate("fileX"), "fileX");
-
+        throwsActiveFileException(() -> linker.addFileCreate("fileX"), "Trying to create using an active name: fileX");
     }
 
     @Test
-    public void nonsense_RenameAfterMove() {
+    public void nonsense_RenameFromAfterMove() {
         linker.addFileMove("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
 
     @Test
-    public void nonsense_RenameAfterRename() {
+    public void nonsense_RenameFromAfterRename() {
         linker.addFileRename("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
 
     @Test
-    public void nonsense_MoveAfterMove() {
+    public void nonsense_MoveFromAfterMove() {
         linker.addFileMove("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
 
     @Test
-    public void nonsense_MoveAfterRename() {
+    public void nonsense_MoveFromAfterRename() {
         linker.addFileRename("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
     }
@@ -190,30 +193,23 @@ public class Linking {
         throwsDiscardedNameUseException(() -> linker.addFileUpdate("fileB"), "Trying to update using a discarded name: fileB");
     }
 
-    private void throwsIllegalState(Runnable runnable, String file) {
-        throwsIllegalState(runnable, file, ALREADY_EXISTS );
+    private void throwsActiveFileException(Runnable runnable, String expectedReason) {
+        throwsIllegalStateException(runnable, ActiveFileException.class, expectedReason);
     }
 
-    private void throwsIllegalState(Runnable runnable, String file, String reason) {
+    private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
+        throwsIllegalStateException(runnable, DiscardedNameUseException.class, expectedReason);
+    }
+
+    private void throwsIllegalStateException(Runnable runnable, Class expectedExceptionClass, String expectedReason) {
 
         try {
             runnable.run();
             assert false;
         }
         catch(IllegalStateException e) {
-            assertEquals(file + " " + reason,e.getMessage());
-        }
-
-    }
-
-    private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
-
-        try {
-            runnable.run();
-            assert false;
-        }
-        catch(DiscardedNameUseException e) {
-            assertEquals(expectedReason,e.getMessage());
+            assertEquals(expectedExceptionClass, e.getClass());
+            assertEquals(expectedReason, e.getMessage());
         }
 
     }
@@ -222,6 +218,7 @@ public class Linking {
 
     // 1. Complete Linking
 
+    // maybe move nonsense tests to their own class
     // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
 
     // Delete

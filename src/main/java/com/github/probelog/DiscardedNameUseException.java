@@ -2,8 +2,6 @@ package com.github.probelog;
 
 public class DiscardedNameUseException extends IllegalStateException {
 
-    public static final String NO_LONGER_EXISTS = "no longer exists";
-
     DiscardedNameUseException(String message) {
         super(message);
     }
