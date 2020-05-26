@@ -14,8 +14,6 @@ import static com.github.probelog.DiscardedNameUseException.*;
 
 public class Linker {
 
-    public static final String ALREADY_EXISTS = "already exists";
-    public static final String NO_LONGER_EXISTS = "no longer exists";
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
     private Set<String> discardedNames = new HashSet<>();

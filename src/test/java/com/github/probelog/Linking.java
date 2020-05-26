@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static com.github.probelog.FileEvent.Type.*;
 import static com.github.probelog.Linker.*;
-import static com.github.probelog.Linker.ALREADY_EXISTS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -120,6 +119,7 @@ public class Linking {
         assertEquals(createFileX, linker.addFileUpdate("fileX").previousEventForFile());
         assertNull(createFileX.previousEventForFile());
         assertEquals(4, createFileX.sequence());
+        assertEquals(FileEvent.Type.CREATE, createFileX.type());
 
     }
 
@@ -219,6 +219,7 @@ public class Linking {
     // 1. Complete Linking
 
     // maybe move nonsense tests to their own class
+    // Create
     // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
 
     // Delete
