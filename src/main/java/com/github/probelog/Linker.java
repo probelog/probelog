@@ -52,7 +52,10 @@ public class Linker {
 
     public FileEvent addFileCreate(String file) {
         checkFileExistence(file, ()->illegalCreate(file));
-        return addToFileEventMap(file, new FileEvent(file, sequence++,  isDiscardedName(file) ? discardEvents.get(file) : null));
+        FileEvent previous = isDiscardedName(file) ? discardEvents.get(file) : null;
+        if (isDiscardedName(file))
+            discardEvents.remove(file);
+        return addToFileEventMap(file, new FileEvent(file, sequence++,  previous));
     }
 
     private FileEvent getPreviousEventForFile(String file) {

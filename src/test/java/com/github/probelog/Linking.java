@@ -122,12 +122,14 @@ public class Linking {
     }
 
     @Test
-    public void createAfterRename() {
+    public void renameAfterCreateAfterRename() {
 
         FileEvent renameFileA = linker.addFileRename("fileA","fileX");
         FileEvent createFileA = linker.addFileCreate("fileA");
+        FileEvent renameFileA_again = linker.addFileRename("fileA", "fileY");
 
         assertEquals(renameFileA, createFileA.previousEventForFile());
+        assertEquals(createFileA, renameFileA_again.previousEventForFile());
 
     }
 
