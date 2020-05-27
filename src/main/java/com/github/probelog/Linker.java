@@ -17,6 +17,7 @@ public class Linker {
     private int sequence=1;
     private Map<String, FileEvent> fileEventsMap = new HashMap<>();
     private Set<String> discardedNames = new HashSet<>();
+    private Map<String,FileEvent> moveEvents = new HashMap<>();
 
     public FileEvent addFileUpdate(String file) {
         checkFileNotDiscarded(file, ()->illegalUpdate(file));
@@ -36,19 +37,24 @@ public class Linker {
 
     @NotNull
     private FileEvent doMove(String fromFile, String toFile, Callable<FileEvent> fileEventCreator) {
+
         checkFileNotDiscarded(fromFile, ()->illegalSource(fromFile, toFile));
         discardedNames.add(fromFile);
+        FileEvent moveEvent;
         try {
-            return addToFileEventMap(toFile, fileEventCreator.call());
+            moveEvent = fileEventCreator.call();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+        moveEvents.put(fromFile, moveEvent);
+        return addToFileEventMap(toFile, moveEvent);
+
     }
 
     public FileEvent addFileCreate(String file) {
         checkFileExistence(file, ()->illegalCreate(file));
-        return addToFileEventMap(file, new FileEvent(file, sequence++, null));
+        return addToFileEventMap(file, new FileEvent(file, sequence++, discardedNames.contains(file) ? moveEvents.get(file) : null));
     }
 
     private FileEvent getPreviousEventForFile(String file) {
@@ -66,7 +72,7 @@ public class Linker {
     }
 
     private void checkFileExistence(String file, Runnable exceptionThrower) {
-        if (fileEventsMap.containsKey(file))
+        if (!discardedNames.contains(file) && fileEventsMap.containsKey(file))
             exceptionThrower.run();
     }
 }
