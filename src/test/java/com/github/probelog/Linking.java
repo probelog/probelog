@@ -121,60 +121,9 @@ public class Linking {
 
     }
 
-    @Test
-    public void nonsense_RenameFromAfterMove() {
-        linker.addFileMove("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
-    }
-
-    @Test
-    public void nonsense_RenameFromAfterRename() {
-        linker.addFileRename("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
-    }
-
-    @Test
-    public void nonsense_MoveFromAfterMove() {
-        linker.addFileMove("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
-    }
-
-    @Test
-    public void nonsense_MoveFromAfterRename() {
-        linker.addFileRename("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileMove("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
-    }
-
-    @Test
-    public void nonsense_UpdateAfterMove() {
-        linker.addFileMove("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileUpdate("fileB"), "Trying to update using a discarded name: fileB");
-    }
-
-    @Test
-    public void nonsense_UpdateAfterRename() {
-        linker.addFileRename("fileB","fileX");
-        throwsDiscardedNameUseException(() -> linker.addFileUpdate("fileB"), "Trying to update using a discarded name: fileB");
-    }
-
-    private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
-
-        try {
-            runnable.run();
-            assert false;
-        }
-        catch(DiscardedNameUseException e) {
-            assertEquals(expectedReason, e.getMessage());
-        }
-
-    }
-
-
 
     // 1. Complete Linking
 
-    // maybe move nonsense tests to their own class
-    // Create
     // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
 
     // Delete
