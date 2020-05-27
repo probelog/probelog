@@ -1,11 +1,9 @@
 package com.github.probelog;
 
-import com.github.probelog.FileEvent.Type;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.probelog.FileEvent.Type.*;
-import static com.github.probelog.Linker.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

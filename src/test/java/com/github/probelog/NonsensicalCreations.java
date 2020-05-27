@@ -14,14 +14,12 @@ public class NonsensicalCreations {
 
     @Before
     public void setUp() {
-
         linker = new Linker();
-        linker.addFileUpdate("X");
-
     }
 
     @Test
     public void nonsense_rename_to_X_after_X_updated() {
+        linker.addFileUpdate("X");
         throwsActiveFileException(() -> linker.addFileRename("Y","X"), "Trying to rename: Y to an active name: X");
     }
 
@@ -39,6 +37,7 @@ public class NonsensicalCreations {
 
     @Test
     public void nonsense_create_X_after_X_update() {
+        linker.addFileUpdate("X");
         throwsActiveFileException(() -> linker.addFileCreate("X"), "Trying to create using an active name: X");
     }
 
