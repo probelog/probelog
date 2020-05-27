@@ -133,9 +133,19 @@ public class Linking {
 
     }
 
-    // 1. Complete Linking
+    @Test
+    public void renameAfterCreateAfterMove() {
 
-    // Frankenstein Create - create for a moved from , renamed from is good - and can move from A, create A, and then move from A
+        FileEvent moveFileA = linker.addFileMove("fileA","fileX");
+        FileEvent createFileA = linker.addFileCreate("fileA");
+        FileEvent renameFileA_again = linker.addFileRename("fileA", "fileY");
+
+        assertEquals(moveFileA, createFileA.previousEventForFile());
+        assertEquals(createFileA, renameFileA_again.previousEventForFile());
+
+    }
+
+    // 1. Complete Linking
 
     // Delete
     // Update, move from, rename from  after delete - illegalState
