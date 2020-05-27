@@ -124,40 +124,6 @@ public class Linking {
     }
 
     @Test
-    public void nonsense_RenameAfterUpdate() {
-        throwsActiveFileException(() -> linker.addFileRename("fileD","fileA"), "Trying to rename: fileD to an active name: fileA");
-    }
-
-    @Test
-    public void nonsense_RenameAfterRenameTo() {
-        linker.addFileRename("fileA","fileX");
-        throwsActiveFileException(() -> linker.addFileRename("fileD","fileX"), "Trying to rename: fileD to an active name: fileX");
-    }
-
-    @Test
-    public void nonsense_RenameAfterMoveTo() {
-        linker.addFileMove("fileA","fileX");
-        throwsActiveFileException(() -> linker.addFileRename("fileD","fileX"), "Trying to rename: fileD to an active name: fileX");
-    }
-
-    @Test
-    public void nonsense_CreateAfterUpdate() {
-        throwsActiveFileException(() -> linker.addFileCreate("fileB"), "Trying to create using an active name: fileB");
-    }
-
-    @Test
-    public void nonsense_CreateAfterRename() {
-        linker.addFileRename("fileB","fileX");
-        throwsActiveFileException(() -> linker.addFileCreate("fileX"), "Trying to create using an active name: fileX");
-    }
-
-    @Test
-    public void nonsense_CreateAfterMove() {
-        linker.addFileMove("fileB","fileX");
-        throwsActiveFileException(() -> linker.addFileCreate("fileX"), "Trying to create using an active name: fileX");
-    }
-
-    @Test
     public void nonsense_RenameFromAfterMove() {
         linker.addFileMove("fileB","fileX");
         throwsDiscardedNameUseException(() -> linker.addFileRename("fileB", "fileY"), "Trying to use discarded name: fileB as source for: fileY");
@@ -193,22 +159,13 @@ public class Linking {
         throwsDiscardedNameUseException(() -> linker.addFileUpdate("fileB"), "Trying to update using a discarded name: fileB");
     }
 
-    private void throwsActiveFileException(Runnable runnable, String expectedReason) {
-        throwsIllegalStateException(runnable, ActiveFileException.class, expectedReason);
-    }
-
     private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
-        throwsIllegalStateException(runnable, DiscardedNameUseException.class, expectedReason);
-    }
-
-    private void throwsIllegalStateException(Runnable runnable, Class expectedExceptionClass, String expectedReason) {
 
         try {
             runnable.run();
             assert false;
         }
-        catch(IllegalStateException e) {
-            assertEquals(expectedExceptionClass, e.getClass());
+        catch(DiscardedNameUseException e) {
             assertEquals(expectedReason, e.getMessage());
         }
 
