@@ -147,6 +147,8 @@ public class Linking {
 
     // 1. Complete Linking
 
+    // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
+
     // Delete
     // Update, move from, rename from  after delete - illegalState
     // Rename To after delete is good
