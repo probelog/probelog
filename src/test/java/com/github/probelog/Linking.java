@@ -147,7 +147,11 @@ public class Linking {
 
     // 1. Complete Linking
 
+    // change rename to moveCreate and move to moveUpdate (also will be copyCreate and copyUpdate)
+
+    // add movedFrom to rename (and rename only has previous if it points to a regenerated discard)
     // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
+    // move to a renamed file is illegal (DiscardedNameException) should be a rename instead
 
     // Delete
     // Update, move from, rename from  after delete - illegalState
