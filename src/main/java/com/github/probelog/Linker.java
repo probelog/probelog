@@ -23,14 +23,14 @@ public class Linker {
         return addToFileEventMap(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
     }
 
-    public FileEvent addFileRename(String fromFile, String toFile) {
+    public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
         checkFileExistence(toFile, ()->illegalRename(fromFile, toFile));
         return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
 
     }
 
-    public FileEvent addFileMove(String fromFile, String toFile) {
+    public FileEvent addFileMoveUpdate(String fromFile, String toFile) {
         return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
     }
 
