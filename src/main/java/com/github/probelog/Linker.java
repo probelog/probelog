@@ -3,13 +3,11 @@ package com.github.probelog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.github.probelog.ActiveFileException.illegalCreate;
-import static com.github.probelog.ActiveFileException.illegalRename;
+import static com.github.probelog.ActiveFileException.illegalMoveCreate;
 import static com.github.probelog.DiscardedNameUseException.*;
 
 public class Linker {
@@ -25,7 +23,7 @@ public class Linker {
 
     public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
-        checkFileExistence(toFile, ()->illegalRename(fromFile, toFile));
+        checkFileExistence(toFile, ()-> illegalMoveCreate(fromFile, toFile));
         return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, discardEvents.get(toFile), getPreviousEventForFile(fromFile)));
 
     }

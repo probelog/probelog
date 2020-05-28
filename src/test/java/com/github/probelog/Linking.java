@@ -154,12 +154,26 @@ public class Linking {
 
         assertEquals(moveFileAtoX, createFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, createFileA.movedFromFile());
+        assertEquals(RENAME, createFileA.type());
+
+    }
+
+    // TODO need to rename and refator type()
+    @Test
+    public void moveCreateTargetLinksBackToGhost2() {
+
+        FileEvent moveFileAtoX = linker.addFileMoveUpdate("fileA","fileX");
+        FileEvent createFileA = linker.addFileMoveCreate("fileB","fileA");
+
+        assertEquals(moveFileAtoX, createFileA.previousEventForFile());
+        assertEquals(event2__Update1__ToFileB, createFileA.movedFromFile());
+        assertEquals(RENAME, createFileA.type());
 
     }
 
     // 1. Complete Linking
 
-
+    // moveUpdate to a file that has been moved from and moved back to again is ok
     // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
     // move to a renamed file is illegal (DiscardedNameException) should be a rename instead
 

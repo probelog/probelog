@@ -51,6 +51,14 @@ public class NonsensicalGhosts {
         throwsDiscardedNameUseException(() -> linker.addFileUpdate("X"), "Trying to update using a discarded name: X");
     }
 
+
+    // TODO
+//    @Test
+//    public void nonsense_moveupdate_to_X_after_X_moved() {
+//        linker.addFileMoveUpdate("X","Y");
+//        throwsDiscardedNameUseException( ()-> linker.addFileMoveUpdate("W","X"), "Trying to do move update from: W to a discarded name: X");
+//    }
+
     private void throwsDiscardedNameUseException(Runnable runnable, String expectedReason) {
 
         try {
