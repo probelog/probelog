@@ -37,7 +37,7 @@ public class FileEvent {
     }
 
     public Type type() {
-        return sequence == 0 ? Type.INITIAL : movedFromFile != null ? Type.MOVE : previousEventForFile == null ? Type.CREATE : !(file.equals(previousEventForFile.file)) ? Type.RENAME : Type.UPDATE;
+        return sequence == 0 ? Type.INITIAL : movedFromFile != null ? (previousEventForFile==null ? Type.RENAME : Type.MOVE) : previousEventForFile==null ? Type.CREATE :  Type.UPDATE;
     }
 
     public int sequence() {

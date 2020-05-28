@@ -26,7 +26,7 @@ public class Linker {
     public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
         checkFileExistence(toFile, ()->illegalRename(fromFile, toFile));
-        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(fromFile)));
+        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, null, getPreviousEventForFile(fromFile)));
 
     }
 

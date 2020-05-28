@@ -63,28 +63,29 @@ public class Linking {
     }
 
     @Test
-    public void rename() {
+    public void moveCreate() {
 
         FileEvent event4__RenameFileBtoFileC = linker.addFileMoveCreate("fileB","fileC");
         FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
         assertEquals(RENAME, event4__RenameFileBtoFileC.type());
         assertEquals(4, event4__RenameFileBtoFileC.sequence());
-        assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.previousEventForFile());
+        assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.movedFromFile());
+        assertEquals(null, event4__RenameFileBtoFileC.previousEventForFile());
         assertEquals(event4__RenameFileBtoFileC, event5__Update2_ToFileC.previousEventForFile());
 
     }
 
     @Test
-    public void renameIsFirstEventForFileCausesInitialEventCreation() {
+    public void moveCreateIsFirstEventForFileCausesInitialEventCreation() {
 
         FileEvent renameEvent = linker.addFileMoveCreate("fileC","fileD");
         assertEquals(RENAME, renameEvent.type());
-        assertEquals(INITIAL, renameEvent.previousEventForFile().type());
+        assertEquals(INITIAL, renameEvent.movedFromFile().type());
 
     }
 
     @Test
-    public void move() {
+    public void moveUpdate() {
 
         FileEvent event4__MoveFileBtoFileA = linker.addFileMoveUpdate("fileB","fileA");
         FileEvent event5__Update2_ToFileA = linker.addFileUpdate("fileA");
@@ -97,14 +98,14 @@ public class Linking {
     }
 
     @Test
-    public void moveToEventlessFile() {
+    public void moveUpdateToEventlessFile() {
 
         assertEquals(INITIAL, linker.addFileMoveUpdate("fileB","fileC").previousEventForFile().type());
 
     }
 
     @Test
-    public void moveFromEventlessFile() {
+    public void moveUpdateFromEventlessFile() {
 
         assertEquals(INITIAL, linker.addFileMoveUpdate("fileZ","fileC").movedFromFile().type());
 
@@ -122,19 +123,31 @@ public class Linking {
     }
 
     @Test
-    public void renameAfterCreateAfterRename() {
+    public void moveCreateAtoX_thenCreateA_thenMoveCreateAtoY() {
 
         FileEvent renameFileA = linker.addFileMoveCreate("fileA","fileX");
         FileEvent createFileA = linker.addFileCreate("fileA");
         FileEvent renameFileA_again = linker.addFileMoveCreate("fileA", "fileY");
 
         assertEquals(renameFileA, createFileA.previousEventForFile());
-        assertEquals(createFileA, renameFileA_again.previousEventForFile());
+        assertEquals(createFileA, renameFileA_again.movedFromFile());
 
     }
 
     @Test
-    public void renameAfterCreateAfterMove() {
+    public void moveUpdateAtoX_thenCreateA_thenMoveCreateAtoY() {
+
+        FileEvent moveFileA = linker.addFileMoveUpdate("fileA","fileX");
+        FileEvent createFileA = linker.addFileCreate("fileA");
+        FileEvent renameFileA_again = linker.addFileMoveCreate("fileA", "fileY");
+
+        assertEquals(moveFileA, createFileA.previousEventForFile());
+        assertEquals(createFileA, renameFileA_again.movedFromFile());
+
+    }
+
+/*    @Test
+    public void moveCreateTargetLinksBackToGhost() {
 
         FileEvent moveFileA = linker.addFileMoveUpdate("fileA","fileX");
         FileEvent createFileA = linker.addFileCreate("fileA");
@@ -143,7 +156,7 @@ public class Linking {
         assertEquals(moveFileA, createFileA.previousEventForFile());
         assertEquals(createFileA, renameFileA_again.previousEventForFile());
 
-    }
+    }*/
 
     // 1. Complete Linking
 
