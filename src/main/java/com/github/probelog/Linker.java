@@ -29,6 +29,7 @@ public class Linker {
     }
 
     public FileEvent addFileMoveUpdate(String fromFile, String toFile) {
+        checkFileNotDiscarded(toFile, ()->illegalMoveUpdate(fromFile, toFile));
         return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
     }
 

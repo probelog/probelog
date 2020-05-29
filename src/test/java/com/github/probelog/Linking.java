@@ -147,7 +147,7 @@ public class Linking {
     }
 
     @Test
-    public void moveCreateTargetLinksBackToGhost() {
+    public void moveCreateTargetLinksBackToMoveCreate() {
 
         FileEvent moveFileAtoX = linker.addFileMoveCreate("fileA","fileX");
         FileEvent createFileA = linker.addFileMoveCreate("fileB","fileA");
@@ -158,9 +158,8 @@ public class Linking {
 
     }
 
-    // TODO need to rename and refator type()
     @Test
-    public void moveCreateTargetLinksBackToGhost2() {
+    public void moveCreateTargetLinksBackToMoveUpdate() {
 
         FileEvent moveFileAtoX = linker.addFileMoveUpdate("fileA","fileX");
         FileEvent createFileA = linker.addFileMoveCreate("fileB","fileA");

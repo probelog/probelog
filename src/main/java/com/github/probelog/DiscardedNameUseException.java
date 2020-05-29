@@ -14,4 +14,8 @@ public class DiscardedNameUseException extends IllegalStateException {
         throw new DiscardedNameUseException("Trying to update using a discarded name: " + name);
     }
 
+    static DiscardedNameUseException illegalMoveUpdate(String fromName, String toName) {
+        throw new DiscardedNameUseException("Trying to do move update from: " + fromName + " to a discarded name: " + toName);
+    }
+
 }
