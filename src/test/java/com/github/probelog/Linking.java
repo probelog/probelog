@@ -186,7 +186,7 @@ public class Linking {
 
 
     // 2. linker can return all the FileEvents from its map (i.e. all the heads) that have been created since a certain sequence number (time) - thats all Test Run needs
-
+    //       file events map should not contain files that have been movedFrom and then we can just use the file event map values to do this
 
     // 3. Change Algebra - Change fileEvent.change(sequence) includes file states (i.e. if state same after a sequence of file Events then no change!)
 }
