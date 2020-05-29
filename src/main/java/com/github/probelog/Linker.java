@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import static com.github.probelog.ActiveFileException.illegalCreate;
 import static com.github.probelog.ActiveFileException.illegalMoveCreate;
@@ -14,17 +13,17 @@ import static com.github.probelog.DiscardedNameUseException.*;
 public class Linker {
 
     private int sequence=1;
-    private Map<String, FileEvent> fileEventsMap = new HashMap<>();
+    private Map<String, FileEvent> activeEvents = new HashMap<>();
     private Map<String,FileEvent> discardEvents = new HashMap<>();
 
     public FileEvent addFileUpdate(String file) {
         checkFileNotDiscarded(file, ()->illegalUpdate(file));
-        return addToFileEventMap(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
+        return addActiveEvent(file, new FileEvent(file, sequence++, getPreviousEventForFile(file)));
     }
 
     public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
-        checkFileExistence(toFile, ()-> illegalMoveCreate(fromFile, toFile));
+        checkFileNotExisting(toFile, ()-> illegalMoveCreate(fromFile, toFile));
         return doMove(fromFile, toFile, recycleDiscarded(toFile));
 
     }
@@ -39,27 +38,28 @@ public class Linker {
 
         checkFileNotDiscarded(fromFile, ()->illegalSource(fromFile, toFile));
         FileEvent moveEvent = new FileEvent(toFile, sequence++, previousEvent, getPreviousEventForFile(fromFile));
-        saveDiscardEvent(fromFile, moveEvent);
-        return addToFileEventMap(toFile, moveEvent);
+        discardFile(fromFile, moveEvent);
+        return addActiveEvent(toFile, moveEvent);
 
     }
 
     public FileEvent addFileCreate(String file) {
-        checkFileExistence(file, ()->illegalCreate(file));
-        return addToFileEventMap(file, new FileEvent(file, sequence++, recycleDiscarded(file)));
+        checkFileNotExisting(file, ()->illegalCreate(file));
+        return addActiveEvent(file, new FileEvent(file, sequence++, recycleDiscarded(file)));
     }
 
     private FileEvent getPreviousEventForFile(String file) {
-        return fileEventsMap.containsKey(file) ? fileEventsMap.get(file) : new FileEvent(file);
+        return activeEvents.containsKey(file) ? activeEvents.get(file) : new FileEvent(file);
     }
 
-    private FileEvent addToFileEventMap(String file, FileEvent fileEvent) {
-        fileEventsMap.put(file, fileEvent);
+    private FileEvent addActiveEvent(String file, FileEvent fileEvent) {
+        activeEvents.put(file, fileEvent);
         return fileEvent;
     }
 
-    private void saveDiscardEvent(String fromFile, FileEvent moveEvent) {
+    private void discardFile(String fromFile, FileEvent moveEvent) {
         discardEvents.put(fromFile, moveEvent);
+        activeEvents.remove(fromFile);
     }
 
     @Nullable
@@ -76,8 +76,8 @@ public class Linker {
             exceptionThrower.run();
     }
 
-    private void checkFileExistence(String file, Runnable exceptionThrower) {
-        if (!isDiscardedName(file) && fileEventsMap.containsKey(file))
+    private void checkFileNotExisting(String file, Runnable exceptionThrower) {
+        if (activeEvents.containsKey(file))
             exceptionThrower.run();
     }
 
