@@ -173,7 +173,6 @@ public class Linking {
     // 1. Complete Linking
 
     // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
-    // move to a renamed file is illegal (DiscardedNameException) should be a rename instead
 
     // Delete
     // Update, move from, rename from  after delete - illegalState
