@@ -1,6 +1,7 @@
 package com.github.probelog;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Linker {
     public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
         checkFileExistence(toFile, ()-> illegalMoveCreate(fromFile, toFile));
-        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, discardEvents.get(toFile), getPreviousEventForFile(fromFile)));
+        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, recycleDiscarded(toFile), getPreviousEventForFile(fromFile)));
 
     }
 
@@ -37,25 +38,15 @@ public class Linker {
     private FileEvent doMove(String fromFile, String toFile, Callable<FileEvent> fileEventCreator) {
 
         checkFileNotDiscarded(fromFile, ()->illegalSource(fromFile, toFile));
-        FileEvent moveEvent;
-        try {
-            moveEvent = fileEventCreator.call();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        discardEvents.remove(toFile);
-        discardEvents.put(fromFile, moveEvent);
+        FileEvent moveEvent = doCall(fileEventCreator);
+        saveDiscardEvent(fromFile, moveEvent);
         return addToFileEventMap(toFile, moveEvent);
 
     }
 
     public FileEvent addFileCreate(String file) {
         checkFileExistence(file, ()->illegalCreate(file));
-        FileEvent previous = isDiscardedName(file) ? discardEvents.get(file) : null;
-        if (isDiscardedName(file))
-            discardEvents.remove(file);
-        return addToFileEventMap(file, new FileEvent(file, sequence++,  previous));
+        return addToFileEventMap(file, new FileEvent(file, sequence++, recycleDiscarded(file)));
     }
 
     private FileEvent getPreviousEventForFile(String file) {
@@ -65,6 +56,19 @@ public class Linker {
     private FileEvent addToFileEventMap(String file, FileEvent fileEvent) {
         fileEventsMap.put(file, fileEvent);
         return fileEvent;
+    }
+
+    private void saveDiscardEvent(String fromFile, FileEvent moveEvent) {
+        discardEvents.put(fromFile, moveEvent);
+    }
+
+    @Nullable
+    private FileEvent recycleDiscarded(String file) {
+        if (!isDiscardedName(file))
+            return null;
+        FileEvent previous =  discardEvents.get(file);
+        discardEvents.remove(file);
+        return previous;
     }
 
     private void checkFileNotDiscarded(String file, Runnable exceptionThrower) {
@@ -79,5 +83,14 @@ public class Linker {
 
     private boolean isDiscardedName(String file) {
         return discardEvents.containsKey(file);
+    }
+
+    static FileEvent doCall(Callable<FileEvent> fileEventCreator)  {
+        try {
+            return fileEventCreator.call();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
