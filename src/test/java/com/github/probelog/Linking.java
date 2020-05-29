@@ -172,7 +172,6 @@ public class Linking {
 
     // 1. Complete Linking
 
-    // moveUpdate to a file that has been moved from and moved back to again is ok
     // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
     // move to a renamed file is illegal (DiscardedNameException) should be a rename instead
 
@@ -182,6 +181,8 @@ public class Linking {
     // Move To after a delete is illegalState (should be a rename)
 
     // Frankenstein Create - create for a deleted is good
+
+    // copyUpdate and copyCreate
 
 
 
