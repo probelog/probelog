@@ -44,6 +44,7 @@ public class Linker {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+        discardEvents.remove(toFile);
         discardEvents.put(fromFile, moveEvent);
         return addToFileEventMap(toFile, moveEvent);
 

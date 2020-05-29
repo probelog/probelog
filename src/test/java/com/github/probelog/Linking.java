@@ -170,9 +170,20 @@ public class Linking {
 
     }
 
+    @Test
+    public void canMovetoPreviouslyDiscarded() {
+
+        linker.addFileMoveUpdate("fileA","fileX");
+        FileEvent createFileA = linker.addFileMoveCreate("fileX","fileA");
+        FileEvent moveFileRtoA = linker.addFileMoveUpdate("fileR","fileA");
+
+        assertEquals(createFileA, moveFileRtoA.previousEventForFile());
+
+    }
+
     // 1. Complete Linking
 
-    // write test to make move(and rename) remove the target file from discarded if it is there (in the way create does)
+    // Rework Linking test so that its more like the Nonsensical Test stories
 
     // Delete
     // Update, move from, rename from  after delete - illegalState
