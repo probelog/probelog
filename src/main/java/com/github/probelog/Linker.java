@@ -25,20 +25,20 @@ public class Linker {
     public FileEvent addFileMoveCreate(String fromFile, String toFile) {
 
         checkFileExistence(toFile, ()-> illegalMoveCreate(fromFile, toFile));
-        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, recycleDiscarded(toFile), getPreviousEventForFile(fromFile)));
+        return doMove(fromFile, toFile, recycleDiscarded(toFile));
 
     }
 
     public FileEvent addFileMoveUpdate(String fromFile, String toFile) {
         checkFileNotDiscarded(toFile, ()->illegalMoveUpdate(fromFile, toFile));
-        return doMove(fromFile, toFile, ()-> new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile)));
+        return doMove(fromFile, toFile,  getPreviousEventForFile(toFile));
     }
 
     @NotNull
-    private FileEvent doMove(String fromFile, String toFile, Callable<FileEvent> fileEventCreator) {
+    private FileEvent doMove(String fromFile, String toFile, FileEvent previousEvent) {
 
         checkFileNotDiscarded(fromFile, ()->illegalSource(fromFile, toFile));
-        FileEvent moveEvent = doCall(fileEventCreator);
+        FileEvent moveEvent = new FileEvent(toFile, sequence++, previousEvent, getPreviousEventForFile(fromFile));
         saveDiscardEvent(fromFile, moveEvent);
         return addToFileEventMap(toFile, moveEvent);
 
@@ -85,12 +85,4 @@ public class Linker {
         return discardEvents.containsKey(file);
     }
 
-    static FileEvent doCall(Callable<FileEvent> fileEventCreator)  {
-        try {
-            return fileEventCreator.call();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
