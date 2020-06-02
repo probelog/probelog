@@ -3,8 +3,7 @@ package com.github.probelog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.probelog.ActiveFileException.illegalCreate;
 import static com.github.probelog.ActiveFileException.illegalMoveCreate;
@@ -85,4 +84,17 @@ public class Linker {
         return discardEvents.containsKey(file);
     }
 
+    public List<FileEvent> latestEvents() {
+        Set<FileEvent> latestEventsSet = new HashSet<>();
+        latestEventsSet.addAll(discardEvents.values());
+        latestEventsSet.addAll(activeEvents.values());
+        List<FileEvent> result = new ArrayList(latestEventsSet);
+        Collections.sort(result, new Comparator<FileEvent>() {
+            @Override
+            public int compare(FileEvent o1, FileEvent o2) {
+                return o2.sequence().compareTo(o1.sequence());
+            }
+        });
+        return result;
+    }
 }

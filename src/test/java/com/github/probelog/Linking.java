@@ -3,6 +3,8 @@ package com.github.probelog;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.github.probelog.FileEvent.Type.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -34,9 +36,9 @@ public class Linking {
     @Test
     public void sequencing() {
 
-        assertEquals(1,event1__Update1__ToFileA.sequence());
-        assertEquals(2,event2__Update1__ToFileB.sequence());
-        assertEquals(3,event3__Update2__ToFileA.sequence());
+        assertEquals(1,event1__Update1__ToFileA.sequence().intValue());
+        assertEquals(2,event2__Update1__ToFileB.sequence().intValue());
+        assertEquals(3,event3__Update2__ToFileA.sequence().intValue());
 
     }
 
@@ -68,7 +70,7 @@ public class Linking {
         FileEvent event4__RenameFileBtoFileC = linker.addFileMoveCreate("fileB","fileC");
         FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
         assertEquals(RENAME, event4__RenameFileBtoFileC.type());
-        assertEquals(4, event4__RenameFileBtoFileC.sequence());
+        assertEquals(4, event4__RenameFileBtoFileC.sequence().intValue());
         assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.movedFromFile());
         assertEquals(null, event4__RenameFileBtoFileC.previousEventForFile());
         assertEquals(event4__RenameFileBtoFileC, event5__Update2_ToFileC.previousEventForFile());
@@ -90,7 +92,7 @@ public class Linking {
         FileEvent event4__MoveFileBtoFileA = linker.addFileMoveUpdate("fileB","fileA");
         FileEvent event5__Update2_ToFileA = linker.addFileUpdate("fileA");
         assertEquals(MOVE, event4__MoveFileBtoFileA.type());
-        assertEquals(4, event4__MoveFileBtoFileA.sequence());
+        assertEquals(4, event4__MoveFileBtoFileA.sequence().intValue());
         assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
         assertEquals(event4__MoveFileBtoFileA, event5__Update2_ToFileA.previousEventForFile());
@@ -117,7 +119,7 @@ public class Linking {
         FileEvent createFileX = linker.addFileCreate("fileX");
         assertEquals(createFileX, linker.addFileUpdate("fileX").previousEventForFile());
         assertNull(createFileX.previousEventForFile());
-        assertEquals(4, createFileX.sequence());
+        assertEquals(4, createFileX.sequence().intValue());
         assertEquals(FileEvent.Type.CREATE, createFileX.type());
 
     }
@@ -181,9 +183,22 @@ public class Linking {
 
     }
 
+    @Test
+    public void latestEvents() {
+
+        linker.addFileMoveUpdate("fileB","fileX");
+        List<FileEvent> fileEvents = linker.latestEvents();
+        assertEquals(2, fileEvents.size());
+        FileEvent moveBtoX=fileEvents.get(0);
+        FileEvent updateA=fileEvents.get(1);
+        assertEquals(event2__Update1__ToFileB, moveBtoX.movedFromFile());
+        assertEquals(event3__Update2__ToFileA, updateA);
+
+    }
+
     // 1. Complete Linking
 
-    // Rework Linking test so that its more like the Nonsensical Test stories
+    // Rework Linking test so that its more like the Nonsensical Test stories - use latestEvents instead of add methods return values
 
     // Delete
     // Update, move from, rename from  after delete - illegalState
