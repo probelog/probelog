@@ -41,10 +41,10 @@ public class FileEvent {
     public Type type() {
         if (sequence == 0)
             return INITIAL;
-        if (notMove())
-            return isCreate() ? CREATE : UPDATE;
-        else
+        if (isMove())
             return isCreate() ? MOVE_CREATE : MOVE_UPDATE;
+        else
+            return isCreate() ? CREATE : UPDATE;
 
     }
 
@@ -52,8 +52,8 @@ public class FileEvent {
         return noPrevious() || previousWasMoveAway();
     }
 
-    private boolean notMove() {
-        return movedFromFile==null;
+    private boolean isMove() {
+        return movedFromFile!=null;
     }
 
     private boolean noPrevious() {
