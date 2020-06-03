@@ -48,6 +48,16 @@ public class FileEvent {
 
     }
 
+    public String toString() {
+        switch(type()) {
+            case UPDATE: return "Updating " + file;
+            case MOVE_UPDATE: return "Moving " + movedFromFile.file + " to " + file + " (overwriting target file)";
+            case MOVE_CREATE: return "Moving " + movedFromFile.file + " to " + file + " (creating target file)";
+            default: return null;
+        }
+
+    }
+
     private boolean isCreate() {
         return noPrevious() || previousWasMoveAway();
     }
@@ -75,5 +85,6 @@ public class FileEvent {
     public FileEvent movedFromFile() {
         return movedFromFile;
     }
+
 
 }

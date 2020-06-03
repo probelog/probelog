@@ -43,13 +43,23 @@ public class Linking {
         List<FileEvent> fileEvents = linker.latestEvents();
         assertEquals(1, fileEvents.size());
 
-        // TODO to make this test readable need to have toString implementations instead of type
+        // TODO have idea to return a tree string from toString - can use this in all no nonsense tests to tell story
+        // like
+        // root
+        // |_previousEventString
+        // |_previousEventString
+        //    |_movedFromString
+        //       |_previousEventString
+        // |_previousEventString
 
         FileEvent head =  fileEvents.get(0);
         assertEquals(UPDATE, head.type());
+        assertEquals("Updating B", head.toString());
         assertEquals(MOVE_UPDATE, head.previousEventForFile().type());
+        assertEquals("Moving A to B (overwriting target file)", head.previousEventForFile().toString());
         assertEquals(CREATE, head.previousEventForFile().movedFromFile().type());
         assertEquals(MOVE_CREATE, head.previousEventForFile().previousEventForFile().type());
+        assertEquals("Moving A to B (creating target file)", head.previousEventForFile().previousEventForFile().toString());
         assertEquals(UPDATE, head.previousEventForFile().previousEventForFile().movedFromFile().type());
         assertEquals(CREATE, head.previousEventForFile().previousEventForFile().movedFromFile().previousEventForFile().type());
 
