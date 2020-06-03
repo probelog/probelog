@@ -45,7 +45,11 @@ public class Linking {
 
         FileEvent head =  fileEvents.get(0);
         assertEquals(UPDATE, head.type());
+        assertEquals(MOVE_UPDATE, head.previousEventForFile().type());
         assertEquals(CREATE, head.previousEventForFile().movedFromFile().type());
+        assertEquals(MOVE_CREATE, head.previousEventForFile().previousEventForFile().type());
+        assertEquals(UPDATE, head.previousEventForFile().previousEventForFile().movedFromFile().type());
+        assertEquals(CREATE, head.previousEventForFile().previousEventForFile().movedFromFile().previousEventForFile().type());
 
     }
 

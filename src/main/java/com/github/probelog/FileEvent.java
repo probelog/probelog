@@ -41,15 +41,27 @@ public class FileEvent {
     public Type type() {
         if (sequence == 0)
             return INITIAL;
-        if (movedFromFile==null)
-            return previousEventForFile==null || (previousWasMove() && previousWasMoveAway()) ? CREATE : UPDATE;
+        if (notMove())
+            return isCreate() ? CREATE : UPDATE;
         else
-            return previousEventForFile==null || previousWasMove() ? MOVE_CREATE : MOVE_UPDATE;
+            return isCreate() ? MOVE_CREATE : MOVE_UPDATE;
 
     }
 
+    private boolean isCreate() {
+        return noPrevious() || previousWasMoveAway();
+    }
+
+    private boolean notMove() {
+        return movedFromFile==null;
+    }
+
+    private boolean noPrevious() {
+        return previousEventForFile == null;
+    }
+
     private boolean previousWasMoveAway() {
-        return !previousEventForFile.file.equals(file);
+        return previousWasMove() && !previousEventForFile.file.equals(file);
     }
 
     private boolean previousWasMove() {
