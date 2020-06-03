@@ -42,10 +42,14 @@ public class FileEvent {
         if (sequence == 0)
             return INITIAL;
         if (movedFromFile==null)
-            return previousEventForFile==null || previousWasMove() ? CREATE : UPDATE;
+            return previousEventForFile==null || (previousWasMove() && previousWasMoveAway()) ? CREATE : UPDATE;
         else
             return previousEventForFile==null || previousWasMove() ? MOVE_CREATE : MOVE_UPDATE;
 
+    }
+
+    private boolean previousWasMoveAway() {
+        return !previousEventForFile.file.equals(file);
     }
 
     private boolean previousWasMove() {
