@@ -43,6 +43,8 @@ public class Linking {
         List<FileEvent> fileEvents = linker.latestEvents();
         assertEquals(1, fileEvents.size());
 
+        // TODO to make this test readable need to have toString implementations instead of type
+
         FileEvent head =  fileEvents.get(0);
         assertEquals(UPDATE, head.type());
         assertEquals(MOVE_UPDATE, head.previousEventForFile().type());
