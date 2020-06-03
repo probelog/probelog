@@ -1,5 +1,7 @@
 package com.github.probelog;
 
+import static com.github.probelog.FileEvent.Type.*;
+
 public class FileEvent {
 
 
@@ -38,15 +40,16 @@ public class FileEvent {
 
     public Type type() {
         if (sequence == 0)
-            return Type.INITIAL;
+            return INITIAL;
         if (movedFromFile==null)
-            return previousEventForFile==null ? Type.CREATE :  Type.UPDATE;
-        return previousEventForFile==null || previousWasMove() ? Type.MOVE_CREATE : Type.MOVE_UPDATE;
+            return previousEventForFile==null || previousWasMove() ? CREATE : UPDATE;
+        else
+            return previousEventForFile==null || previousWasMove() ? MOVE_CREATE : MOVE_UPDATE;
 
     }
 
     private boolean previousWasMove() {
-        return previousEventForFile.type().equals(Type.MOVE_CREATE) || previousEventForFile.type().equals(Type.MOVE_UPDATE);
+        return previousEventForFile.type().equals(MOVE_CREATE) || previousEventForFile.type().equals(MOVE_UPDATE);
     }
 
     public Integer sequence() {

@@ -150,7 +150,17 @@ public class Linking {
         assertEquals(createFileX, linker.addFileUpdate("fileX").previousEventForFile());
         assertNull(createFileX.previousEventForFile());
         assertEquals(4, createFileX.sequence().intValue());
-        assertEquals(FileEvent.Type.CREATE, createFileX.type());
+        assertEquals(CREATE, createFileX.type());
+
+    }
+
+    @Test
+    public void reCreateAfterMove() {
+
+        linker.addFileMoveCreate("fileA","fileX");
+        FileEvent reCreateFileA = linker.addFileCreate("fileA");
+        assertEquals(MOVE_CREATE, reCreateFileA.previousEventForFile().type());
+        assertEquals(FileEvent.Type.CREATE, reCreateFileA.type());
 
     }
 
