@@ -28,9 +28,39 @@ public class Linking {
 
     }
 
+/* type() is getting in the way
+
+   @Test
+    public void completelifeCycle() {
+
+        Linker linker = new Linker();
+        linker.addFileCreate("A");
+        linker.addFileUpdate("A");
+        linker.addFileMoveCreate("A","B");
+        linker.addFileCreate("A");
+        linker.addFileMoveUpdate("A","B");
+        linker.addFileUpdate("B");
+        List<FileEvent> fileEvents = linker.latestEvents();
+        assertEquals(1, fileEvents.size());
+
+        assertEquals(CREATE, fileEvents.get(0).previousEventForFile().movedFromFile().type());
+
+
+
+    }*/
+
+    @Test
+    public void partialLifeCycle() {
+
+
+
+    }
+
     @Test
     public void updateEvent() {
-        assertEquals(UPDATE, event1__Update1__ToFileA.type());
+
+        assertEquals(UPDATE, event1__Update1__ToFileA.type()
+        );
     }
 
     @Test
