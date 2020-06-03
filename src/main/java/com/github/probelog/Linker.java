@@ -85,16 +85,8 @@ public class Linker {
     }
 
     public List<FileEvent> latestEvents() {
-        Set<FileEvent> latestEventsSet = new HashSet<>();
-        latestEventsSet.addAll(discardEvents.values());
-        latestEventsSet.addAll(activeEvents.values());
-        List<FileEvent> result = new ArrayList(latestEventsSet);
-        Collections.sort(result, new Comparator<FileEvent>() {
-            @Override
-            public int compare(FileEvent o1, FileEvent o2) {
-                return o2.sequence().compareTo(o1.sequence());
-            }
-        });
+        List<FileEvent> result = new ArrayList(activeEvents.values());
+        Collections.sort(result, (o1, o2) -> o2.sequence().compareTo(o1.sequence()));
         return result;
     }
 }

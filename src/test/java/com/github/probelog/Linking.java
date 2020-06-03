@@ -186,13 +186,14 @@ public class Linking {
     @Test
     public void latestEvents() {
 
-        linker.addFileMoveUpdate("fileB","fileX");
+        linker.addFileMoveUpdate("fileA","fileX");
+        linker.addFileUpdate("fileB");
         List<FileEvent> fileEvents = linker.latestEvents();
         assertEquals(2, fileEvents.size());
-        FileEvent moveBtoX=fileEvents.get(0);
-        FileEvent updateA=fileEvents.get(1);
-        assertEquals(event2__Update1__ToFileB, moveBtoX.movedFromFile());
-        assertEquals(event3__Update2__ToFileA, updateA);
+        FileEvent updateB=fileEvents.get(0);
+        FileEvent moveAtoX=fileEvents.get(1);
+        assertEquals(event2__Update1__ToFileB, updateB.previousEventForFile());
+        assertEquals(event3__Update2__ToFileA, moveAtoX.movedFromFile());
 
     }
 
