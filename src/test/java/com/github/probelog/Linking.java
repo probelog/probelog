@@ -99,7 +99,7 @@ public class Linking {
 
         FileEvent event4__RenameFileBtoFileC = linker.addFileMoveCreate("fileB","fileC");
         FileEvent event5__Update2_ToFileC = linker.addFileUpdate("fileC");
-        assertEquals(RENAME, event4__RenameFileBtoFileC.type());
+        assertEquals(MOVE_CREATE, event4__RenameFileBtoFileC.type());
         assertEquals(4, event4__RenameFileBtoFileC.sequence().intValue());
         assertEquals(event2__Update1__ToFileB, event4__RenameFileBtoFileC.movedFromFile());
         assertEquals(null, event4__RenameFileBtoFileC.previousEventForFile());
@@ -111,7 +111,7 @@ public class Linking {
     public void moveCreateIsFirstEventForFileCausesInitialEventCreation() {
 
         FileEvent renameEvent = linker.addFileMoveCreate("fileC","fileD");
-        assertEquals(RENAME, renameEvent.type());
+        assertEquals(MOVE_CREATE, renameEvent.type());
         assertEquals(INITIAL, renameEvent.movedFromFile().type());
 
     }
@@ -121,7 +121,7 @@ public class Linking {
 
         FileEvent event4__MoveFileBtoFileA = linker.addFileMoveUpdate("fileB","fileA");
         FileEvent event5__Update2_ToFileA = linker.addFileUpdate("fileA");
-        assertEquals(MOVE, event4__MoveFileBtoFileA.type());
+        assertEquals(MOVE_UPDATE, event4__MoveFileBtoFileA.type());
         assertEquals(4, event4__MoveFileBtoFileA.sequence().intValue());
         assertEquals(event3__Update2__ToFileA, event4__MoveFileBtoFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, event4__MoveFileBtoFileA.movedFromFile());
@@ -186,7 +186,7 @@ public class Linking {
 
         assertEquals(moveFileAtoX, createFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, createFileA.movedFromFile());
-        assertEquals(RENAME, createFileA.type());
+        assertEquals(MOVE_CREATE, createFileA.type());
 
     }
 
@@ -198,7 +198,7 @@ public class Linking {
 
         assertEquals(moveFileAtoX, createFileA.previousEventForFile());
         assertEquals(event2__Update1__ToFileB, createFileA.movedFromFile());
-        assertEquals(RENAME, createFileA.type());
+        assertEquals(MOVE_CREATE, createFileA.type());
 
     }
 

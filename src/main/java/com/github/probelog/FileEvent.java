@@ -5,8 +5,8 @@ public class FileEvent {
 
     enum Type {
         INITIAL,
-        MOVE,
-        RENAME,
+        MOVE_UPDATE,
+        MOVE_CREATE,
         UPDATE,
         CREATE
     }
@@ -37,7 +37,16 @@ public class FileEvent {
     }
 
     public Type type() {
-        return sequence == 0 ? Type.INITIAL : movedFromFile != null ? ((previousEventForFile==null || (previousEventForFile.type().equals(Type.RENAME) || previousEventForFile.type().equals(Type.MOVE))) ? Type.RENAME : Type.MOVE) : previousEventForFile==null ? Type.CREATE :  Type.UPDATE;
+        if (sequence == 0)
+            return Type.INITIAL;
+        if (movedFromFile==null)
+            return previousEventForFile==null ? Type.CREATE :  Type.UPDATE;
+        return previousEventForFile==null || previousWasMove() ? Type.MOVE_CREATE : Type.MOVE_UPDATE;
+
+    }
+
+    private boolean previousWasMove() {
+        return previousEventForFile.type().equals(Type.MOVE_CREATE) || previousEventForFile.type().equals(Type.MOVE_UPDATE);
     }
 
     public Integer sequence() {
