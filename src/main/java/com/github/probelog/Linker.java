@@ -84,9 +84,4 @@ public class Linker {
         return discardEvents.containsKey(file);
     }
 
-    public List<FileEvent> latestEvents() {
-        List<FileEvent> result = new ArrayList(activeEvents.values());
-        Collections.sort(result, (o1, o2) -> o2.sequence().compareTo(o1.sequence()));
-        return result;
-    }
 }
