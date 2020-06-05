@@ -37,9 +37,11 @@ public class SensibleLinking {
 
         FileEvent createX=linker.addFileCreate("X");
         FileEvent moveXtoY = linker.addFileMoveCreate("X","Y");
+        FileEvent updateY = linker.addFileUpdate("Y");
         assertEquals("2) Moving X to Y (creating target file)",moveXtoY.toString());
         assertEquals(createX,moveXtoY.movedFromFile());
         assertTrue(moveXtoY.noPrevious());
+        assertEquals(moveXtoY,updateY.previousEventForFile());
 
     }
 
@@ -47,12 +49,9 @@ public class SensibleLinking {
     public void movingToAFileThatUsedToExist() {
 
         FileEvent createX=linker.addFileCreate("X");
-
         linker.addFileCreate("Y");
         FileEvent moveYtoZ = linker.addFileMoveCreate("Y","Z");
-
         FileEvent moveXtoY = linker.addFileMoveCreate("X","Y");
-
         assertEquals("4) Moving X to Y (creating target file)",moveXtoY.toString());
         assertEquals(createX,moveXtoY.movedFromFile());
         assertEquals(moveYtoZ, moveXtoY.previousEventForFile());
@@ -97,6 +96,21 @@ public class SensibleLinking {
 
         assertEquals(moveZtoX, moveTtoX.previousEventForFile());
         assertEquals(moveXtoY, moveZtoX.previousEventForFile());
+
+    }
+
+    @Test
+    public void copyToAFilethatHasNeverExisted() {
+
+        FileEvent createX=linker.addFileCreate("X");
+        FileEvent copyXtoY = linker.addFileCopyCreate("X","Y");
+        FileEvent updateX = linker.addFileUpdate("X");
+        FileEvent updateY = linker.addFileUpdate("Y");
+        assertEquals("2) Copying X to Y (creating target file)",copyXtoY.toString());
+        assertEquals(createX,copyXtoY.movedFromFile());
+        assertTrue(copyXtoY.noPrevious());
+        assertEquals(copyXtoY,updateX.previousEventForFile());
+        assertEquals(copyXtoY,updateY.previousEventForFile());
 
     }
 

@@ -9,6 +9,7 @@ public class FileEvent {
         INITIAL,
         MOVE_UPDATE,
         MOVE_CREATE,
+        COPY_CREATE,
         UPDATE,
         CREATE
     }
@@ -18,6 +19,7 @@ public class FileEvent {
     private int sequence;
     private FileEvent previousEventForFile;
     private FileEvent movedFromFile;
+    private boolean isCopy;
 
     FileEvent(String file) {
         this(file, 0, null);
@@ -28,10 +30,15 @@ public class FileEvent {
     }
 
     FileEvent(String file, int sequence, FileEvent previousEventForFile, FileEvent movedFromFile) {
+        this(file, sequence, previousEventForFile, movedFromFile, false);
+    }
+
+    FileEvent(String file, int sequence, FileEvent previousEventForFile, FileEvent movedFromFile, boolean isCopy) {
         this.file = file;
         this.sequence = sequence;
         this.previousEventForFile = previousEventForFile;
         this.movedFromFile = movedFromFile;
+        this.isCopy=isCopy;
     }
 
     public FileEvent previousEventForFile() {
@@ -42,7 +49,7 @@ public class FileEvent {
         if (sequence == 0)
             return INITIAL;
         if (isMove())
-            return isCreate() ? MOVE_CREATE : MOVE_UPDATE;
+            return isCreate() ? (isCopy ? COPY_CREATE : MOVE_CREATE) : MOVE_UPDATE;
         else
             return isCreate() ? CREATE : UPDATE;
 
@@ -54,6 +61,7 @@ public class FileEvent {
             case CREATE: return sequence + ") Creating " + file;
             case UPDATE: return sequence + ") Updating " + file;
             case MOVE_UPDATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (overwriting target file)";
+            case COPY_CREATE: return sequence + ") Copying " + movedFromFile.file + " to " + file + " (creating target file)";
             case MOVE_CREATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (creating target file)";
             default: return null;
         }

@@ -32,6 +32,13 @@ public class Linker {
         return doMove(fromFile, toFile,  getPreviousEventForFile(toFile));
     }
 
+    public FileEvent addFileCopyCreate(String fromFile, String toFile) {
+        FileEvent copyEvent = new FileEvent(toFile, sequence++, null, getPreviousEventForFile(fromFile), true);
+        activeEvents.put(fromFile, copyEvent);
+        activeEvents.put(toFile, copyEvent);
+        return copyEvent;
+    }
+
     @NotNull
     private FileEvent doMove(String fromFile, String toFile, FileEvent previousEvent) {
 
@@ -83,5 +90,4 @@ public class Linker {
     private boolean isDiscardedName(String file) {
         return discardEvents.containsKey(file);
     }
-
 }
