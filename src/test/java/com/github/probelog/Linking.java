@@ -49,13 +49,11 @@ public class Linking {
         // |_previousEventString
         // |_previousEventString
         //    |_movedFromString
-        //       |_previousEventString
+        //    |_previousEventString
         // |_previousEventString
 
         FileEvent head =  fileEvents.get(0);
-        assertEquals(UPDATE, head.type());
         assertEquals("Updating B", head.toString());
-        assertEquals(MOVE_UPDATE, head.previousEventForFile().type());
         assertEquals("Moving A to B (overwriting target file)", head.previousEventForFile().toString());
         assertEquals(CREATE, head.previousEventForFile().movedFromFile().type());
         assertEquals(MOVE_CREATE, head.previousEventForFile().previousEventForFile().type());
