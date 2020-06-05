@@ -9,6 +9,7 @@ public class FileEvent {
         INITIAL,
         MOVE_UPDATE,
         MOVE_CREATE,
+        COPY_UPDATE,
         COPY_CREATE,
         UPDATE,
         CREATE
@@ -49,7 +50,7 @@ public class FileEvent {
         if (sequence == 0)
             return INITIAL;
         if (isMove())
-            return isCreate() ? (isCopy ? COPY_CREATE : MOVE_CREATE) : MOVE_UPDATE;
+            return isCreate() ? (isCopy ? COPY_CREATE : MOVE_CREATE) : (isCopy ? COPY_UPDATE : MOVE_UPDATE);
         else
             return isCreate() ? CREATE : UPDATE;
 
@@ -60,6 +61,7 @@ public class FileEvent {
             case INITIAL: return "Initial State for " + file;
             case CREATE: return sequence + ") Creating " + file;
             case UPDATE: return sequence + ") Updating " + file;
+            case COPY_UPDATE: return sequence + ") Copying " + movedFromFile.file + " to " + file + " (overwriting target file)";
             case MOVE_UPDATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (overwriting target file)";
             case COPY_CREATE: return sequence + ") Copying " + movedFromFile.file + " to " + file + " (creating target file)";
             case MOVE_CREATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (creating target file)";

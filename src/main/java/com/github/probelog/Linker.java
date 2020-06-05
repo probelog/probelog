@@ -33,10 +33,15 @@ public class Linker {
     }
 
     public FileEvent addFileCopyCreate(String fromFile, String toFile) {
-        FileEvent copyEvent = new FileEvent(toFile, sequence++, null, getPreviousEventForFile(fromFile), true);
-        activeEvents.put(fromFile, copyEvent);
-        activeEvents.put(toFile, copyEvent);
-        return copyEvent;
+        FileEvent copyEvent = new FileEvent(toFile, sequence++, recycleDiscarded(toFile), getPreviousEventForFile(fromFile), true);
+        addActiveEvent(fromFile, copyEvent);
+        return addActiveEvent(toFile, copyEvent);
+    }
+
+    public FileEvent addFileCopyUpdate(String fromFile, String toFile) {
+        FileEvent copyEvent = new FileEvent(toFile, sequence++, getPreviousEventForFile(toFile), getPreviousEventForFile(fromFile), true);
+        addActiveEvent(fromFile, copyEvent);
+        return addActiveEvent(toFile, copyEvent);
     }
 
     @NotNull

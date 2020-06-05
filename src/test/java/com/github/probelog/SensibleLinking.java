@@ -151,14 +151,14 @@ public class SensibleLinking {
 
     // 1. Complete Linking
 
+    // copyUpdate and copyCreate nonsense
+
     // Delete
     // Update, move from, rename from  after delete - illegalState
     // Rename To after delete is good
     // Move To after a delete is illegalState (should be a rename)
 
     // Frankenstein Create - create for a deleted is good
-
-    // copyUpdate and copyCreate
 
     // 2. linker can return all the FileEvents from its map (i.e. all the heads) that have been created since a certain sequence number (time) - thats all Test Run needs
     //       file events map should not contain files that have been movedFrom and then we can just use the file event map values to do this
