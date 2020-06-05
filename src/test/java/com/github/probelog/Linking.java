@@ -29,46 +29,37 @@ public class Linking {
     }
 
 
-
     @Test
-    public void completelifeCycle() {
-
-        Linker linker = new Linker();
-        linker.addFileCreate("A");
-        linker.addFileUpdate("A");
-        linker.addFileMoveCreate("A","B");
-        linker.addFileCreate("A");
-        linker.addFileMoveUpdate("A","B");
-        linker.addFileUpdate("B");
-        List<FileEvent> fileEvents = linker.latestEvents();
-        assertEquals(1, fileEvents.size());
-
-        // TODO have idea to return a tree string from toString - can use this in all no nonsense tests to tell story
-        // like
-        // root
-        // |_previousEventString
-        // |_previousEventString
-        //    |_movedFromString
-        //    |_previousEventString
-        // |_previousEventString
-
-        FileEvent head =  fileEvents.get(0);
-        assertEquals("Updating B", head.toString());
-        assertEquals("Moving A to B (overwriting target file)", head.previousEventForFile().toString());
-        assertEquals(CREATE, head.previousEventForFile().movedFromFile().type());
-        assertEquals(MOVE_CREATE, head.previousEventForFile().previousEventForFile().type());
-        assertEquals("Moving A to B (creating target file)", head.previousEventForFile().previousEventForFile().toString());
-        assertEquals(UPDATE, head.previousEventForFile().previousEventForFile().movedFromFile().type());
-        assertEquals(CREATE, head.previousEventForFile().previousEventForFile().movedFromFile().previousEventForFile().type());
+    public void updateIsFirstEventForFile() {
 
     }
 
     @Test
-    public void partialLifeCycle() {
-
-
+    public void createThenUpdate() {
 
     }
+
+    @Test
+    public void movingToAFileThatUsedToExist() {
+
+    }
+
+    @Test
+    public void movingToAFilethatHasNeverExisted() {
+
+    }
+
+    @Test
+    public void movingToAFileThatExists() {
+
+    }
+
+    @Test
+    public void moveIsFirstEventForTheMovesSourceFile() {
+
+    }
+
+
 
     @Test
     public void updateEvent() {
