@@ -50,9 +50,11 @@ public class FileEvent {
 
     public String toString() {
         switch(type()) {
-            case UPDATE: return "Updating " + file;
-            case MOVE_UPDATE: return "Moving " + movedFromFile.file + " to " + file + " (overwriting target file)";
-            case MOVE_CREATE: return "Moving " + movedFromFile.file + " to " + file + " (creating target file)";
+            case INITIAL: return "Initial State for " + file;
+            case CREATE: return sequence + ") Creating " + file;
+            case UPDATE: return sequence + ") Updating " + file;
+            case MOVE_UPDATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (overwriting target file)";
+            case MOVE_CREATE: return sequence + ") Moving " + movedFromFile.file + " to " + file + " (creating target file)";
             default: return null;
         }
 
@@ -66,7 +68,7 @@ public class FileEvent {
         return movedFromFile!=null;
     }
 
-    private boolean noPrevious() {
+    public boolean noPrevious() {
         return previousEventForFile == null;
     }
 
