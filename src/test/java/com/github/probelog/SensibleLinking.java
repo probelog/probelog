@@ -115,6 +115,40 @@ public class SensibleLinking {
     }
 
 
+    @Test
+    public void copyingToAFileThatUsedToExist() {
+
+        FileEvent createX=linker.addFileCreate("X");
+        linker.addFileCreate("Y");
+        FileEvent moveYtoZ = linker.addFileMoveCreate("Y","Z");
+        FileEvent copyXtoY = linker.addFileCopyCreate("X","Y");
+        FileEvent updateX = linker.addFileUpdate("X");
+        FileEvent updateY = linker.addFileUpdate("Y");
+        assertEquals("4) Copying X to Y (creating target file)",copyXtoY.toString());
+        assertEquals(createX,copyXtoY.movedFromFile());
+        assertEquals(moveYtoZ, copyXtoY.previousEventForFile());
+        assertEquals(copyXtoY,updateX.previousEventForFile());
+        assertEquals(copyXtoY,updateY.previousEventForFile());
+
+    }
+
+
+    @Test
+    public void copyingToAFileThatExists() {
+
+        FileEvent createX=linker.addFileCreate("X");
+        FileEvent createY=linker.addFileCreate("Y");
+        FileEvent copyXtoY = linker.addFileCopyUpdate("X","Y");
+        FileEvent updateX = linker.addFileUpdate("X");
+        FileEvent updateY = linker.addFileUpdate("Y");
+        assertEquals("3) Copying X to Y (overwriting target file)",copyXtoY.toString());
+        assertEquals(createX,copyXtoY.movedFromFile());
+        assertEquals(createY,copyXtoY.previousEventForFile());
+        assertEquals(copyXtoY,updateX.previousEventForFile());
+        assertEquals(copyXtoY,updateY.previousEventForFile());
+
+    }
+
     // 1. Complete Linking
 
     // Delete
