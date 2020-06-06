@@ -8,9 +8,11 @@ import static java.util.Arrays.asList;
 public class Change {
 
     private Change previous;
+    private List<FileState> afters;
 
-    Change(Change previous) {
+    Change(Change previous, List<FileState> afters) {
         this.previous=previous;
+        this.afters=afters;
     }
 
     public Change previousChange() {
@@ -18,6 +20,6 @@ public class Change {
     }
 
     public List<FileState> afters() {
-        return asList(new FileState());
+        return afters;
     }
 }

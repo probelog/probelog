@@ -14,11 +14,16 @@ public class MakingChanges {
 
         ChangeMaker maker = new ChangeMaker();
         maker.consumeCreate("x");
+        maker.consumeCreate("y");
         Change first = maker.makeChange();
         List<FileState> afters = first.afters();
-        assertEquals(1, afters.size());
-        assertEquals("name:x,state:newly created", afters.get(0).toString());
-        assertNull(afters.get(0).before());
+        assertEquals(2, afters.size());
+        FileState xCreate = afters.get(0);
+        FileState yCreate = afters.get(1);
+        assertEquals("name:x,state:newly created", xCreate.toString());
+        assertNull(xCreate.before());
+        assertEquals("name:y,state:newly created", yCreate.toString());
+        assertNull(yCreate.before());
         Change second = maker.makeChange();
         assertEquals(first, second.previousChange());
 
