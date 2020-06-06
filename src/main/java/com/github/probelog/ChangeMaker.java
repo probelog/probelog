@@ -9,4 +9,7 @@ public class ChangeMaker {
         return currentChange;
     }
 
+    public void consumeCreate(String fileName) {
+
+    }
 }
