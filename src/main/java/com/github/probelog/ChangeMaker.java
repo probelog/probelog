@@ -1,6 +1,8 @@
 package com.github.probelog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChangeMaker {
@@ -9,7 +11,8 @@ public class ChangeMaker {
     private List<FileState> fileStates = new ArrayList<>();
 
     public Change makeChange() {
-        currentChange=new Change(currentChange, fileStates);
+        Collections.sort(fileStates, (o1, o2) -> o1.fileName().compareTo(o2.fileName()));
+        currentChange=new Change(currentChange,fileStates);
         return currentChange;
     }
 

@@ -13,8 +13,8 @@ public class MakingChanges {
     public void sequentialChange() {
 
         ChangeMaker maker = new ChangeMaker();
-        maker.consumeCreate("x");
         maker.consumeCreate("y");
+        maker.consumeCreate("x");
         Change first = maker.makeChange();
         List<FileState> afters = first.afters();
         assertEquals(2, afters.size());

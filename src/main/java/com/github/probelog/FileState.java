@@ -12,6 +12,10 @@ public class FileState {
         return null;
     }
 
+    public String fileName() {
+        return fileName;
+    }
+
     public String toString() {
         return "name:" + fileName + ",state:newly created";
     }
