@@ -26,5 +26,6 @@ public class ChangeMaker {
     }
 
     public void consumeState(String fileName, String state) {
+        fileChanges.get(0).afterState().setState(state);
     }
 }

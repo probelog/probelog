@@ -3,13 +3,14 @@ package com.github.probelog;
 public class FileState {
 
     private String fileName;
+    private String state;
 
     FileState(String fileName) {
         this.fileName=fileName;
     }
 
-    public FileState before() {
-        return null;
+    void setState(String state) {
+        this.state=state;
     }
 
     public String fileName() {
@@ -17,6 +18,6 @@ public class FileState {
     }
 
     public String toString() {
-        return "name:" + fileName + ",state:newly created";
+        return "name:" + fileName + ",state:"  + (state!=null ? state: "newly created");
     }
 }
