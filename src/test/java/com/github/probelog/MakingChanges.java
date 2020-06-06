@@ -26,8 +26,13 @@ public class MakingChanges {
         assertEquals("name:y,state:newly created", yCreate.afterState().toString());
         assertNull(yCreate.beforeState());
         assertEquals(1, yCreate.time());
+
+        maker.consumeUpdate("x");
+        maker.consumeState("x", "xState1");
         Change second = maker.makeChange();
         assertEquals(first, second.previousChange());
+        fileChanges = second.fileChanges();
+        assertEquals(1, fileChanges.size());
 
     }
 
