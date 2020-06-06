@@ -2,13 +2,15 @@ package com.github.probelog;
 
 public class FileChange {
 
+    private int time;
     private FileState before, after;
 
-    public FileChange(FileState after) {
-        this(null,after);
+    public FileChange(int time, FileState after) {
+        this(time, null,after);
     }
 
-    public FileChange(FileState before,FileState after) {
+    public FileChange(int time, FileState before,FileState after) {
+        this.time=time;
         this.before=before;
         this.after=after;
     }
@@ -23,6 +25,6 @@ public class FileChange {
     }
 
     public int time() {
-        return 1;
+        return time;
     }
 }
