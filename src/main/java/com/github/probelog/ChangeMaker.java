@@ -27,7 +27,7 @@ public class ChangeMaker {
 
     public void consumeUpdate(String fileName) {
         activeFiles.add(fileName);
-        fileChanges.put(fileName, new FileChange(time, fileChanges.get(fileName).afterState(), new FileState(fileName)));
+        fileChanges.put(fileName, new FileChange(time, fileChanges.get(fileName), new FileState(fileName)));
     }
 
     public void consumeState(String fileName, String state) {
