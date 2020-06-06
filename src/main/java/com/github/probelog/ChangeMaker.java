@@ -1,31 +1,34 @@
 package com.github.probelog;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class ChangeMaker {
 
     private Change currentChange;
-    private List<FileChange> fileChanges = new ArrayList<>();
+    private Map<String,FileChange> fileChanges = new HashMap();
+    private Set<String> activeFiles = new HashSet();
 
     public Change makeChange() {
-        Collections.sort(fileChanges, (o1, o2) -> o1.afterState().fileName().compareTo(o2.afterState().fileName()));
-        currentChange=new Change(currentChange,fileChanges);
-        fileChanges= new ArrayList<>();
+        List<FileChange> changes = new ArrayList<>();
+        for(String activeFile: activeFiles)
+            changes.add(fileChanges.get(activeFile));
+        Collections.sort(changes, (o1, o2) -> o1.afterState().fileName().compareTo(o2.afterState().fileName()));
+        currentChange=new Change(currentChange,changes);
+        activeFiles.clear();
         return currentChange;
     }
 
     public void consumeCreate(String fileName) {
-        fileChanges.add(new FileChange(new FileState(fileName)));
+        activeFiles.add(fileName);
+        fileChanges.put(fileName, new FileChange(new FileState(fileName)));
     }
 
     public void consumeUpdate(String fileName) {
-        fileChanges.add(new FileChange(new FileState(fileName)));
+        activeFiles.add(fileName);
+        fileChanges.put(fileName, new FileChange(fileChanges.get(fileName).afterState(), new FileState(fileName)));
     }
 
     public void consumeState(String fileName, String state) {
-        fileChanges.get(0).afterState().setState(state);
+        fileChanges.get(fileName).afterState().setState(state);
     }
 }

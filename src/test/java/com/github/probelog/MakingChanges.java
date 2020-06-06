@@ -35,6 +35,7 @@ public class MakingChanges {
         assertEquals(1, fileChanges.size());
         FileChange xUpdate = fileChanges.get(0);
         assertEquals("name:x,state:xState1", xUpdate.afterState().toString());
+        assertEquals(xCreate.afterState(), xUpdate.beforeState());
 
     }
 
