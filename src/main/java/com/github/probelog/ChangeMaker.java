@@ -8,15 +8,15 @@ import java.util.List;
 public class ChangeMaker {
 
     private Change currentChange;
-    private List<FileState> fileStates = new ArrayList<>();
+    private List<FileChange> fileChanges = new ArrayList<>();
 
     public Change makeChange() {
-        Collections.sort(fileStates, (o1, o2) -> o1.fileName().compareTo(o2.fileName()));
-        currentChange=new Change(currentChange,fileStates);
+        Collections.sort(fileChanges, (o1, o2) -> o1.afterState().fileName().compareTo(o2.afterState().fileName()));
+        currentChange=new Change(currentChange,fileChanges);
         return currentChange;
     }
 
     public void consumeCreate(String fileName) {
-        fileStates.add(new FileState(fileName));
+        fileChanges.add(new FileChange(new FileState(fileName)));
     }
 }

@@ -1,25 +1,22 @@
 package com.github.probelog;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 public class Change {
 
     private Change previous;
-    private List<FileState> afters;
+    private List<FileChange> fileChanges;
 
-    Change(Change previous, List<FileState> afters) {
+    Change(Change previous, List<FileChange> fileChanges) {
         this.previous=previous;
-        this.afters=afters;
+        this.fileChanges=fileChanges;
     }
 
     public Change previousChange() {
         return previous;
     }
 
-    public List<FileState> afters() {
-        return afters;
+    public List<FileChange> fileChanges() {
+        return fileChanges;
     }
 }
