@@ -16,4 +16,8 @@ public class FileChange {
     public FileState afterState() {
         return after;
     }
+
+    public int time() {
+        return 1;
+    }
 }
