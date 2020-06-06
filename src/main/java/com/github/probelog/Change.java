@@ -17,7 +17,7 @@ public class Change {
         return previous;
     }
 
-    public List<FileState> after() {
+    public List<FileState> afters() {
         return asList(new FileState());
     }
 }
