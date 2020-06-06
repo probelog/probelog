@@ -11,15 +11,19 @@ public class RecordingHistory {
 
         ChangeMaker maker = new ChangeMaker();
         maker.consumeCreate("x");
-        FileState createX = maker.makeChange().fileChanges().get(0).afterState();
+        Change change1 = maker.makeChange();
+        assertEquals(1, change1.time());
+        FileState createXDoneInChange1 = change1.fileChanges().get(0).afterState();
         maker.consumeUpdate("x");
         maker.consumeState("x","xState1");
-        maker.makeChange();
+        Change change2=maker.makeChange();
+        assertEquals(2, change2.time());
         maker.consumeUpdate("x");
         maker.consumeState("x","xState2");
-        FileChange updateX2afterUpdateX1afterCreateX = maker.makeChange().fileChanges().get(0);
+        Change change3=maker.makeChange();
+        FileChange updateX2afterUpdateX1afterCreateX = change3.fileChanges().get(0);
 
-        assertEquals(createX, updateX2afterUpdateX1afterCreateX.beforeState(2));
+        assertEquals(createXDoneInChange1, updateX2afterUpdateX1afterCreateX.beforeState(change2.time()));
 
     }
 

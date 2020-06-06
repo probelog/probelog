@@ -19,4 +19,8 @@ public class Change {
     public List<FileChange> fileChanges() {
         return fileChanges;
     }
+
+    public int time() {
+        return fileChanges.get(0).time();
+    }
 }
