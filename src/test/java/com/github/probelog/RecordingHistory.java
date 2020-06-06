@@ -27,4 +27,22 @@ public class RecordingHistory {
 
     }
 
+    @Test
+    public void goingBackTooFar() {
+
+        ChangeMaker maker = new ChangeMaker();
+        Change change1 = maker.makeChange();
+        assertEquals(1, change1.time());
+        maker.consumeCreate("x");
+        Change change2=maker.makeChange();
+        assertEquals(2, change2.time());
+        maker.consumeUpdate("x");
+        maker.consumeState("x","xState1");
+        Change change3=maker.makeChange();
+        FileChange updateX1afterCreateX = change3.fileChanges().get(0);
+
+        assertEquals(null, updateX1afterCreateX.beforeState(change2.time()));
+
+    }
+
 }

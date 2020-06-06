@@ -4,10 +4,12 @@ import java.util.List;
 
 public class Change {
 
+    private int time;
     private Change previous;
     private List<FileChange> fileChanges;
 
-    Change(Change previous, List<FileChange> fileChanges) {
+    Change(int time, Change previous, List<FileChange> fileChanges) {
+        this.time=time;
         this.previous=previous;
         this.fileChanges=fileChanges;
     }
@@ -21,6 +23,6 @@ public class Change {
     }
 
     public int time() {
-        return fileChanges.get(0).time();
+        return time;
     }
 }

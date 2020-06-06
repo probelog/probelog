@@ -14,9 +14,8 @@ public class ChangeMaker {
         for(String activeFile: activeFiles)
             changes.add(fileChanges.get(activeFile));
         Collections.sort(changes, (o1, o2) -> o1.afterState().fileName().compareTo(o2.afterState().fileName()));
-        currentChange=new Change(currentChange,changes);
+        currentChange=new Change(time++, currentChange,changes);
         activeFiles.clear();
-        time++;
         return currentChange;
     }
 

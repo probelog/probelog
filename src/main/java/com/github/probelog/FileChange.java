@@ -31,7 +31,7 @@ public class FileChange {
 
     public FileState beforeState(int time) {
         if (time()>=time)
-            return before.beforeState(time);
+            return before!=null ? before.beforeState(time) : null;
         return afterState();
     }
 }
