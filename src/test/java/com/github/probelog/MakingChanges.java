@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class MakingChanges {
 
     @Test
-    public void initialisation() {
+    public void sequentialChange() {
 
         ChangeMaker maker = new ChangeMaker();
         Change first = maker.makeChange();
