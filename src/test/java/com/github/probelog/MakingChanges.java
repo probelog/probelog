@@ -40,5 +40,18 @@ public class MakingChanges {
 
     }
 
+    /*
+    Plan
+    1) Initialising (comsumeUpdate is first call for file)
+    2) Deleting
+    3) Recreating
+    4) Copying
+    5) Moving
+    6) When State Needed (e.g Update with no state added for file, no initial state for file)
+    7) Integrity Attacks !
+
+
+     */
+
 
 }
