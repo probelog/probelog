@@ -32,4 +32,9 @@ public class ChangeMaker {
     public void consumeState(String fileName, String state) {
         fileChanges.get(fileName).afterState().setState(state);
     }
+
+    public void consumeDelete(String fileName) {
+        activeFiles.add(fileName);
+        fileChanges.put(fileName, new FileChange(time, fileChanges.get(fileName), new FileState(fileName, true)));
+    }
 }
