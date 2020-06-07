@@ -1,6 +1,13 @@
 package com.github.probelog;
 
-public class FileChange {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
+public class FileChange implements Change {
 
     private int time;
     private FileChange before;
@@ -23,6 +30,11 @@ public class FileChange {
 
     public FileState afterState() {
         return after;
+    }
+
+    @Override
+    public List<FileChange> fileChanges() {
+        return singletonList(this);
     }
 
     public int time() {

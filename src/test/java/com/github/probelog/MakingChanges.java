@@ -30,7 +30,6 @@ public class MakingChanges {
         maker.consumeUpdate("x");
         maker.consumeState("x", "xState1");
         Change second = maker.makeChange();
-        assertEquals(first, second.previousChange());
         fileChanges = second.fileChanges();
         assertEquals(1, fileChanges.size());
         FileChange xUpdate = fileChanges.get(0);

@@ -4,7 +4,6 @@ import java.util.*;
 
 public class ChangeMaker {
 
-    private Change currentChange;
     private Map<String,FileChange> fileChanges = new HashMap();
     private Set<String> activeFiles = new HashSet();
     private int time=1;
@@ -14,9 +13,10 @@ public class ChangeMaker {
         for(String activeFile: activeFiles)
             changes.add(fileChanges.get(activeFile));
         Collections.sort(changes, (o1, o2) -> o1.afterState().fileName().compareTo(o2.afterState().fileName()));
-        currentChange=new Change(time++, currentChange,changes);
+        Change result=changes.isEmpty() ? new NullChange(time) : changes.size()==1 ? changes.get(0) : new CompositeChange(changes);
         activeFiles.clear();
-        return currentChange;
+        time++;
+        return result;
     }
 
     public void consumeCreate(String fileName) {
