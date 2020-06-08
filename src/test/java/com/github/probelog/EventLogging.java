@@ -12,7 +12,8 @@ public class EventLogging {
 
         EventLogger logger = new EventLogger();
         assertEquals(UNKNOWN, logger.state("x"));
-
+        logger.logCreate("x");
+        assertEquals(CREATED, logger.state("x"));
     }
 
 }
