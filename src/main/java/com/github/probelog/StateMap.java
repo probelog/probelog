@@ -13,7 +13,7 @@ public class StateMap {
 
     static Set<State> validTransitions(State fromState) {
         if (fromState==UNKNOWN)
-            return createStateSet(CREATED, INITIALIZED);
+            return createStateSet(CREATED, INITIALIZED, PASTED);
         if (existingAndValid.contains(fromState))
             return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED, UPDATED);
         if (fromState==TOUCHED)
@@ -24,7 +24,7 @@ public class StateMap {
     }
 
     static Set<State> createStateSet(State... states) {
-        return new HashSet<State>(asList(states));
+        return new HashSet<>(asList(states));
     }
 
 }

@@ -13,7 +13,7 @@ public class StateMapTest {
 
     @Test
     public void testValidTransitions() {
-        assertEquals(createStateSet(CREATED, INITIALIZED), validTransitions(UNKNOWN));
+        assertEquals(createStateSet(CREATED, INITIALIZED, PASTED), validTransitions(UNKNOWN));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(CREATED));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(INITIALIZED));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(UPDATED));
@@ -25,7 +25,7 @@ public class StateMapTest {
     }
 
     Set<State> createStateSet(State... states) {
-        return new HashSet<State>(asList(states));
+        return new HashSet<>(asList(states));
     }
 
 }
