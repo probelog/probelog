@@ -9,6 +9,7 @@ import static java.util.Arrays.asList;
 public class StateMap {
 
     private static Set<State> existingAndValid = createStateSet(CREATED, INITIALIZED, UPDATED, PASTED);
+    private static Set<State> deleted = createStateSet(DELETED, CUT);
 
     static Set<State> validTransitions(State fromState) {
         if (fromState==UNKNOWN)
@@ -17,6 +18,8 @@ public class StateMap {
             return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED);
         if (fromState==TOUCHED)
             return createStateSet(UPDATED, TOUCHED);
+        if (deleted.contains(fromState))
+            return createStateSet(CREATED, PASTED);
         throw new RuntimeException("BUG !! Broken State Map !!");
     }
 
