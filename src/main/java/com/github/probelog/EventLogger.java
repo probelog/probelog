@@ -14,13 +14,16 @@ public class EventLogger {
     }
 
     public void logCreate(String fileName) {
-        assert isValidTransition(fileName, CREATED);
-        fileStatesMap.put(fileName, CREATED);
+        transitionState(fileName, CREATED);
     }
 
     public void logInitialize(String fileName, String fileContent) {
-        assert isValidTransition(fileName, INITIALIZED);
-        fileStatesMap.put(fileName, INITIALIZED);
+        transitionState(fileName, INITIALIZED);
+    }
+
+    private void transitionState(String fileName, State created) {
+        assert isValidTransition(fileName, created);
+        fileStatesMap.put(fileName, created);
     }
 
     private boolean isValidTransition(String fileName, State newState) {
