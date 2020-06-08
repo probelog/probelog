@@ -8,7 +8,7 @@ import static java.util.Arrays.asList;
 
 public class StateMap {
 
-    private static Set<State> existingAndValid = createStateSet(CREATED, INITIALIZED, UPDATED, PASTED);
+    private static Set<State> existingAndValid = createStateSet(CREATED, INITIALIZED, UPDATED, PASTED, COPIED);
     private static Set<State> deleted = createStateSet(DELETED, CUT);
 
     static Set<State> validTransitions(State fromState) {
