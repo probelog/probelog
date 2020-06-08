@@ -4,10 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.probelog.State.*;
+import static com.github.probelog.StateMap.validTransitions;
 
 public class EventLogger {
 
     private Map<String, State> fileStatesMap = new HashMap<>();
+
+    // All log methods will add appropriate event to list of probelogEvents (e.g. TestRun, refactoring start, file create, file copy and paste, etc
+    //private List<ProbelogEvent>
+    // this is raw "perfect" data for Change Objects
 
     public State state(String fileName) {
         return fileStatesMap.getOrDefault(fileName, UNKNOWN);
@@ -21,12 +26,25 @@ public class EventLogger {
         transitionState(fileName, INITIALIZED);
     }
 
+    // Will Log TestRuns and Refactorings
+    public void logTestRun() {
+
+    }
+
+    public void logRefactoringStart() {
+
+    }
+
+    public void logRefactoringEnd() {
+
+    }
+
     private void transitionState(String fileName, State newState) {
         assert isValidTransition(fileName, newState);
         fileStatesMap.put(fileName, newState);
     }
 
     private boolean isValidTransition(String fileName, State newState) {
-        return StateMap.validTransitions(state(fileName)).contains(newState);
+        return validTransitions(state(fileName)).contains(newState);
     }
 }
