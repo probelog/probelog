@@ -12,32 +12,12 @@ import static org.junit.Assert.assertEquals;
 public class StateMapTest {
 
     @Test
-    public void unknown() {
+    public void testValidTransitions() {
         assertEquals(createStateSet(CREATED, INITIALIZED), validTransitions(UNKNOWN));
-    }
-
-    @Test
-    public void created() {
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(CREATED));
-    }
-
-    @Test
-    public void initialized() {
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(INITIALIZED));
-    }
-
-    @Test
-    public void updated() {
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(UPDATED));
-    }
-
-    @Test
-    public void pasted() {
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(PASTED));
-    }
-
-    @Test
-    public void touched() {
         assertEquals(createStateSet(UPDATED, TOUCHED), validTransitions(TOUCHED));
     }
 
