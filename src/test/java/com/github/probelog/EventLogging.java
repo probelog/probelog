@@ -14,6 +14,10 @@ public class EventLogging {
         assertEquals(UNKNOWN, logger.state("x"));
         logger.logCreate("x");
         assertEquals(CREATED, logger.state("x"));
+
+        assertEquals(UNKNOWN, logger.state("y"));
+        logger.logInitialize("y","xValue");
+        assertEquals(INITIALIZED, logger.state("y"));
     }
 
 }
