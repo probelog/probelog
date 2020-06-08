@@ -16,6 +16,26 @@ public class StateMapTest {
         assertEquals(createStateSet(CREATED, INITIALIZED), validTransitions(UNKNOWN));
     }
 
+    @Test
+    public void created() {
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(CREATED));
+    }
+
+    @Test
+    public void initialized() {
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(INITIALIZED));
+    }
+
+    @Test
+    public void updated() {
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(UPDATED));
+    }
+
+    @Test
+    public void pasted() {
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(PASTED));
+    }
+
     Set<State> createStateSet(State... states) {
         return new HashSet<State>(asList(states));
     }

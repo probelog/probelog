@@ -3,14 +3,15 @@ package com.github.probelog;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.probelog.State.CREATED;
-import static com.github.probelog.State.INITIALIZED;
+import static com.github.probelog.State.*;
 import static java.util.Arrays.asList;
 
 public class StateMap {
 
     static Set<State> validTransitions(State fromState) {
-        return createStateSet(CREATED, INITIALIZED);
+        if (fromState==UNKNOWN)
+            return createStateSet(CREATED, INITIALIZED);
+        return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED);
     }
 
     static Set<State> createStateSet(State... states) {
