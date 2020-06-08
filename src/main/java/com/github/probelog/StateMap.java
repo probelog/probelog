@@ -15,7 +15,7 @@ public class StateMap {
         if (fromState==UNKNOWN)
             return createStateSet(CREATED, INITIALIZED);
         if (existingAndValid.contains(fromState))
-            return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED);
+            return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED, UPDATED);
         if (fromState==TOUCHED)
             return createStateSet(UPDATED, TOUCHED);
         if (deleted.contains(fromState))

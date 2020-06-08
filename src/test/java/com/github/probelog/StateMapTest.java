@@ -14,11 +14,11 @@ public class StateMapTest {
     @Test
     public void testValidTransitions() {
         assertEquals(createStateSet(CREATED, INITIALIZED), validTransitions(UNKNOWN));
-        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(CREATED));
-        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(INITIALIZED));
-        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(UPDATED));
-        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(PASTED));
-        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED), validTransitions(COPIED));
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(CREATED));
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(INITIALIZED));
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(UPDATED));
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(PASTED));
+        assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(COPIED));
         assertEquals(createStateSet(UPDATED, TOUCHED), validTransitions(TOUCHED));
         assertEquals(createStateSet(CREATED, PASTED), validTransitions(DELETED));
         assertEquals(createStateSet(CREATED, PASTED), validTransitions(CUT));
