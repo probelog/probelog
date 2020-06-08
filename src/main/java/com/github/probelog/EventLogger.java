@@ -21,9 +21,9 @@ public class EventLogger {
         transitionState(fileName, INITIALIZED);
     }
 
-    private void transitionState(String fileName, State created) {
-        assert isValidTransition(fileName, created);
-        fileStatesMap.put(fileName, created);
+    private void transitionState(String fileName, State newState) {
+        assert isValidTransition(fileName, newState);
+        fileStatesMap.put(fileName, newState);
     }
 
     private boolean isValidTransition(String fileName, State newState) {
