@@ -40,6 +40,7 @@ public class EventLogging {
         assertEquals(COPIED, logger.state("x"));
         assertEquals(PASTED, logger.state("y"));
         assertEquals("xValue1", logger.value("y"));
+        assertEquals("Copied x value xValue1 to y", logger.head().state());
 
         logger.update("x","xValue2");
         logger.cutPaste("x","y");

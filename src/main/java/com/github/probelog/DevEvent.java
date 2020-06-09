@@ -8,20 +8,26 @@ public class DevEvent {
     private final String fileValue;
     private DevEvent previous;
     private final State state;
+    private final String fromFile;
 
     DevEvent() {
         this(null, null, null);
     }
 
     DevEvent(DevEvent previous, String fileName, State state) {
-        this(previous,fileName,state,null);
+        this(previous,fileName,state,null,null);
     }
 
     DevEvent(DevEvent previous, String fileName, State state, String fileValue) {
+        this(previous,fileName,state,fileValue,null);
+    }
+
+    DevEvent(DevEvent previous, String fileName, State state, String fileValue, String fromFile) {
         this.previous=previous;
         this.fileName=fileName;
         this.state=state;
         this.fileValue=fileValue;
+        this.fromFile=fromFile;
     }
 
     public String state() {
@@ -33,6 +39,8 @@ public class DevEvent {
             return "Initialized " + fileName+ " value to " + fileValue;
         if (state==UPDATED)
             return "Updated " + fileName + " value to " + fileValue;
+        if (state==COPIED)
+            return "Copied " + fromFile + " value " + fileValue + " to " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
     }
 

@@ -35,7 +35,7 @@ public class EventLogger {
 
     public void logInitialize(String fileName, String fileValue) {
         doStateValueChange(fileName, INITIALIZED, fileValue);
-        start.setPrevious(new DevEvent(head, fileName, INITIALIZED));
+        start.setPrevious(new DevEvent(head, fileName, INITIALIZED, fileValue));
     }
 
     public void update(String fileName, String fileValue) {
@@ -49,6 +49,7 @@ public class EventLogger {
 
     public void copyPaste(String fromFile, String toFile) {
         doCopy(COPIED, fromFile,toFile);
+        head=new DevEvent(head, toFile, COPIED, fileValuesMap.get(toFile), fromFile);
     }
 
     public void cutPaste(String fromFile, String toFile) {
