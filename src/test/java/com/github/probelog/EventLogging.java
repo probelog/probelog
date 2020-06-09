@@ -12,11 +12,11 @@ public class EventLogging {
     public void lifecycle() {
 
         EventLogger logger = new EventLogger();
+        assertEquals("Event Log Start", logger.head().state());
+
         assertEquals(UNKNOWN, logger.state("x"));
         logger.logCreate("x");
         assertEquals(CREATED, logger.state("x"));
-        // TODO
-        //assertEquals(new FileState.createCreateState("x"), logger.head().state());
 
         assertEquals(UNKNOWN, logger.state("y"));
         logger.logInitialize("y","yValue");

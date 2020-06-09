@@ -89,4 +89,7 @@ public class EventLogger {
     }
 
 
+    public DevEvent head() {
+        return new DevEvent();
+    }
 }
