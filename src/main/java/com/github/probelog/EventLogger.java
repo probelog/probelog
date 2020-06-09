@@ -9,6 +9,8 @@ import static com.github.probelog.StateMap.validTransitions;
 public class EventLogger {
 
     private Map<String, State> fileStatesMap = new HashMap<>();
+    private Map<String, String> fileValuesMap = new HashMap<>();
+
 
     // All log methods will add appropriate event to list of probelogEvents (e.g. TestRun, refactoring start, file create, file copy and paste, etc
     //private List<ProbelogEvent>
@@ -22,8 +24,9 @@ public class EventLogger {
         transitionState(fileName, CREATED);
     }
 
-    public void logInitialize(String fileName, String fileContent) {
+    public void logInitialize(String fileName, String fileValue) {
         transitionState(fileName, INITIALIZED);
+        fileValuesMap.put(fileName, fileValue);
     }
 
     // Will Log TestRuns and Refactorings
@@ -46,5 +49,9 @@ public class EventLogger {
 
     private boolean isValidTransition(String fileName, State newState) {
         return validTransitions(state(fileName)).contains(newState);
+    }
+
+    public String value(String fileName) {
+        return fileValuesMap.get(fileName);
     }
 }
