@@ -29,10 +29,12 @@ public class EventLogging {
 
         logger.touch("x");
         assertEquals(TOUCHED, logger.state("x"));
+        assertEquals("Created x", logger.head().state());
 
         logger.update("x","xValue1");
         assertEquals(UPDATED, logger.state("x"));
         assertEquals("xValue1", logger.value("x"));
+        assertEquals("Updated x value to xValue1", logger.head().state());
 
         logger.copyPaste("x","y");
         assertEquals(COPIED, logger.state("x"));

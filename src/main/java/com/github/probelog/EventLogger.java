@@ -40,6 +40,7 @@ public class EventLogger {
 
     public void update(String fileName, String fileValue) {
         doStateValueChange(fileName, UPDATED, fileValue);
+        head=new DevEvent(head, fileName, UPDATED, fileValue);
     }
 
     public void touch(String fileName) {
