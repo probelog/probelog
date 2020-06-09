@@ -41,6 +41,12 @@ public class EventLogger {
         transitionState(toFile, PASTED);
         fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
     }
+
+    public void cutPaste(String fromFile, String toFile) {
+        transitionState(fromFile, CUT);
+        transitionState(toFile, PASTED);
+        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
+    }
     // Will Log TestRuns and Refactorings
 
     public void logTestRun() {

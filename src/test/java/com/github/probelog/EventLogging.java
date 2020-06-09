@@ -32,6 +32,12 @@ public class EventLogging {
         assertEquals(PASTED, logger.state("y"));
         assertEquals("xValue1", logger.value("y"));
 
+        logger.update("x","xValue2");
+        logger.cutPaste("x","y");
+        assertEquals(CUT, logger.state("x"));
+        assertEquals(PASTED, logger.state("y"));
+        assertEquals("xValue2", logger.value("y"));
+
     }
 
 }
