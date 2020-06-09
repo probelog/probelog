@@ -30,7 +30,7 @@ public class DevEvent {
         if (state==CREATED)
             return "Created " + fileName;
         if (state==INITIALIZED)
-            return "Initialized " + fileName;
+            return "Initialized " + fileName+ " value to " + fileValue;
         if (state==UPDATED)
             return "Updated " + fileName + " value to " + fileValue;
         throw new RuntimeException("BUG!! Missing State Condition");

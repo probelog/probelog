@@ -25,7 +25,7 @@ public class EventLogging {
         logger.logInitialize("y","yValue");
         assertEquals(INITIALIZED, logger.state("y"));
         assertEquals("yValue", logger.value("y"));
-        assertEquals("Initialized y", startEvent.previous().state());
+        assertEquals("Initialized y value to yValue", startEvent.previous().state());
 
         logger.touch("x");
         assertEquals(TOUCHED, logger.state("x"));
