@@ -38,6 +38,16 @@ public class EventLogging {
         assertEquals(PASTED, logger.state("y"));
         assertEquals("xValue2", logger.value("y"));
 
+        try {
+            logger.delete("x");
+            assert false;
+        }
+        catch(AssertionError e) {
+        }
+
+        logger.delete("y");
+        assertEquals(DELETED, logger.state("y"));
+
     }
 
 }

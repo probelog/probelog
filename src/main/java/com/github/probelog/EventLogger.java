@@ -47,6 +47,11 @@ public class EventLogger {
         transitionState(toFile, PASTED);
         fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
     }
+
+    public void delete(String fileName) {
+        transitionState(fileName, DELETED);
+    }
+
     // Will Log TestRuns and Refactorings
 
     public void logTestRun() {
