@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static com.github.probelog.State.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EventLogging {
 
@@ -36,6 +37,7 @@ public class EventLogging {
         logger.cutPaste("x","y");
         assertEquals(CUT, logger.state("x"));
         assertEquals(PASTED, logger.state("y"));
+        assertNull(logger.value("x"));
         assertEquals("xValue2", logger.value("y"));
 
         try {
@@ -47,7 +49,9 @@ public class EventLogging {
 
         logger.delete("y");
         assertEquals(DELETED, logger.state("y"));
+        assertNull(logger.value("y"));
 
     }
+
 
 }

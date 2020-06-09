@@ -46,10 +46,12 @@ public class EventLogger {
 
     public void cutPaste(String fromFile, String toFile) {
         doCopy(CUT, fromFile,toFile);
+        fileValuesMap.remove(fromFile);
     }
 
     public void delete(String fileName) {
         transitionState(fileName, DELETED);
+        fileValuesMap.remove(fileName);
     }
 
     // Will Log TestRuns and Refactorings
