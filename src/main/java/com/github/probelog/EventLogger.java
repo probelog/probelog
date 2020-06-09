@@ -28,7 +28,7 @@ public class EventLogger {
     public void logCreate(String fileName) {
 
         transitionState(fileName, CREATED);
-        head=new DevEvent(fileName);
+        head=new DevEvent(head, fileName);
 
     }
 
