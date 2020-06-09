@@ -63,6 +63,7 @@ public class EventLogging {
     }
 
     // Write Test with two initializations so that setPrevious has to break link
+    // Write Test with initialise x, delete x, create x, copy x to y and check that state in copy event is null and not x's initialised value
 
 
 }
