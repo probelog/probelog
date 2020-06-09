@@ -10,6 +10,7 @@ public class EventLogger {
 
     private Map<String, State> fileStatesMap = new HashMap<>();
     private Map<String, String> fileValuesMap = new HashMap<>();
+    private DevEvent head = new DevEvent();
 
 
     // All log methods will add appropriate event to list of probelogEvents (e.g. TestRun, refactoring start, file create, file copy and paste, etc
@@ -25,7 +26,10 @@ public class EventLogger {
     }
 
     public void logCreate(String fileName) {
+
         transitionState(fileName, CREATED);
+        head=new DevEvent(fileName);
+
     }
 
     public void logInitialize(String fileName, String fileValue) {
@@ -88,8 +92,7 @@ public class EventLogger {
         fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
     }
 
-
     public DevEvent head() {
-        return new DevEvent();
+        return head;
     }
 }
