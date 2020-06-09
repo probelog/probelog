@@ -20,6 +20,10 @@ public class EventLogger {
         return fileStatesMap.getOrDefault(fileName, UNKNOWN);
     }
 
+    public String value(String fileName) {
+        return fileValuesMap.get(fileName);
+    }
+
     public void logCreate(String fileName) {
         transitionState(fileName, CREATED);
     }
@@ -37,15 +41,11 @@ public class EventLogger {
     }
 
     public void copyPaste(String fromFile, String toFile) {
-        transitionState(fromFile, COPIED);
-        transitionState(toFile, PASTED);
-        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
+        doCopy(COPIED, fromFile,toFile);
     }
 
     public void cutPaste(String fromFile, String toFile) {
-        transitionState(fromFile, CUT);
-        transitionState(toFile, PASTED);
-        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
+        doCopy(CUT, fromFile,toFile);
     }
 
     public void delete(String fileName) {
@@ -80,7 +80,11 @@ public class EventLogger {
         return validTransitions(state(fileName)).contains(newState);
     }
 
-    public String value(String fileName) {
-        return fileValuesMap.get(fileName);
+    private void doCopy(State cutOrCopy, String fromFile, String toFile) {
+        transitionState(fromFile, cutOrCopy);
+        transitionState(toFile, PASTED);
+        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
     }
+
+
 }
