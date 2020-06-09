@@ -13,17 +13,19 @@ public class EventLogging {
 
         EventLogger logger = new EventLogger();
         assertEquals("Event Log Start", logger.head().state());
+        DevEvent startEvent = logger.head();
 
         assertEquals(UNKNOWN, logger.state("x"));
         logger.logCreate("x");
         assertEquals(CREATED, logger.state("x"));
         assertEquals("Created x", logger.head().state());
-        assertEquals("Event Log Start", logger.head().previous().state());
+        assertEquals(startEvent, logger.head().previous());
 
         assertEquals(UNKNOWN, logger.state("y"));
         logger.logInitialize("y","yValue");
         assertEquals(INITIALIZED, logger.state("y"));
         assertEquals("yValue", logger.value("y"));
+        assertEquals("Initialized y", startEvent.previous().state());
 
         logger.touch("x");
         assertEquals(TOUCHED, logger.state("x"));
@@ -56,6 +58,8 @@ public class EventLogging {
         assertNull(logger.value("y"));
 
     }
+
+    // Write Test with two initializations so that setPrevious has to break link
 
 
 }

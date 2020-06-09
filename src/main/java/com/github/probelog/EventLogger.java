@@ -11,6 +11,7 @@ public class EventLogger {
     private Map<String, State> fileStatesMap = new HashMap<>();
     private Map<String, String> fileValuesMap = new HashMap<>();
     private DevEvent head = new DevEvent();
+    private final DevEvent start = head;
 
 
     // All log methods will add appropriate event to list of probelogEvents (e.g. TestRun, refactoring start, file create, file copy and paste, etc
@@ -28,12 +29,13 @@ public class EventLogger {
     public void logCreate(String fileName) {
 
         transitionState(fileName, CREATED);
-        head=new DevEvent(head, fileName);
+        head=new DevEvent(head, fileName, CREATED);
 
     }
 
     public void logInitialize(String fileName, String fileValue) {
         doStateValueChange(fileName, INITIALIZED, fileValue);
+        start.setPrevious(new DevEvent(head, fileName, INITIALIZED));
     }
 
     public void update(String fileName, String fileValue) {
