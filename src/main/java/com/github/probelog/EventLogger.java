@@ -25,11 +25,24 @@ public class EventLogger {
     }
 
     public void logInitialize(String fileName, String fileValue) {
-        transitionState(fileName, INITIALIZED);
-        fileValuesMap.put(fileName, fileValue);
+        doStateValueChange(fileName, INITIALIZED, fileValue);
     }
 
+    public void update(String fileName, String fileValue) {
+        doStateValueChange(fileName, UPDATED, fileValue);
+    }
+
+    public void touch(String fileName) {
+        transitionState(fileName, TOUCHED);
+    }
+
+    public void copyPaste(String fromFile, String toFile) {
+        transitionState(fromFile, COPIED);
+        transitionState(toFile, PASTED);
+        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
+    }
     // Will Log TestRuns and Refactorings
+
     public void logTestRun() {
 
     }
@@ -45,6 +58,11 @@ public class EventLogger {
     private void transitionState(String fileName, State newState) {
         assert isValidTransition(fileName, newState);
         fileStatesMap.put(fileName, newState);
+    }
+
+    private void doStateValueChange(String fileName, State newState, String fileValue) {
+        transitionState(fileName, newState);
+        fileValuesMap.put(fileName, fileValue);
     }
 
     private boolean isValidTransition(String fileName, State newState) {

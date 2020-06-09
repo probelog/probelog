@@ -20,6 +20,18 @@ public class EventLogging {
         assertEquals(INITIALIZED, logger.state("y"));
         assertEquals("yValue", logger.value("y"));
 
+        logger.touch("x");
+        assertEquals(TOUCHED, logger.state("x"));
+
+        logger.update("x","xValue1");
+        assertEquals(UPDATED, logger.state("x"));
+        assertEquals("xValue1", logger.value("x"));
+
+        logger.copyPaste("x","y");
+        assertEquals(COPIED, logger.state("x"));
+        assertEquals(PASTED, logger.state("y"));
+        assertEquals("xValue1", logger.value("y"));
+
     }
 
 }
