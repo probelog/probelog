@@ -60,6 +60,7 @@ public class EventLogging {
     }
 
     // Write invalid state tranistion steps
+    // More than one initial event
     // Contract: no files can be in touched state when test run recorded
     // Change - DevEvent (end), DevEvent(start) the before is nearest event before start event of Change
 
