@@ -2,7 +2,12 @@ package com.github.probelog;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.github.probelog.State.*;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -12,60 +17,51 @@ public class EventLogging {
     public void lifecycle() {
 
         EventLogger logger = new EventLogger();
-        assertEquals("Event Log Start", logger.head().state());
-        DevEvent startEvent = logger.head();
 
-        assertEquals(UNKNOWN, logger.state("x"));
         logger.logCreate("x");
-        assertEquals(CREATED, logger.state("x"));
-        assertEquals("Created x", logger.head().state());
-        assertEquals(startEvent, logger.head().previous());
-
-        assertEquals(UNKNOWN, logger.state("y"));
         logger.logInitialize("y","yValue");
-        assertEquals(INITIALIZED, logger.state("y"));
-        assertEquals("yValue", logger.value("y"));
-        assertEquals("Initialized y value to yValue", startEvent.previous().state());
-
         logger.touch("x");
-        assertEquals(TOUCHED, logger.state("x"));
-        assertEquals("Created x", logger.head().state());
-
         logger.update("x","xValue1");
-        assertEquals(UPDATED, logger.state("x"));
-        assertEquals("xValue1", logger.value("x"));
-        assertEquals("Updated x value to xValue1", logger.head().state());
-
         logger.copyPaste("x","y");
-        assertEquals(COPIED, logger.state("x"));
-        assertEquals(PASTED, logger.state("y"));
-        assertEquals("xValue1", logger.value("y"));
-        assertEquals("Copied x value xValue1 to y", logger.head().state());
-
         logger.update("x","xValue2");
         logger.cutPaste("x","y");
-        assertEquals(CUT, logger.state("x"));
-        assertEquals(PASTED, logger.state("y"));
-        assertNull(logger.value("x"));
-        assertEquals("xValue2", logger.value("y"));
-        assertEquals("Moved x value xValue2 to y", logger.head().state());
-
         try {
             logger.delete("x");
             assert false;
         }
         catch(AssertionError e) {
         }
-
         logger.delete("y");
+
         assertEquals(DELETED, logger.state("y"));
-        assertNull(logger.value("y"));
-        assertEquals("Deleted y", logger.head().state());
+        assertEquals(asList(
+                "Initialized y value to yValue",
+                "Event Log Start",
+                "Created x",
+                "Updated x value to xValue1",
+                "Copied x value xValue1 to y",
+                "Updated x value to xValue2",
+                "Moved x value xValue2 to y",
+                "Deleted y"
+                ), eventDescriptions(logger.head()));
 
     }
 
-    // Write Test with two initializations so that setPrevious has to break link
-    // Write Test with initialise x, delete x, create x, copy x to y and check that state in copy event is null and not x's initialised value
+    List<String> eventDescriptions(DevEvent head) {
+        List<String> collector = new ArrayList<>();
+        collectDescriptions(head, collector);
+        return collector;
+    }
+
+    void collectDescriptions(DevEvent head, List<String> collector) {
+        collector.add(0, head.description());
+        if (head.previous()!=null)
+            collectDescriptions(head.previous(), collector);
+    }
+
+    // Write invalid state tranistion steps
+    // Contract: no files can be in touched state when test run recorded
+    // Change - DevEvent (end), DevEvent(start) the before is nearest event before start event of Change
 
 
 }

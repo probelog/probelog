@@ -30,7 +30,7 @@ public class DevEvent {
         this.fromFile=fromFile;
     }
 
-    public String state() {
+    public String description() {
         if (fileName==null)
             return "Event Log Start";
         if (state==CREATED)
@@ -54,6 +54,14 @@ public class DevEvent {
 
     public DevEvent previous() {
         return previous;
+    }
+
+    public String fileValue() {
+        return fileValue;
+    }
+
+    public State state(String fileName) {
+        return ((state.equals(CUT) || state.equals(COPIED)) & this.fileName.equals(fileName)) ? PASTED : state;
     }
 
 

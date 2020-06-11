@@ -1,15 +1,17 @@
 package com.github.probelog;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static com.github.probelog.State.*;
 import static com.github.probelog.StateMap.validTransitions;
 
 public class EventLogger {
 
-    private Map<String, State> fileStatesMap = new HashMap<>();
-    private Map<String, String> fileValuesMap = new HashMap<>();
+    private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
+    private Set<String> touchedFiles = new HashSet<>();
     private DevEvent head = new DevEvent();
     private final DevEvent start = head;
 
@@ -19,49 +21,54 @@ public class EventLogger {
     // this is raw "perfect" data for Change Objects
 
     public State state(String fileName) {
-        return fileStatesMap.getOrDefault(fileName, UNKNOWN);
-    }
-
-    public String value(String fileName) {
-        return fileValuesMap.get(fileName);
+        return touchedFiles.contains(fileName) ? TOUCHED : fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
     }
 
     public void logCreate(String fileName) {
 
-        transitionState(fileName, CREATED);
-        head=new DevEvent(head, fileName, CREATED);
+        assert isValidTransition(fileName, CREATED);
+        setHead(fileName, new DevEvent(head, fileName, CREATED));
 
+    }
+
+    private void setHead(String fileName, DevEvent devEvent) {
+        head=devEvent;
+        touchedFiles.remove(fileName);
+        fileHeadsMap.put(fileName, devEvent);
     }
 
     public void logInitialize(String fileName, String fileValue) {
-        doStateValueChange(fileName, INITIALIZED, fileValue);
-        start.setPrevious(new DevEvent(head, fileName, INITIALIZED, fileValue));
+        DevEvent initializeEvent = new DevEvent(null, fileName, INITIALIZED, fileValue);
+        fileHeadsMap.put(fileName, initializeEvent);
+        start.setPrevious(initializeEvent);
     }
 
     public void update(String fileName, String fileValue) {
-        doStateValueChange(fileName, UPDATED, fileValue);
-        head=new DevEvent(head, fileName, UPDATED, fileValue);
+        setHead(fileName, new DevEvent(head, fileName, UPDATED, fileValue));
     }
 
     public void touch(String fileName) {
-        transitionState(fileName, TOUCHED);
+        assert isValidTransition(fileName, TOUCHED);
+        touchedFiles.add(fileName);
     }
 
     public void copyPaste(String fromFile, String toFile) {
         doCopy(COPIED, fromFile,toFile);
-        head=new DevEvent(head, toFile, COPIED, fileValuesMap.get(toFile), fromFile);
+        DevEvent copyEvent = new DevEvent(head, toFile, COPIED, fileHeadsMap.get(fromFile).fileValue(), fromFile);
+        setHead(fromFile, copyEvent);
+        setHead(toFile, copyEvent);
     }
 
     public void cutPaste(String fromFile, String toFile) {
         doCopy(CUT, fromFile,toFile);
-        fileValuesMap.remove(fromFile);
-        head=new DevEvent(head, toFile, CUT, fileValuesMap.get(toFile), fromFile);
+        DevEvent copyEvent = new DevEvent(head, toFile, CUT, fileHeadsMap.get(fromFile).fileValue(), fromFile);
+        setHead(fromFile, copyEvent);
+        setHead(toFile, copyEvent);
     }
 
     public void delete(String fileName) {
-        transitionState(fileName, DELETED);
-        fileValuesMap.remove(fileName);
-        head=new DevEvent(head, fileName, DELETED);
+        assert isValidTransition(fileName, DELETED);
+        setHead(fileName, new DevEvent(head, fileName, DELETED));
     }
 
     // Will Log TestRuns and Refactorings
@@ -78,24 +85,13 @@ public class EventLogger {
 
     }
 
-    private void transitionState(String fileName, State newState) {
-        assert isValidTransition(fileName, newState);
-        fileStatesMap.put(fileName, newState);
-    }
-
-    private void doStateValueChange(String fileName, State newState, String fileValue) {
-        transitionState(fileName, newState);
-        fileValuesMap.put(fileName, fileValue);
-    }
-
     private boolean isValidTransition(String fileName, State newState) {
         return validTransitions(state(fileName)).contains(newState);
     }
 
     private void doCopy(State cutOrCopy, String fromFile, String toFile) {
-        transitionState(fromFile, cutOrCopy);
-        transitionState(toFile, PASTED);
-        fileValuesMap.put(toFile, fileValuesMap.get(fromFile));
+        assert isValidTransition(fromFile, cutOrCopy);
+        assert isValidTransition(toFile, PASTED);
     }
 
     public DevEvent head() {
