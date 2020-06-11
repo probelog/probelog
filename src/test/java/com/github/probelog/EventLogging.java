@@ -60,6 +60,7 @@ public class EventLogging {
         logger.delete("y");
         assertEquals(DELETED, logger.state("y"));
         assertNull(logger.value("y"));
+        assertEquals("Deleted y", logger.head().state());
 
     }
 

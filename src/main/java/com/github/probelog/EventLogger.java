@@ -61,6 +61,7 @@ public class EventLogger {
     public void delete(String fileName) {
         transitionState(fileName, DELETED);
         fileValuesMap.remove(fileName);
+        head=new DevEvent(head, fileName, DELETED);
     }
 
     // Will Log TestRuns and Refactorings

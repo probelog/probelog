@@ -43,6 +43,8 @@ public class DevEvent {
             return "Copied " + fromFile + " value " + fileValue + " to " + fileName;
         if (state==CUT)
             return "Moved " + fromFile + " value " + fileValue + " to " + fileName;
+        if (state==DELETED)
+            return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
     }
 
