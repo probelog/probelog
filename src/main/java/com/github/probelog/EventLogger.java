@@ -55,6 +55,7 @@ public class EventLogger {
     public void cutPaste(String fromFile, String toFile) {
         doCopy(CUT, fromFile,toFile);
         fileValuesMap.remove(fromFile);
+        head=new DevEvent(head, toFile, CUT, fileValuesMap.get(toFile), fromFile);
     }
 
     public void delete(String fileName) {

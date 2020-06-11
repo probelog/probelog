@@ -48,6 +48,7 @@ public class EventLogging {
         assertEquals(PASTED, logger.state("y"));
         assertNull(logger.value("x"));
         assertEquals("xValue2", logger.value("y"));
+        assertEquals("Moved x value xValue2 to y", logger.head().state());
 
         try {
             logger.delete("x");
