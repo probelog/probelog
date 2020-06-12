@@ -12,6 +12,7 @@ public class EventLogger {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
     private Set<String> touchedFiles = new HashSet<>();
+    private Set<String> notExistingFiles = new HashSet<>();
     private DevEvent head = new DevEvent();
     private final DevEvent start = head;
 
@@ -20,8 +21,10 @@ public class EventLogger {
     //private List<ProbelogEvent>
     // this is raw "perfect" data for Change Objects
 
-    public State state(String fileName) {
-        return touchedFiles.contains(fileName) ? TOUCHED : fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
+    private State state(String fileName) {
+        return touchedFiles.contains(fileName) ? TOUCHED :
+                notExistingFiles.contains(fileName) ? NOT_EXISTING :
+                        fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
     }
 
     public void logCreate(String fileName) {
@@ -41,6 +44,11 @@ public class EventLogger {
         DevEvent initializeEvent = new DevEvent(null, fileName, INITIALIZED, fileValue);
         fileHeadsMap.put(fileName, initializeEvent);
         start.setPrevious(initializeEvent);
+    }
+
+    public void logNotExisting(String fileName) {
+        assert isValidTransition(fileName, NOT_EXISTING);
+        notExistingFiles.add(fileName);
     }
 
     public void update(String fileName, String fileValue) {

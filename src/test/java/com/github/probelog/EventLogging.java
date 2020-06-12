@@ -1,5 +1,6 @@
 package com.github.probelog;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,15 +9,20 @@ import java.util.List;
 
 import static com.github.probelog.State.*;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class EventLogging {
 
+    EventLogger logger;
+
+    @Before
+    public void setUp() {
+        logger = new EventLogger();
+    }
+
+
     @Test
     public void lifecycle() {
-
-        EventLogger logger = new EventLogger();
 
         logger.logCreate("x");
         logger.logInitialize("y","yValue");
@@ -27,13 +33,12 @@ public class EventLogging {
         logger.cutPaste("x","y");
         try {
             logger.delete("x");
-            assert false;
+            fail();
         }
         catch(AssertionError e) {
         }
         logger.delete("y");
 
-        assertEquals(DELETED, logger.state("y"));
         assertEquals(asList(
                 "Initialized y value to yValue",
                 "Event Log Start",
@@ -44,6 +49,27 @@ public class EventLogging {
                 "Moved x value xValue2 to y",
                 "Deleted y"
                 ), eventDescriptions(logger.head()));
+
+    }
+
+    @Test
+    public void pastingToANewFile() {
+
+        logger.logCreate("x");
+        try {
+            logger.copyPaste("x", "y");
+            fail();
+        }
+        catch(AssertionError e) {}
+
+        logger.logNotExisting("y");
+        logger.copyPaste("x", "y");
+
+        assertEquals(asList(
+                "Event Log Start",
+                "Created x",
+                "Copied x value null to y"
+        ), eventDescriptions(logger.head()));
 
     }
 
