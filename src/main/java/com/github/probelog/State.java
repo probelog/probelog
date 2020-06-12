@@ -4,6 +4,7 @@ public enum State {
     UNKNOWN,
     CREATED,
     INITIALIZED,
+    NOT_EXISTING,
     CUT,
     COPIED,
     PASTED,

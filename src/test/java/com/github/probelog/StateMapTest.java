@@ -13,7 +13,8 @@ public class StateMapTest {
 
     @Test
     public void testValidTransitions() {
-        assertEquals(createStateSet(CREATED, INITIALIZED, PASTED), validTransitions(UNKNOWN));
+        assertEquals(createStateSet(CREATED, INITIALIZED, NOT_EXISTING), validTransitions(UNKNOWN));
+        assertEquals(createStateSet(PASTED), validTransitions(NOT_EXISTING));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(CREATED));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(INITIALIZED));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(UPDATED));

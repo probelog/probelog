@@ -13,7 +13,9 @@ public class StateMap {
 
     static Set<State> validTransitions(State fromState) {
         if (fromState==UNKNOWN)
-            return createStateSet(CREATED, INITIALIZED, PASTED);
+            return createStateSet(CREATED, INITIALIZED, NOT_EXISTING);
+        if (fromState==NOT_EXISTING)
+           return createStateSet(PASTED);
         if (existingAndValid.contains(fromState))
             return createStateSet(DELETED, CUT, COPIED, PASTED, TOUCHED, UPDATED);
         if (fromState==TOUCHED)
