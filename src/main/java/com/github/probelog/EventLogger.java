@@ -1,9 +1,7 @@
 package com.github.probelog;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static com.github.probelog.State.*;
 import static com.github.probelog.StateMap.validTransitions;
@@ -11,8 +9,7 @@ import static com.github.probelog.StateMap.validTransitions;
 public class EventLogger {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
-    private Set<String> touchedFiles = new HashSet<>();
-    private Set<String> notExistingFiles = new HashSet<>();
+    private Map<String, State> unLoggedFileStateMap = new HashMap<>();
     private DevEvent head = new DevEvent();
     private final DevEvent start = head;
 
@@ -22,9 +19,8 @@ public class EventLogger {
     // this is raw "perfect" data for Change Objects
 
     private State state(String fileName) {
-        return touchedFiles.contains(fileName) ? TOUCHED :
-                notExistingFiles.contains(fileName) ? NOT_EXISTING :
-                        fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
+        return unLoggedFileStateMap.containsKey(fileName) ? unLoggedFileStateMap.get(fileName) :
+                fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
     }
 
     public void logCreate(String fileName) {
@@ -36,8 +32,7 @@ public class EventLogger {
 
     private void setHead(String fileName, DevEvent devEvent) {
         head=devEvent;
-        touchedFiles.remove(fileName);
-        notExistingFiles.remove(fileName);
+        unLoggedFileStateMap.remove(fileName);
         fileHeadsMap.put(fileName, devEvent);
     }
 
@@ -49,7 +44,7 @@ public class EventLogger {
 
     public void logNotExisting(String fileName) {
         assert isValidTransition(fileName, NOT_EXISTING);
-        notExistingFiles.add(fileName);
+        unLoggedFileStateMap.put(fileName, NOT_EXISTING);
     }
 
     public void update(String fileName, String fileValue) {
@@ -59,7 +54,7 @@ public class EventLogger {
 
     public void touch(String fileName) {
         assert isValidTransition(fileName, TOUCHED);
-        touchedFiles.add(fileName);
+        unLoggedFileStateMap.put(fileName,TOUCHED);
     }
 
     public void copyPaste(String fromFile, String toFile) {
