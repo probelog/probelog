@@ -75,6 +75,20 @@ public class EventLogging {
 
     }
 
+    @Test
+    public void moreThanOneFileInitialized() {
+
+        logger.logInitialize("x", "xValue");
+        logger.logInitialize("y", "yValue");
+
+        assertEquals(asList(
+                "Initialized x value to xValue",
+                "Initialized y value to yValue",
+                "Event Log Start"
+        ), eventDescriptions(logger.head()));
+
+    }
+
     List<String> eventDescriptions(DevEvent head) {
         List<String> collector = new ArrayList<>();
         collectDescriptions(head, collector);
@@ -88,7 +102,6 @@ public class EventLogging {
     }
 
     // Write invalid state tranistion steps
-    // More than one initial event
     // Contract: no files can be in touched state when test run recorded
     // Change - DevEvent (end), DevEvent(start) the before is nearest event before start event of Change
 

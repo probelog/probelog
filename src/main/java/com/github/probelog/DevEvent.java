@@ -49,6 +49,7 @@ public class DevEvent {
     }
 
     public void setPrevious(DevEvent previous) {
+        previous.previous=this.previous;
         this.previous=previous;
     }
 
