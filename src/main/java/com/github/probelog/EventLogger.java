@@ -37,6 +37,7 @@ public class EventLogger {
     private void setHead(String fileName, DevEvent devEvent) {
         head=devEvent;
         touchedFiles.remove(fileName);
+        notExistingFiles.remove(fileName);
         fileHeadsMap.put(fileName, devEvent);
     }
 
@@ -52,6 +53,7 @@ public class EventLogger {
     }
 
     public void update(String fileName, String fileValue) {
+        assert isValidTransition(fileName, UPDATED);
         setHead(fileName, new DevEvent(head, fileName, UPDATED, fileValue));
     }
 

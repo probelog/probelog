@@ -64,11 +64,13 @@ public class EventLogging {
 
         logger.logNotExisting("y");
         logger.copyPaste("x", "y");
+        logger.update("y", "yValue");
 
         assertEquals(asList(
                 "Event Log Start",
                 "Created x",
-                "Copied x value null to y"
+                "Copied x value null to y",
+                "Updated y value to yValue"
         ), eventDescriptions(logger.head()));
 
     }
