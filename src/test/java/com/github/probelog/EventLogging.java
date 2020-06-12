@@ -101,7 +101,6 @@ public class EventLogging {
             collectDescriptions(head.previous(), collector);
     }
 
-    // Write invalid state tranistion steps
     // Contract: no files can be in touched state when test run recorded
     // Change - DevEvent (end), DevEvent(start) the before is nearest event before start event of Change
 

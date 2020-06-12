@@ -10,13 +10,8 @@ public class EventLogger {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
     private Map<String, State> unLoggedFileStateMap = new HashMap<>();
-    private DevEvent head = new DevEvent();
-    private final DevEvent start = head;
-
-
-    // All log methods will add appropriate event to list of probelogEvents (e.g. TestRun, refactoring start, file create, file copy and paste, etc
-    //private List<ProbelogEvent>
-    // this is raw "perfect" data for Change Objects
+    private final DevEvent start = new DevEvent();
+    private DevEvent head = start;
 
     private State state(String fileName) {
         return unLoggedFileStateMap.containsKey(fileName) ? unLoggedFileStateMap.get(fileName) :
@@ -76,17 +71,7 @@ public class EventLogger {
         setHead(fileName, new DevEvent(head, fileName, DELETED));
     }
 
-    // Will Log TestRuns and Refactorings
-
     public void logTestRun() {
-
-    }
-
-    public void logRefactoringStart() {
-
-    }
-
-    public void logRefactoringEnd() {
 
     }
 
