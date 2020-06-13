@@ -53,7 +53,7 @@ public class DevEvent {
         if (state==UPDATED)
             return "Updated " + fileName + " value to " + fileValue;
         if (state==PASTED)
-            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + previous.fileValue + " to " + fileName;
+            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValue() + " to " + fileName;
         if (state==DELETED)
             return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
@@ -69,7 +69,7 @@ public class DevEvent {
     }
 
     public String fileValue() {
-        return fileValue;
+        return state==PASTED ? previous.fileValue : fileValue;
     }
 
     public State state() {
