@@ -1,7 +1,9 @@
 package com.github.probelog;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static com.github.probelog.State.*;
 import static com.github.probelog.StateMap.validTransitions;
@@ -86,5 +88,13 @@ public class EventLogger {
 
     public DevEvent head() {
         return head;
+    }
+
+    public Set<String> touchedFiles() {
+        Set<String> result = new HashSet<>();
+        for (String fileName: unLoggedFileStateMap.keySet())
+            if (unLoggedFileStateMap.get(fileName)==TOUCHED)
+                result.add(fileName);
+        return result;
     }
 }

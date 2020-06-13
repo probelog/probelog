@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.github.probelog.State.*;
@@ -89,8 +90,20 @@ public class EventLogging {
 
     }
 
-    // Contract: no files can be in touched state when test run recorded
-    // Change - DevEvent (end), DevEvent(start) the before is nearest event before start event of Change
+    @Test
+    public void listOfFilesInTouchedState() {
+
+        logger.logCreate("x");
+        logger.logCreate("y");
+        logger.logNotExisting("z");
+        logger.touch("x");
+        logger.touch("y");
+        assertEquals(new HashSet<String>(asList("x","y")),logger.touchedFiles());
+
+    }
+
+    // Contract: no files can be in touched or not existing state when test run recorded
+    // ChangeBuilder - given start event and end event collects all the changes
 
 
 }

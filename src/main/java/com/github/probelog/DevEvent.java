@@ -68,7 +68,7 @@ public class DevEvent {
         return previous==null;
     }
 
-    private String fileValue() {
+    String fileValue() {
         return state==PASTED ? previous.fileValue : fileValue;
     }
 
