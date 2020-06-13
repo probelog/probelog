@@ -48,7 +48,7 @@ public class EventLogging {
                 "Updated x value to xValue2",
                 "Moved x value xValue2 to y",
                 "Deleted y"
-                ), eventDescriptions(logger.head()));
+                ),logger.head().description());
 
     }
 
@@ -71,7 +71,7 @@ public class EventLogging {
                 "Created x",
                 "Copied x value null to y",
                 "Updated y value to yValue"
-        ), eventDescriptions(logger.head()));
+        ), logger.head().description());
 
     }
 
@@ -85,20 +85,8 @@ public class EventLogging {
                 "Initialized x value to xValue",
                 "Initialized y value to yValue",
                 "Event Log Start"
-        ), eventDescriptions(logger.head()));
+        ), logger.head().description());
 
-    }
-
-    List<String> eventDescriptions(DevEvent head) {
-        List<String> collector = new ArrayList<>();
-        collectDescriptions(head, collector);
-        return collector;
-    }
-
-    void collectDescriptions(DevEvent head, List<String> collector) {
-        collector.add(0, head.description());
-        if (head.previous()!=null)
-            collectDescriptions(head.previous(), collector);
     }
 
     // Contract: no files can be in touched state when test run recorded

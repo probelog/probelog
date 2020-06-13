@@ -15,7 +15,7 @@ public class EventLogger {
 
     private State state(String fileName) {
         return unLoggedFileStateMap.containsKey(fileName) ? unLoggedFileStateMap.get(fileName) :
-                fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state(fileName) : UNKNOWN;
+                fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
     }
 
     public void logCreate(String fileName) {
@@ -54,16 +54,16 @@ public class EventLogger {
 
     public void copyPaste(String fromFile, String toFile) {
         doCopy(COPIED, fromFile,toFile);
-        DevEvent copyEvent = new DevEvent(head, toFile, COPIED, fileHeadsMap.get(fromFile).fileValue(), fromFile);
-        setHead(fromFile, copyEvent);
-        setHead(toFile, copyEvent);
+        String copyValue = fileHeadsMap.get(fromFile).fileValue();
+        setHead(fromFile, new DevEvent(head, fromFile, COPIED, copyValue));
+        setHead(toFile, new DevEvent(head, toFile, PASTED));
     }
 
     public void cutPaste(String fromFile, String toFile) {
         doCopy(CUT, fromFile,toFile);
-        DevEvent copyEvent = new DevEvent(head, toFile, CUT, fileHeadsMap.get(fromFile).fileValue(), fromFile);
-        setHead(fromFile, copyEvent);
-        setHead(toFile, copyEvent);
+        String copyValue = fileHeadsMap.get(fromFile).fileValue();
+        setHead(fromFile, new DevEvent(head, fromFile, CUT, copyValue));
+        setHead(toFile, new DevEvent(head, toFile, PASTED));
     }
 
     public void delete(String fileName) {
