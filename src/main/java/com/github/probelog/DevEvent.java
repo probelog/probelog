@@ -33,7 +33,7 @@ public class DevEvent {
         return lines;
     }
 
-    public void collectDescription(List<String> lines) {
+    private void collectDescription(List<String> lines) {
         lines.add(0, doDescription());
         if (isTail())
             return;
@@ -43,7 +43,7 @@ public class DevEvent {
             previous.collectDescription(lines);
     }
 
-    public String doDescription() {
+    private String doDescription() {
         if (fileName==null)
             return "Event Log Start";
         if (state==CREATED)
@@ -68,11 +68,11 @@ public class DevEvent {
         return previous==null;
     }
 
-    public String fileValue() {
+    private String fileValue() {
         return state==PASTED ? previous.fileValue : fileValue;
     }
 
-    public State state() {
+    State state() {
         return state;
     }
 
