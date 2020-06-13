@@ -21,7 +21,7 @@ public class StateMap {
         if (fromState==TOUCHED)
             return createStateSet(UPDATED, TOUCHED);
         if (deleted.contains(fromState))
-            return createStateSet(CREATED, PASTED);
+            return createStateSet(CREATED, PASTED, NOT_EXISTING);
         throw new RuntimeException("BUG !! Broken State Map !!");
     }
 

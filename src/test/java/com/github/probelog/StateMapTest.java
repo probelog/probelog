@@ -21,8 +21,8 @@ public class StateMapTest {
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(PASTED));
         assertEquals(createStateSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validTransitions(COPIED));
         assertEquals(createStateSet(UPDATED, TOUCHED), validTransitions(TOUCHED));
-        assertEquals(createStateSet(CREATED, PASTED), validTransitions(DELETED));
-        assertEquals(createStateSet(CREATED, PASTED), validTransitions(CUT));
+        assertEquals(createStateSet(CREATED, PASTED, NOT_EXISTING), validTransitions(DELETED));
+        assertEquals(createStateSet(CREATED, PASTED, NOT_EXISTING), validTransitions(CUT));
     }
 
     Set<State> createStateSet(State... states) {
