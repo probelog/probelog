@@ -35,7 +35,7 @@ public class DevEvent {
 
     public void collectDescription(List<String> lines) {
         lines.add(0, doDescription());
-        if (previous==null)
+        if (isTail())
             return;
         if (state==PASTED)
             previous.previous.collectDescription(lines);
@@ -64,8 +64,8 @@ public class DevEvent {
         this.previous=previous;
     }
 
-    public DevEvent previous() {
-        return previous;
+    private boolean isTail() {
+        return previous==null;
     }
 
     public String fileValue() {
