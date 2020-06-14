@@ -68,12 +68,24 @@ public class DevEvent {
         return previous==null;
     }
 
+    String fileName() {
+        return fileName;
+    }
+
     String fileValue() {
         return state==PASTED ? previous.fileValue : fileValue;
     }
 
     State state() {
         return state;
+    }
+
+    public DevEvent previousSibling() {
+        return previous.findPrevious(fileName);
+    }
+
+    private DevEvent findPrevious(String fileName) {
+        return this.fileName.equals(fileName) ? this : previous.findPrevious(fileName);
     }
 
 
