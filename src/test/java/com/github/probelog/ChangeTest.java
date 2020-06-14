@@ -1,21 +1,45 @@
 package com.github.probelog;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ChangeTest {
 
+    EventLogger logger;
+
+    @Before
+    public void setUp() {
+        logger = new EventLogger();
+    }
+
     @Test
     public void update() {
 
-        EventLogger logger = new EventLogger();
         logger.logInitialize("x", "xvalue1");
         logger.logCreate("y");
         logger.update("y", "yvalue1");
         logger.update("x", "xvalue2");
 
         assertEquals("Update x from xvalue1 to xvalue2", new Change(logger.head()).toString());
+
+    }
+
+    @Test
+    public void updateAfterCreate() {
+
+        logger.logCreate("x");
+        logger.update("x", "xvalue1");
+
+        assertEquals("Created x with value xvalue1", new Change(logger.head()).toString());
+
+    }
+
+    @Test
+    public void createIsFirstEventForFile() {
+
+        // TODO
 
     }
 
@@ -26,9 +50,6 @@ public class ChangeTest {
     and nurture the key design elements
 
     1) Simple Change (i.e. two nearest events for same file.)
-       - Update Change
-          - previous is before Start Event
-          - no previous Sibling exists
        - Create Change
        - Delete Change
        - No Change (e.g. two deletes, or 2 updates (with same file value))
