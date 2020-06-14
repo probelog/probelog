@@ -16,7 +16,7 @@ public class Change {
         if (after.state()==CREATED)
             return "Created " + fileName();
         if (before.state()==CREATED)
-            return "Created " + fileName() + " with value " + afterValue();
+            return "Set " + fileName() + " with value " + afterValue();
         return "Update " + fileName() + " from " + beforeValue() +" to " + afterValue();
     }
 

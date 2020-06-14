@@ -32,7 +32,7 @@ public class ChangeTest {
         logger.logCreate("x");
         logger.update("x", "xvalue1");
 
-        assertEquals("Created x with value xvalue1", new Change(logger.head()).toString());
+        assertEquals("Set x with value xvalue1", new Change(logger.head()).toString());
 
     }
 
