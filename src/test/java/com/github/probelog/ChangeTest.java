@@ -45,6 +45,21 @@ public class ChangeTest {
 
     }
 
+    @Test
+    public void deleteAfterCreate() {
+
+        // TODO
+
+    }
+
+    @Test
+    public void deleteAfterUpdate() {
+
+        // TODO
+
+    }
+
+
     /*
 
     Decided to to do this before test run logging as these tests
@@ -52,14 +67,15 @@ public class ChangeTest {
     and nurture the key design elements
 
     1) Simple Change (i.e. two nearest events for same file.)
-       - Create Change
-       - Delete Change
        - No Change (e.g. two deletes, or 2 updates (with same file value))
 
     2) Episode Change (have to go back beyond a specific start event of "episode")
+       - Delete, Episode Start, Create, Update - is Created
+       - Delete, Episode Start, Create, Delete  - is no Change
+       - Too tired to think of other permutations - but suspect more ?
 
 
-    3) Aggregate Episode Change - get all the changes fro an episode.
+    3) Aggregate Episode Change - get all the changes for an episode.
      */
 
 }
