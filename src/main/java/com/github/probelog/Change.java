@@ -13,8 +13,24 @@ public class Change {
 
     @Override
     public String toString() {
-        if (before.state()== CREATED)
-            return "Created " + after.fileName() + " with value " + after.fileValue();
-        return "Update " + after.fileName() + " from " + before.fileValue()  +" to " + after.fileValue();
+        if (after.state()==CREATED)
+            return "Created " + fileName();
+        if (before.state()==CREATED)
+            return "Created " + fileName() + " with value " + afterValue();
+        return "Update " + fileName() + " from " + beforeValue() +" to " + afterValue();
     }
+
+    private String fileName() {
+        return after.fileName();
+    }
+
+    private String beforeValue() {
+        return before.fileValue();
+    }
+
+    private String afterValue() {
+        return after.fileValue();
+    }
+
+
 }

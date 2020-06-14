@@ -39,7 +39,9 @@ public class ChangeTest {
     @Test
     public void createIsFirstEventForFile() {
 
-        // TODO
+        logger.logCreate("x");
+
+        assertEquals("Created x", new Change(logger.head()).toString());
 
     }
 

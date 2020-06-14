@@ -85,7 +85,7 @@ public class DevEvent {
     }
 
     private DevEvent findPrevious(String fileName) {
-        return fileName.equals(this.fileName) ? this : previous.findPrevious(fileName);
+        return fileName.equals(this.fileName) ? this : isTail() ? null : previous.findPrevious(fileName);
     }
 
 
