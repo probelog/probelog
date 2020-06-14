@@ -10,14 +10,12 @@ public class ChangeTest {
     public void update() {
 
         EventLogger logger = new EventLogger();
-        logger.logCreate("x");
-        logger.update("x", "xvalue1");
+        logger.logInitialize("x", "xvalue1");
         logger.logCreate("y");
         logger.update("y", "yvalue1");
         logger.update("x", "xvalue2");
 
         assertEquals("Update x from xvalue1 to xvalue2", new Change(logger.head()).toString());
-
 
     }
 
