@@ -11,15 +11,22 @@ public class Change {
         this.after=after;
     }
 
+    public Change(DevEvent episodeStart, DevEvent after) {
+        this.before=after.previousSibling(episodeStart);
+        this.after=after;
+    }
+
     @Override
     public String toString() {
-        if (afterState().equals(UPDATED) && afterValue().equals(beforeValue()))
+        if ((afterState().equals(UPDATED) && beforeState().equals(DELETED)))
+            return "Created " + fileName() + " with value " + afterValue();
+        if ((afterState().equals(UPDATED) || afterState().equals(PASTED)) && afterValue().equals(beforeValue()))
             return "No Change";
         if (afterState() ==DELETED)
             return before.state().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValue();
         if (afterState() ==CREATED)
             return "Created " + fileName();
-        if (before.state()==CREATED)
+        if (beforeState()==CREATED)
             return "Set " + fileName() + " with value " + afterValue();
         return "Update " + fileName() + " from " + beforeValue() +" to " + afterValue();
     }

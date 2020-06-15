@@ -84,9 +84,15 @@ public class DevEvent {
         return previous.findPrevious(fileName);
     }
 
+    public DevEvent previousSibling(DevEvent episodeStart) {
+        return previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    }
+
     private DevEvent findPrevious(String fileName) {
         return fileName.equals(this.fileName) ? this : isTail() ? null : previous.findPrevious(fileName);
     }
 
-
+    private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
+        return this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    }
 }

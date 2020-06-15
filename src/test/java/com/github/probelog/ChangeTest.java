@@ -77,6 +77,33 @@ public class ChangeTest {
 
     }
 
+    @Test
+    public void pasteAfterUpdateNoChange() {
+
+        logger.create("x");
+        logger.create("y");
+        logger.update("x", "xValue");
+        logger.update("y", "xValue");
+        logger.copyPaste("y", "x");
+
+        assertEquals("No Change", new Change(logger.head()).toString());
+
+    }
+
+    @Test
+    public void episode_createAndUpdate() {
+
+        logger.create("x");
+        logger.delete("x");
+        logger.create("anotherFile");
+        DevEvent episodeStart = logger.head();
+        logger.create("x");
+        logger.update("x", "xValue");
+
+        assertEquals("Created x with value xValue", new Change(episodeStart, logger.head()).toString());
+
+    }
+
 
     /*
 
@@ -85,8 +112,11 @@ public class ChangeTest {
     and nurture the key design elements
 
     1) Episode Change (have to go back beyond a specific start event of "episode")
-       - Delete, Episode Start, Create, Update - is Created
+       - Update with No Events for file before start of Episode
+       - Create with No Events for file before start of Episode
+       - Delete with No Events for file before start of Episode - no change
        - Delete, Episode Start, Create, Delete  - is no Change
+
        - anymore ?
 
 
