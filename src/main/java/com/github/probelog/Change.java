@@ -1,6 +1,7 @@
 package com.github.probelog;
 
 import static com.github.probelog.State.CREATED;
+import static com.github.probelog.State.DELETED;
 
 public class Change {
 
@@ -13,6 +14,8 @@ public class Change {
 
     @Override
     public String toString() {
+        if (after.state()==DELETED)
+            return "Deleted Empty File " + fileName();
         if (after.state()==CREATED)
             return "Created " + fileName();
         if (before.state()==CREATED)

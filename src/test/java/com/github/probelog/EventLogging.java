@@ -3,12 +3,8 @@ package com.github.probelog;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
-import static com.github.probelog.State.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
@@ -25,8 +21,8 @@ public class EventLogging {
     @Test
     public void lifecycle() {
 
-        logger.logCreate("x");
-        logger.logInitialize("y","yValue");
+        logger.create("x");
+        logger.initialize("y","yValue");
         logger.touch("x");
         logger.update("x","xValue1");
         logger.copyPaste("x","y");
@@ -56,14 +52,14 @@ public class EventLogging {
     @Test
     public void pastingToANewFile() {
 
-        logger.logCreate("x");
+        logger.create("x");
         try {
             logger.copyPaste("x", "y");
             fail();
         }
         catch(AssertionError e) {}
 
-        logger.logNotExisting("y");
+        logger.notExisting("y");
         logger.copyPaste("x", "y");
         logger.update("y", "yValue");
 
@@ -79,8 +75,8 @@ public class EventLogging {
     @Test
     public void moreThanOneFileInitialized() {
 
-        logger.logInitialize("x", "xValue");
-        logger.logInitialize("y", "yValue");
+        logger.initialize("x", "xValue");
+        logger.initialize("y", "yValue");
 
         assertEquals(asList(
                 "Initialized x value to xValue",
@@ -93,9 +89,9 @@ public class EventLogging {
     @Test
     public void listOfFilesInTouchedState() {
 
-        logger.logCreate("x");
-        logger.logCreate("y");
-        logger.logNotExisting("z");
+        logger.create("x");
+        logger.create("y");
+        logger.notExisting("z");
         logger.touch("x");
         logger.touch("y");
         assertEquals(new HashSet<String>(asList("x","y")),logger.touchedFiles());

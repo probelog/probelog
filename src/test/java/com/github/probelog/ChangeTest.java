@@ -17,8 +17,8 @@ public class ChangeTest {
     @Test
     public void update() {
 
-        logger.logInitialize("x", "xvalue1");
-        logger.logCreate("y");
+        logger.initialize("x", "xvalue1");
+        logger.create("y");
         logger.update("y", "yvalue1");
         logger.update("x", "xvalue2");
 
@@ -29,7 +29,7 @@ public class ChangeTest {
     @Test
     public void updateAfterCreate() {
 
-        logger.logCreate("x");
+        logger.create("x");
         logger.update("x", "xvalue1");
 
         assertEquals("Set x with value xvalue1", new Change(logger.head()).toString());
@@ -39,7 +39,7 @@ public class ChangeTest {
     @Test
     public void createIsFirstEventForFile() {
 
-        logger.logCreate("x");
+        logger.create("x");
 
         assertEquals("Created x", new Change(logger.head()).toString());
 
@@ -48,7 +48,10 @@ public class ChangeTest {
     @Test
     public void deleteAfterCreate() {
 
-        // TODO
+        logger.create("x");
+        logger.delete("x");
+
+        assertEquals("Deleted Empty File x", new Change(logger.head()).toString());
 
     }
 

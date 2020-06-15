@@ -20,26 +20,24 @@ public class EventLogger {
                 fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
     }
 
-    public void logCreate(String fileName) {
-
-        assert isValidTransition(fileName, CREATED);
-        setHead(fileName, new DevEvent(head, fileName, CREATED));
-
-    }
-
     private void setHead(String fileName, DevEvent devEvent) {
         head=devEvent;
         unLoggedFileStateMap.remove(fileName);
         fileHeadsMap.put(fileName, devEvent);
     }
 
-    public void logInitialize(String fileName, String fileValue) {
+    public void create(String fileName) {
+        assert isValidTransition(fileName, CREATED);
+        setHead(fileName, new DevEvent(head, fileName, CREATED));
+    }
+
+    public void initialize(String fileName, String fileValue) {
         DevEvent initializeEvent = new DevEvent(null, fileName, INITIALIZED, fileValue);
         fileHeadsMap.put(fileName, initializeEvent);
         start.setPrevious(initializeEvent);
     }
 
-    public void logNotExisting(String fileName) {
+    public void notExisting(String fileName) {
         assert isValidTransition(fileName, NOT_EXISTING);
         unLoggedFileStateMap.put(fileName, NOT_EXISTING);
     }
@@ -73,7 +71,7 @@ public class EventLogger {
         setHead(fileName, new DevEvent(head, fileName, DELETED));
     }
 
-    public void logTestRun() {
+    public void testRun() {
 
     }
 
