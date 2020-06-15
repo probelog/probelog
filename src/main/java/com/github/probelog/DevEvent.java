@@ -80,11 +80,11 @@ public class DevEvent {
         return state;
     }
 
-    DevEvent previous() {
-        return previous;
+    public DevEvent previousSibling() {
+        return previous.findPrevious(fileName);
     }
 
-    DevEvent previousSibling(DevEvent episodeStart) {
+    public DevEvent previousSibling(DevEvent episodeStart) {
         return previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 
@@ -93,6 +93,6 @@ public class DevEvent {
     }
 
     private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
-        return this.equals(episodeStart) ? findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+        return this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 }
