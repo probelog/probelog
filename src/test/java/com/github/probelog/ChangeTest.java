@@ -111,6 +111,11 @@ public class ChangeTest {
     should ask more fundamental questions
     and nurture the key design elements
 
+    Will Introduce an not-existing "event" for each file that has no initial state at start
+    this will there will always be a previous sibling for events after start.
+    To make this easier will refactor start event so its a map of all files with each file either
+    not existing or exists with initial state.
+
     1) Episode Change (have to go back beyond a specific start event of "episode")
        - Update with No Events for file before start of Episode
        - Create with No Events for file before start of Episode
