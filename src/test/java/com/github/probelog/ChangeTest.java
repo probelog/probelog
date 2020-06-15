@@ -58,7 +58,22 @@ public class ChangeTest {
     @Test
     public void deleteAfterUpdate() {
 
-        // TODO
+        logger.create("x");
+        logger.update("x", "xValue");
+        logger.delete("x");
+
+        assertEquals("Deleted File x with value xValue", new Change(logger.head()).toString());
+
+    }
+
+    @Test
+    public void updateAfterUpdateNoChange() {
+
+        logger.create("x");
+        logger.update("x", "xValue");
+        logger.update("x", "xValue");
+
+        assertEquals("No Change", new Change(logger.head()).toString());
 
     }
 
@@ -69,16 +84,14 @@ public class ChangeTest {
     should ask more fundamental questions
     and nurture the key design elements
 
-    1) Simple Change (i.e. two nearest events for same file.)
-       - No Change (e.g. two deletes, or 2 updates (with same file value))
-
-    2) Episode Change (have to go back beyond a specific start event of "episode")
+    1) Episode Change (have to go back beyond a specific start event of "episode")
        - Delete, Episode Start, Create, Update - is Created
        - Delete, Episode Start, Create, Delete  - is no Change
-       - Too tired to think of other permutations - but suspect more ?
+       - anymore ?
 
 
-    3) Aggregate Episode Change - get all the changes for an episode.
+
+    2) Aggregate Episode Change - get all the changes for an episode.
      */
 
 }
