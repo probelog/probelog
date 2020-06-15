@@ -7,8 +7,7 @@ public class Change {
     private DevEvent before, after;
 
     public Change(DevEvent after) {
-        this.before=after.previousSibling();
-        this.after=after;
+        this(after.previous(), after);
     }
 
     public Change(DevEvent episodeStart, DevEvent after) {
