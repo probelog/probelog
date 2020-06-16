@@ -45,7 +45,7 @@ public class EventLogging {
                 "Updated x value to xValue2",
                 "Moved x value xValue2 to y",
                 "Deleted y"
-                ),logger.description());
+                ),logger.head().description());
 
     }
 
@@ -68,7 +68,7 @@ public class EventLogging {
                 "Created x",
                 "Copied x value null to y",
                 "Updated y value to yValue"
-        ), logger.description());
+        ), logger.head().description());
 
     }
 
@@ -82,7 +82,7 @@ public class EventLogging {
                 "Initialized x value to xValue",
                 "Initialized y value to yValue",
                 "Event Log Start"
-        ), logger.description());
+        ), logger.head().description());
 
     }
 
@@ -94,7 +94,7 @@ public class EventLogging {
         logger.notExisting("z");
         logger.touch("x");
         logger.touch("y");
-        assertEquals(new HashSet<>(asList("x","y")),logger.touchedFiles());
+        assertEquals(new HashSet<String>(asList("x","y")),logger.touchedFiles());
 
     }
 

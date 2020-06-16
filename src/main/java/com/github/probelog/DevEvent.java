@@ -1,37 +1,44 @@
 package com.github.probelog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.probelog.State.*;
 
-public class DevEvent implements IDevEvent {
+public class DevEvent {
 
     private final String fileName;
     private final String fileValue;
-    private IDevEvent previous;
+    private DevEvent previous;
     private final State state;
 
     DevEvent() {
         this(null, null, null);
     }
 
-    DevEvent(IDevEvent previous, String fileName, State state) {
+    DevEvent(DevEvent previous, String fileName, State state) {
         this(previous,fileName,state,null);
     }
 
-    DevEvent(IDevEvent previous, String fileName, State state, String fileValue) {
+    DevEvent(DevEvent previous, String fileName, State state, String fileValue) {
         this.previous=previous;
         this.fileName=fileName;
         this.state=state;
         this.fileValue=fileValue;
     }
 
-    public void collectDescription(List<String> lines) {
+    public List<String> description() {
+        List<String> lines = new ArrayList<>();
+        collectDescription(lines);
+        return lines;
+    }
+
+    private void collectDescription(List<String> lines) {
         lines.add(0, doDescription());
         if (isTail())
             return;
         if (state==PASTED)
-            ((DevEvent)previous).previous.collectDescription(lines);
+            previous.previous.collectDescription(lines);
         else
             previous.collectDescription(lines);
     }
@@ -46,7 +53,7 @@ public class DevEvent implements IDevEvent {
         if (state==UPDATED)
             return "Updated " + fileName + " value to " + fileValue;
         if (state==PASTED)
-            return (previous().state()==CUT ? "Moved ": "Copied ") + previous().fileName() + " value " + fileValue() + " to " + fileName;
+            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValue() + " to " + fileName;
         if (state==DELETED)
             return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
@@ -58,38 +65,34 @@ public class DevEvent implements IDevEvent {
     }
 
     private boolean isTail() {
-        return previous()==null;
+        return previous==null;
     }
 
-    public String fileName() {
+    String fileName() {
         return fileName;
     }
 
-    public String fileValue() {
-        return state==PASTED ? previous().fileValue() : fileValue;
+    String fileValue() {
+        return state==PASTED ? previous.fileValue : fileValue;
     }
 
-    public State state() {
+    State state() {
         return state;
     }
 
-    public IDevEvent previous() {
-        return previous;
+    public DevEvent previousSibling() {
+        return previous.findPrevious(fileName);
     }
 
-    public IDevEvent previousSibling() {
-        return previous().findPrevious(fileName);
+    public DevEvent previousSibling(DevEvent episodeStart) {
+        return previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 
-    public IDevEvent previousSibling(IDevEvent episodeStart) {
-        return previous().findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    private DevEvent findPrevious(String fileName) {
+        return fileName.equals(this.fileName) ? this : isTail() ? null : previous.findPrevious(fileName);
     }
 
-    public IDevEvent findPrevious(String fileName) {
-        return fileName.equals(this.fileName) ? this : isTail() ? null : previous().findPrevious(fileName);
-    }
-
-    public IDevEvent findPreviousBoforeEpisodeStart(String fileName, IDevEvent episodeStart) {
-        return this.equals(episodeStart) ? previous().findPrevious(fileName) : previous().findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
+        return this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 }
