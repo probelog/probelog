@@ -111,10 +111,13 @@ public class ChangeTest {
     should ask more fundamental questions
     and nurture the key design elements
 
+    Get rid of start event and have initialise event embedded in list - an intialiseEvent will always
+    return itself when searching back for event that happened before an event.,
+
     Will Introduce an not-existing "event" for each file that has no initial state at start
     this will there will always be a previous sibling for events after start.
-    To make this easier will refactor start event so its a map of all files with each file either
-    not existing or exists with initial state.
+
+
 
     1) Episode Change (have to go back beyond a specific start event of "episode")
        - Update with No Events for file before start of Episode
