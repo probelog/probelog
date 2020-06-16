@@ -4,14 +4,14 @@ import static com.github.probelog.State.*;
 
 public class Change {
 
-    private IDevEvent before, after;
+    private DevEvent before, after;
 
     public Change(DevEvent after) {
         this.before=after.previousSibling();
         this.after=after;
     }
 
-    public Change(IDevEvent episodeStart, DevEvent after) {
+    public Change(DevEvent episodeStart, DevEvent after) {
         this.before=after.previousSibling(episodeStart);
         this.after=after;
     }
