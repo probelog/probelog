@@ -9,7 +9,7 @@ public class DevEvent {
 
     private final String fileName;
     private final String fileValue;
-    private DevEvent previous;
+    private final DevEvent previous;
     private final State state;
 
     DevEvent() {
@@ -57,11 +57,6 @@ public class DevEvent {
         if (state==DELETED)
             return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
-    }
-
-    public void setPrevious(DevEvent previous) {
-        previous.previous=this.previous;
-        this.previous=previous;
     }
 
     private boolean isTail() {

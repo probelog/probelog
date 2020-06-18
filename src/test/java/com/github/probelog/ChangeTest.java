@@ -111,7 +111,7 @@ public class ChangeTest {
     should ask more fundamental questions
     and nurture the key design elements
 
-    Get rid of start event and have initialise event embedded in list - an intialiseEvent will always
+    an intialiseEvent will always
     return itself when searching back for event that happened before an event.,
 
     Will Introduce an not-existing "event" for each file that has no initial state at start

@@ -32,9 +32,9 @@ public class EventLogger {
     }
 
     public void initialize(String fileName, String fileValue) {
-        DevEvent initializeEvent = new DevEvent(null, fileName, INITIALIZED, fileValue);
-        fileHeadsMap.put(fileName, initializeEvent);
-        start.setPrevious(initializeEvent);
+        assert isValidTransition(fileName, INITIALIZED);
+        DevEvent initializeEvent = new DevEvent(head, fileName, INITIALIZED, fileValue);
+        setHead(fileName, initializeEvent);
     }
 
     public void notExisting(String fileName) {

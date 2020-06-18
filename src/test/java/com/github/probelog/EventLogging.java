@@ -37,9 +37,9 @@ public class EventLogging {
         logger.delete("y");
 
         assertEquals(asList(
-                "Initialized y value to yValue",
                 "Event Log Start",
                 "Created x",
+                "Initialized y value to yValue",
                 "Updated x value to xValue1",
                 "Copied x value xValue1 to y",
                 "Updated x value to xValue2",
@@ -68,20 +68,6 @@ public class EventLogging {
                 "Created x",
                 "Copied x value null to y",
                 "Updated y value to yValue"
-        ), logger.head().description());
-
-    }
-
-    @Test
-    public void moreThanOneFileInitialized() {
-
-        logger.initialize("x", "xValue");
-        logger.initialize("y", "yValue");
-
-        assertEquals(asList(
-                "Initialized x value to xValue",
-                "Initialized y value to yValue",
-                "Event Log Start"
         ), logger.head().description());
 
     }
