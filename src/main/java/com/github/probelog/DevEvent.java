@@ -46,6 +46,8 @@ public class DevEvent {
     private String doDescription() {
         if (fileName==null)
             return "Event Log Start";
+        if (state==NOT_EXISTING)
+            return "Not Existing " + fileName;
         if (state==CREATED)
             return "Created " + fileName;
         if (state==INITIALIZED)

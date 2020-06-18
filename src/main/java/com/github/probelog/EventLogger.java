@@ -11,23 +11,25 @@ import static com.github.probelog.StateMap.validTransitions;
 public class EventLogger {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
-    private Map<String, State> unLoggedFileStateMap = new HashMap<>();
+    private Set<String> touchedFiles = new HashSet<>();
     private final DevEvent start = new DevEvent();
     private DevEvent head = start;
 
     private State state(String fileName) {
-        return unLoggedFileStateMap.containsKey(fileName) ? unLoggedFileStateMap.get(fileName) :
+        return touchedFiles.contains(fileName) ? TOUCHED :
                 fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
     }
 
     private void setHead(String fileName, DevEvent devEvent) {
         head=devEvent;
-        unLoggedFileStateMap.remove(fileName);
+        touchedFiles.remove(fileName);
         fileHeadsMap.put(fileName, devEvent);
     }
 
     public void create(String fileName) {
         assert isValidTransition(fileName, CREATED);
+        if (state(fileName).equals(UNKNOWN))
+            setHead(fileName, new DevEvent(head, fileName, NOT_EXISTING));
         setHead(fileName, new DevEvent(head, fileName, CREATED));
     }
 
@@ -39,7 +41,7 @@ public class EventLogger {
 
     public void notExisting(String fileName) {
         assert isValidTransition(fileName, NOT_EXISTING);
-        unLoggedFileStateMap.put(fileName, NOT_EXISTING);
+        setHead(fileName, new DevEvent(head, fileName, NOT_EXISTING));
     }
 
     public void update(String fileName, String fileValue) {
@@ -49,7 +51,7 @@ public class EventLogger {
 
     public void touch(String fileName) {
         assert isValidTransition(fileName, TOUCHED);
-        unLoggedFileStateMap.put(fileName,TOUCHED);
+        touchedFiles.add(fileName);
     }
 
     public void copyPaste(String fromFile, String toFile) {
@@ -89,10 +91,6 @@ public class EventLogger {
     }
 
     public Set<String> touchedFiles() {
-        Set<String> result = new HashSet<>();
-        for (String fileName: unLoggedFileStateMap.keySet())
-            if (unLoggedFileStateMap.get(fileName)==TOUCHED)
-                result.add(fileName);
-        return result;
+        return touchedFiles;
     }
 }

@@ -38,6 +38,7 @@ public class EventLogging {
 
         assertEquals(asList(
                 "Event Log Start",
+                "Not Existing x",
                 "Created x",
                 "Initialized y value to yValue",
                 "Updated x value to xValue1",
@@ -65,7 +66,9 @@ public class EventLogging {
 
         assertEquals(asList(
                 "Event Log Start",
+                "Not Existing x",
                 "Created x",
+                "Not Existing y",
                 "Copied x value null to y",
                 "Updated y value to yValue"
         ), logger.head().description());
@@ -81,6 +84,23 @@ public class EventLogging {
         logger.touch("x");
         logger.touch("y");
         assertEquals(new HashSet<String>(asList("x","y")),logger.touchedFiles());
+
+    }
+
+    @Test
+    public void createDeleteCreate() {
+
+        logger.create("x");
+        logger.delete("x");
+        logger.create("x");
+
+        assertEquals(asList(
+                "Event Log Start",
+                "Not Existing x",
+                "Created x",
+                "Deleted x",
+                "Created x"
+        ),logger.head().description());
 
     }
 
