@@ -40,11 +40,12 @@ public class EventLogging {
                 "Event Log Start",
                 "Not Existing x",
                 "Created x",
-                "Initialized y value to yValue",
-                "Updated x value to xValue1",
-                "Copied x value xValue1 to y",
-                "Updated x value to xValue2",
-                "Moved x value xValue2 to y",
+                "Initialized y value to (yValue)",
+                "Touched x value UNKNOWN",
+                "Updated x value to (xValue1)",
+                "Copied x value (xValue1) to y",
+                "Updated x value to (xValue2)",
+                "Moved x value (xValue2) to y",
                 "Deleted y"
                 ),logger.head().description());
 
@@ -69,8 +70,8 @@ public class EventLogging {
                 "Not Existing x",
                 "Created x",
                 "Not Existing y",
-                "Copied x value null to y",
-                "Updated y value to yValue"
+                "Copied x value EMPTY to y",
+                "Updated y value to (yValue)"
         ), logger.head().description());
 
     }

@@ -11,18 +11,15 @@ import static com.github.probelog.StateMap.validTransitions;
 public class EventLogger {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
-    private Set<String> touchedFiles = new HashSet<>();
     private final DevEvent start = new DevEvent();
     private DevEvent head = start;
 
     private State state(String fileName) {
-        return touchedFiles.contains(fileName) ? TOUCHED :
-                fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
+        return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
     }
 
     private void setHead(String fileName, DevEvent devEvent) {
         head=devEvent;
-        touchedFiles.remove(fileName);
         fileHeadsMap.put(fileName, devEvent);
     }
 
@@ -51,7 +48,7 @@ public class EventLogger {
 
     public void touch(String fileName) {
         assert isValidTransition(fileName, TOUCHED);
-        touchedFiles.add(fileName);
+        setHead(fileName, new DevEvent(head, fileName, TOUCHED));
     }
 
     public void copyPaste(String fromFile, String toFile) {
@@ -91,6 +88,10 @@ public class EventLogger {
     }
 
     public Set<String> touchedFiles() {
-        return touchedFiles;
+        Set<String> result = new HashSet<String>();
+        for (DevEvent fileHead: fileHeadsMap.values())
+            if (fileHead.state()==TOUCHED)
+                result.add(fileHead.fileName());
+        return result;
     }
 }

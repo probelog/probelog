@@ -22,7 +22,7 @@ public class ChangeTest {
         logger.update("y", "yvalue1");
         logger.update("x", "xvalue2");
 
-        assertEquals("Update x from xvalue1 to xvalue2", new Change(logger.head()).toString());
+        assertEquals("Update x from (xvalue1) to (xvalue2)", new Change(logger.head()).toString());
 
     }
 
@@ -32,7 +32,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xvalue1");
 
-        assertEquals("Set x with value xvalue1", new Change(logger.head()).toString());
+        assertEquals("Set x with value (xvalue1)", new Change(logger.head()).toString());
 
     }
 
@@ -62,7 +62,7 @@ public class ChangeTest {
         logger.update("x", "xValue");
         logger.delete("x");
 
-        assertEquals("Deleted File x with value xValue", new Change(logger.head()).toString());
+        assertEquals("Deleted File x with value (xValue)", new Change(logger.head()).toString());
 
     }
 
@@ -100,7 +100,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xValue");
 
-        assertEquals("Created x with value xValue", new Change(episodeStart, logger.head()).toString());
+        assertEquals("Created x with value (xValue)", new Change(episodeStart, logger.head()).toString());
 
     }
 
@@ -110,9 +110,6 @@ public class ChangeTest {
     Decided to to do this before test run logging as these tests
     should ask more fundamental questions
     and nurture the key design elements
-
-    an intialiseEvent or non-existing event will always
-    return itself when searching back for event that happened before an event.,
 
     1) Episode Change (have to go back beyond a specific start event of "episode")
        - Update with No Events for file before start of Episode

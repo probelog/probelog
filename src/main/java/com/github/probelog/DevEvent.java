@@ -51,11 +51,13 @@ public class DevEvent {
         if (state==CREATED)
             return "Created " + fileName;
         if (state==INITIALIZED)
-            return "Initialized " + fileName+ " value to " + fileValue;
+            return "Initialized " + fileName+ " value to " + fileValueString();
+        if (state==TOUCHED)
+            return "Touched " + fileName + " value " + fileValueString();
         if (state==UPDATED)
-            return "Updated " + fileName + " value to " + fileValue;
+            return "Updated " + fileName + " value to " + fileValueString();
         if (state==PASTED)
-            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValue() + " to " + fileName;
+            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValueString() + " to " + fileName;
         if (state==DELETED)
             return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
@@ -67,6 +69,10 @@ public class DevEvent {
 
     String fileName() {
         return fileName;
+    }
+
+    String fileValueString() {
+        return state==TOUCHED ? "UNKNOWN" : fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
     }
 
     String fileValue() {

@@ -19,16 +19,16 @@ public class Change {
     @Override
     public String toString() {
         if ((afterState().equals(UPDATED) && beforeState().equals(DELETED)))
-            return "Created " + fileName() + " with value " + afterValue();
-        if ((afterState().equals(UPDATED) || afterState().equals(PASTED)) && afterValue().equals(beforeValue()))
+            return "Created " + fileName() + " with value " + afterValueString();
+        if ((afterState().equals(UPDATED) || afterState().equals(PASTED)) && afterValueString().equals(beforeValueString()))
             return "No Change";
         if (afterState() ==DELETED)
-            return before.state().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValue();
+            return before.state().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValueString();
         if (afterState() ==CREATED)
             return "Created " + fileName();
         if (beforeState()==CREATED)
-            return "Set " + fileName() + " with value " + afterValue();
-        return "Update " + fileName() + " from " + beforeValue() +" to " + afterValue();
+            return "Set " + fileName() + " with value " + afterValueString();
+        return "Update " + fileName() + " from " + beforeValueString() +" to " + afterValueString();
     }
 
     private State afterState() {
@@ -43,12 +43,12 @@ public class Change {
         return after.fileName();
     }
 
-    private String beforeValue() {
-        return before.fileValue();
+    private String beforeValueString() {
+        return before.fileValueString();
     }
 
-    private String afterValue() {
-        return after.fileValue();
+    private String afterValueString() {
+        return after.fileValueString();
     }
 
 
