@@ -1,6 +1,6 @@
 package com.github.probelog;
 
-public enum State {
+public enum Action {
     UNKNOWN,
     CREATED,
     INITIALIZED,

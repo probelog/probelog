@@ -1,6 +1,6 @@
 package com.github.probelog;
 
-import static com.github.probelog.State.*;
+import static com.github.probelog.Action.*;
 
 public class Change {
 
@@ -23,7 +23,7 @@ public class Change {
         if ((afterState().equals(UPDATED) || afterState().equals(PASTED)) && afterValueString().equals(beforeValueString()))
             return "No Change";
         if (afterState() ==DELETED)
-            return before.state().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValueString();
+            return before.action().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValueString();
         if (afterState() ==CREATED)
             return "Created " + fileName();
         if (beforeState()==CREATED)
@@ -31,12 +31,12 @@ public class Change {
         return "Update " + fileName() + " from " + beforeValueString() +" to " + afterValueString();
     }
 
-    private State afterState() {
-        return after.state();
+    private Action afterState() {
+        return after.action();
     }
 
-    private State beforeState() {
-        return before.state();
+    private Action beforeState() {
+        return before.action();
     }
 
     private String fileName() {

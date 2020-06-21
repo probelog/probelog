@@ -3,27 +3,27 @@ package com.github.probelog;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.probelog.State.*;
+import static com.github.probelog.Action.*;
 
 public class DevEvent {
 
     private final String fileName;
     private final String fileValue;
     private final DevEvent previous;
-    private final State state;
+    private final Action action;
 
     DevEvent() {
         this(null, null, null);
     }
 
-    DevEvent(DevEvent previous, String fileName, State state) {
-        this(previous,fileName,state,null);
+    DevEvent(DevEvent previous, String fileName, Action action) {
+        this(previous,fileName, action,null);
     }
 
-    DevEvent(DevEvent previous, String fileName, State state, String fileValue) {
+    DevEvent(DevEvent previous, String fileName, Action action, String fileValue) {
         this.previous=previous;
         this.fileName=fileName;
-        this.state=state;
+        this.action = action;
         this.fileValue=fileValue;
     }
 
@@ -37,7 +37,7 @@ public class DevEvent {
         lines.add(0, doDescription());
         if (isTail())
             return;
-        if (state==PASTED)
+        if (action ==PASTED)
             previous.previous.collectDescription(lines);
         else
             previous.collectDescription(lines);
@@ -46,19 +46,19 @@ public class DevEvent {
     private String doDescription() {
         if (fileName==null)
             return "Event Log Start";
-        if (state==NOT_EXISTING)
+        if (action ==NOT_EXISTING)
             return "Not Existing " + fileName;
-        if (state==CREATED)
+        if (action ==CREATED)
             return "Created " + fileName;
-        if (state==INITIALIZED)
+        if (action ==INITIALIZED)
             return "Initialized " + fileName+ " value to " + fileValueString();
-        if (state==TOUCHED)
+        if (action ==TOUCHED)
             return "Touched " + fileName + " value " + fileValueString();
-        if (state==UPDATED)
+        if (action ==UPDATED)
             return "Updated " + fileName + " value to " + fileValueString();
-        if (state==PASTED)
-            return (previous.state==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValueString() + " to " + fileName;
-        if (state==DELETED)
+        if (action ==PASTED)
+            return (previous.action ==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValueString() + " to " + fileName;
+        if (action ==DELETED)
             return "Deleted " + fileName;
         throw new RuntimeException("BUG!! Missing State Condition");
     }
@@ -72,15 +72,15 @@ public class DevEvent {
     }
 
     String fileValueString() {
-        return state==TOUCHED ? "UNKNOWN" : fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
+        return action ==TOUCHED ? "UNKNOWN" : fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
     }
 
     String fileValue() {
-        return state==PASTED ? previous.fileValue : fileValue;
+        return action ==PASTED ? previous.fileValue : fileValue;
     }
 
-    State state() {
-        return state;
+    Action action() {
+        return action;
     }
 
     public DevEvent previousSibling() {

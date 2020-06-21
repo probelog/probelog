@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.github.probelog.State.*;
-import static com.github.probelog.StateMap.validTransitions;
+import static com.github.probelog.Action.*;
+import static com.github.probelog.ActionMap.validFollowOnActions;
 
 public class EventLogger {
 
@@ -14,8 +14,8 @@ public class EventLogger {
     private final DevEvent start = new DevEvent();
     private DevEvent head = start;
 
-    private State state(String fileName) {
-        return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).state() : UNKNOWN;
+    private Action state(String fileName) {
+        return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).action() : UNKNOWN;
     }
 
     private void setHead(String fileName, DevEvent devEvent) {
@@ -74,11 +74,11 @@ public class EventLogger {
 
     }
 
-    private boolean isValidTransition(String fileName, State newState) {
-        return validTransitions(state(fileName)).contains(newState);
+    private boolean isValidTransition(String fileName, Action newState) {
+        return validFollowOnActions(state(fileName)).contains(newState);
     }
 
-    private void doCopy(State cutOrCopy, String fromFile, String toFile) {
+    private void doCopy(Action cutOrCopy, String fromFile, String toFile) {
         assert isValidTransition(fromFile, cutOrCopy);
         assert isValidTransition(toFile, PASTED);
     }
@@ -90,7 +90,7 @@ public class EventLogger {
     public Set<String> touchedFiles() {
         Set<String> result = new HashSet<String>();
         for (DevEvent fileHead: fileHeadsMap.values())
-            if (fileHead.state()==TOUCHED)
+            if (fileHead.action()==TOUCHED)
                 result.add(fileHead.fileName());
         return result;
     }
