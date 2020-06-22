@@ -18,38 +18,8 @@ public class Change {
 
     @Override
     public String toString() {
-        if ((afterState().equals(UPDATED) && beforeState().equals(DELETED)))
-            return "Created " + fileName() + " with value " + afterValueString();
-        if ((afterState().equals(UPDATED) || afterState().equals(PASTED)) && afterValueString().equals(beforeValueString()))
-            return "No Change";
-        if (afterState() ==DELETED)
-            return before.action().equals(CREATED) ?"Deleted Empty File " + fileName() : "Deleted File " + fileName() + " with value " + beforeValueString();
-        if (afterState() ==CREATED)
-            return "Created " + fileName();
-        if (beforeState()==CREATED)
-            return "Set " + fileName() + " with value " + afterValueString();
-        return "Update " + fileName() + " from " + beforeValueString() +" to " + afterValueString();
+        return "File: " + after.fileName() +
+                (before.fileState().toString().equals(after.fileState().toString()) ? " / No Change" : " / From:" + before.fileState() + " / To:" + after.fileState());
     }
-
-    private Action afterState() {
-        return after.action();
-    }
-
-    private Action beforeState() {
-        return before.action();
-    }
-
-    private String fileName() {
-        return after.fileName();
-    }
-
-    private String beforeValueString() {
-        return before.fileValueString();
-    }
-
-    private String afterValueString() {
-        return after.fileValueString();
-    }
-
 
 }

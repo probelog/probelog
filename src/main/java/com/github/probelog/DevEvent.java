@@ -37,30 +37,11 @@ public class DevEvent {
         lines.add(0, doDescription());
         if (isTail())
             return;
-        if (action ==PASTED)
-            previous.previous.collectDescription(lines);
-        else
-            previous.collectDescription(lines);
+        previous.collectDescription(lines);
     }
 
     private String doDescription() {
-        if (fileName==null)
-            return "Event Log Start";
-        if (action ==NOT_EXISTING)
-            return "Not Existing " + fileName;
-        if (action ==CREATED)
-            return "Created " + fileName;
-        if (action ==INITIALIZED)
-            return "Initialized " + fileName+ " value to " + fileValueString();
-        if (action ==TOUCHED)
-            return "Touched " + fileName + " value " + fileValueString();
-        if (action ==UPDATED)
-            return "Updated " + fileName + " value to " + fileValueString();
-        if (action ==PASTED)
-            return (previous.action ==CUT ? "Moved ": "Copied ") + previous.fileName + " value " + fileValueString() + " to " + fileName;
-        if (action ==DELETED)
-            return "Deleted " + fileName;
-        throw new RuntimeException("BUG!! Missing State Condition");
+        return fileName!=null ? (fileName +"/" + action + "/" + fileState()) : "Event Log Start";
     }
 
     private boolean isTail() {
@@ -92,10 +73,20 @@ public class DevEvent {
     }
 
     private DevEvent findPrevious(String fileName) {
-        return fileName.equals(this.fileName) ? this : isTail() ? null : previous.findPrevious(fileName);
+        return fileName.equals(this.fileName) ? this : previous.findPrevious(fileName);
     }
 
     private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
         return this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    }
+
+    public FileState fileState() {
+        if (action==PASTED) return previous.previousSibling().fileState();
+        if (action==COPIED) return previousSibling().fileState();
+        if (action==CUT || action==DELETED || action==NOT_EXISTING) return FileState.NOT_EXISTING;
+        if (action==CREATED) return FileState.EMPTY;
+        if (action==TOUCHED) return FileState.EXISTING_UNDEFINED;
+        if (action==UPDATED || action==INITIALIZED) return new FileState(fileValue);
+        throw new RuntimeException("Bug - Missing Action");
     }
 }

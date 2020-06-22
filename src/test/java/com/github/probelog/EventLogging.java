@@ -38,15 +38,17 @@ public class EventLogging {
 
         assertEquals(asList(
                 "Event Log Start",
-                "Not Existing x",
-                "Created x",
-                "Initialized y value to (yValue)",
-                "Touched x value UNKNOWN",
-                "Updated x value to (xValue1)",
-                "Copied x value (xValue1) to y",
-                "Updated x value to (xValue2)",
-                "Moved x value (xValue2) to y",
-                "Deleted y"
+                "x/NOT_EXISTING/NOT_EXISTING",
+                "x/CREATED/EMPTY",
+                "y/INITIALIZED/DEFINED:yValue",
+                "x/TOUCHED/EXISTING_UNDEFINED",
+                "x/UPDATED/DEFINED:xValue1",
+                "x/COPIED/DEFINED:xValue1",
+                "y/PASTED/DEFINED:xValue1",
+                "x/UPDATED/DEFINED:xValue2",
+                "x/CUT/NOT_EXISTING",
+                "y/PASTED/DEFINED:xValue2",
+                "y/DELETED/NOT_EXISTING"
                 ),logger.head().description());
 
     }
@@ -67,11 +69,12 @@ public class EventLogging {
 
         assertEquals(asList(
                 "Event Log Start",
-                "Not Existing x",
-                "Created x",
-                "Not Existing y",
-                "Copied x value EMPTY to y",
-                "Updated y value to (yValue)"
+                "x/NOT_EXISTING/NOT_EXISTING",
+                "x/CREATED/EMPTY",
+                "y/NOT_EXISTING/NOT_EXISTING",
+                "x/COPIED/EMPTY",
+                "y/PASTED/EMPTY",
+                "y/UPDATED/DEFINED:yValue"
         ), logger.head().description());
 
     }
@@ -84,7 +87,7 @@ public class EventLogging {
         logger.notExisting("z");
         logger.touch("x");
         logger.touch("y");
-        assertEquals(new HashSet<String>(asList("x","y")),logger.touchedFiles());
+        assertEquals(new HashSet(asList("x","y")),logger.touchedFiles());
 
     }
 
@@ -97,10 +100,10 @@ public class EventLogging {
 
         assertEquals(asList(
                 "Event Log Start",
-                "Not Existing x",
-                "Created x",
-                "Deleted x",
-                "Created x"
+                "x/NOT_EXISTING/NOT_EXISTING",
+                "x/CREATED/EMPTY",
+                "x/DELETED/NOT_EXISTING",
+                "x/CREATED/EMPTY"
         ),logger.head().description());
 
     }

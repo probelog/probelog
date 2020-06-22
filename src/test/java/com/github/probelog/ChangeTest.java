@@ -22,7 +22,7 @@ public class ChangeTest {
         logger.update("y", "yvalue1");
         logger.update("x", "xvalue2");
 
-        assertEquals("Update x from (xvalue1) to (xvalue2)", new Change(logger.head()).toString());
+        assertEquals("File: x / From:DEFINED:xvalue1 / To:DEFINED:xvalue2", new Change(logger.head()).toString());
 
     }
 
@@ -32,7 +32,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xvalue1");
 
-        assertEquals("Set x with value (xvalue1)", new Change(logger.head()).toString());
+        assertEquals("File: x / From:EMPTY / To:DEFINED:xvalue1", new Change(logger.head()).toString());
 
     }
 
@@ -41,7 +41,7 @@ public class ChangeTest {
 
         logger.create("x");
 
-        assertEquals("Created x", new Change(logger.head()).toString());
+        assertEquals("File: x / From:NOT_EXISTING / To:EMPTY", new Change(logger.head()).toString());
 
     }
 
@@ -51,7 +51,7 @@ public class ChangeTest {
         logger.create("x");
         logger.delete("x");
 
-        assertEquals("Deleted Empty File x", new Change(logger.head()).toString());
+        assertEquals("File: x / From:EMPTY / To:NOT_EXISTING", new Change(logger.head()).toString());
 
     }
 
@@ -62,7 +62,7 @@ public class ChangeTest {
         logger.update("x", "xValue");
         logger.delete("x");
 
-        assertEquals("Deleted File x with value (xValue)", new Change(logger.head()).toString());
+        assertEquals("File: x / From:DEFINED:xValue / To:NOT_EXISTING", new Change(logger.head()).toString());
 
     }
 
@@ -73,7 +73,7 @@ public class ChangeTest {
         logger.update("x", "xValue");
         logger.update("x", "xValue");
 
-        assertEquals("No Change", new Change(logger.head()).toString());
+        assertEquals("File: x / No Change", new Change(logger.head()).toString());
 
     }
 
@@ -86,7 +86,7 @@ public class ChangeTest {
         logger.update("y", "xValue");
         logger.copyPaste("y", "x");
 
-        assertEquals("No Change", new Change(logger.head()).toString());
+        assertEquals("File: x / No Change", new Change(logger.head()).toString());
 
     }
 
@@ -100,7 +100,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xValue");
 
-        assertEquals("Created x with value (xValue)", new Change(episodeStart, logger.head()).toString());
+        assertEquals("File: x / From:NOT_EXISTING / To:DEFINED:xValue", new Change(episodeStart, logger.head()).toString());
 
     }
 
