@@ -111,6 +111,7 @@ public class ChangeTest {
         logger.create("anotherFile");
         DevEvent episodeStart = logger.head();
         logger.initialize("x", "xValue1");
+        logger.initialize("y", "blah");
         logger.update("x", "xValue2");
 
         assertEquals("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", new Change(episodeStart, logger.head()).toString());

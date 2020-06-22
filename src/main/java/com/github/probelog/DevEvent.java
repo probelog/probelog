@@ -77,7 +77,7 @@ public class DevEvent {
     }
 
     private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
-        return action==INITIALIZED ? this : this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+        return action==INITIALIZED && fileName.equals(this.fileName) ? this : this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 
     public FileState fileState() {
