@@ -77,16 +77,20 @@ public class DevEvent {
     }
 
     private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
-        return this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+        return action==INITIALIZED ? this : this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
     }
 
     public FileState fileState() {
-        if (action==PASTED) return previous.previousSibling().fileState();
-        if (action==COPIED) return previousSibling().fileState();
+        if (action==PASTED) return previous.previousSiblingState();
+        if (action==COPIED) return previousSiblingState();
         if (action==CUT || action==DELETED || action==NOT_EXISTING) return FileState.NOT_EXISTING;
         if (action==CREATED) return FileState.EMPTY;
         if (action==TOUCHED) return FileState.EXISTING_UNDEFINED;
         if (action==UPDATED || action==INITIALIZED) return new FileState(fileValue);
         throw new RuntimeException("Bug - Missing Action");
+    }
+
+    private FileState previousSiblingState() {
+        return previousSibling().fileState();
     }
 }
