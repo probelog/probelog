@@ -105,7 +105,7 @@ public class ChangeTest {
     }
 
     @Test
-    public void episode_initialiseAndUpdate() {
+    public void episode_initialiseAtStart() {
 
 
         logger.create("anotherFile");
@@ -119,7 +119,13 @@ public class ChangeTest {
     }
 
     @Test
-    public void episode_notExistingCreate() {
+    public void episode_notExistingAtStart() {
+
+        logger.create("anotherFile");
+        DevEvent episodeStart = logger.head();
+        logger.create("x");
+
+        assertEquals("File: x / From:NOT_EXISTING / To:EMPTY", new Change(episodeStart, logger.head()).toString());
 
     }
 
