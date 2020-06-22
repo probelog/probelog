@@ -68,16 +68,16 @@ public class DevEvent {
         return previous.findPrevious(fileName);
     }
 
-    public DevEvent previousSibling(DevEvent episodeStart) {
-        return previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    public DevEvent previousSibling(DevEvent thisOrBefore) {
+        return previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
     private DevEvent findPrevious(String fileName) {
         return fileName.equals(this.fileName) ? this : previous.findPrevious(fileName);
     }
 
-    private DevEvent findPreviousBoforeEpisodeStart(String fileName, DevEvent episodeStart) {
-        return action==NOT_EXISTING || (action==INITIALIZED && fileName.equals(this.fileName)) ? this : this.equals(episodeStart) ? previous.findPrevious(fileName) : previous.findPreviousBoforeEpisodeStart(fileName, episodeStart);
+    private DevEvent findPreviousInPreviousEpisodes(String fileName, DevEvent thisOrBefore) {
+        return action==NOT_EXISTING || (action==INITIALIZED && fileName.equals(this.fileName)) ? this : this.equals(thisOrBefore) ? findPrevious(fileName) : previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
     public FileState fileState() {
