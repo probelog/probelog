@@ -1,5 +1,7 @@
 package com.github.probelog;
 
+import java.util.List;
+
 import static com.github.probelog.Action.*;
 
 public class Change {

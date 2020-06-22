@@ -3,6 +3,10 @@ package com.github.probelog;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 public class ChangeTest {
@@ -19,10 +23,10 @@ public class ChangeTest {
 
         logger.create("x");
         logger.update("x", "xValue");
-        DevEvent sinceThis = logger.head();
+        DevEvent sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue");
 
-        assertEquals("File: x / No Change", new Change(sinceThis, logger.head()).toString());
+        checkPeriod("File: x / No Change", new Period(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -32,11 +36,11 @@ public class ChangeTest {
         logger.create("x");
         logger.delete("x");
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.head();
+        DevEvent sinceThis = logger.mostRecentEvent();
         logger.create("x");
         logger.update("x", "xValue");
 
-        assertEquals("File: x / From:NOT_EXISTING / To:DEFINED:xValue", new Change(sinceThis, logger.head()).toString());
+        checkPeriod("File: x / From:NOT_EXISTING / To:DEFINED:xValue", new Period(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -44,12 +48,12 @@ public class ChangeTest {
     public void initialiseEventsAreAtTimeZero() {
 
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.head();
+        DevEvent sinceThis = logger.mostRecentEvent();
         logger.initialize("x", "xValue1");
         logger.initialize("y", "blah");
         logger.update("x", "xValue2");
 
-        assertEquals("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", new Change(sinceThis, logger.head()).toString());
+        checkPeriod("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", new Period(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -58,10 +62,49 @@ public class ChangeTest {
     public void notExistingEventsAtTimeZero() {
 
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.head();
+        DevEvent sinceThis = logger.mostRecentEvent();
         logger.create("x");
 
-        assertEquals("File: x / From:NOT_EXISTING / To:EMPTY", new Change(sinceThis, logger.head()).toString());
+        checkPeriod("File: x / From:NOT_EXISTING / To:EMPTY", new Period(sinceThis, logger.mostRecentEvent()));
+
+    }
+
+    @Test
+    public void changes() {
+
+/*        logger.create("x");
+        DevEvent sinceThis = logger.mostRecentEvent();
+        logger.update("x", "xValue1");
+        logger.create("y");
+        logger.update("x", "xValue2");
+
+        List<Change> changes = Change.createChanges(sinceThis, logger.mostRecentEvent());
+        Set<String> changeStrings = new HashSet();
+        for (Change change: changes)
+            changeStrings.add(change.toString());
+
+        assertEquals(changeStrings, new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")));*/
+
+
+    }
+
+    @Test
+    public void noChanges() {
+        // TODO - its easy ;-)
+    }
+
+    private void checkPeriod(String expectedChange, Period period) {
+
+        checkPeriod(new HashSet(singletonList(expectedChange)), period);
+
+    }
+
+    private void checkPeriod(Set<String> expectedChanges, Period period) {
+
+        Set<String> changeStrings = new HashSet();
+        for (Change change: period.changes())
+            changeStrings.add(change.toString());
+        assertEquals(expectedChanges, changeStrings);
 
     }
 

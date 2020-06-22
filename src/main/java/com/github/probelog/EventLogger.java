@@ -83,12 +83,12 @@ public class EventLogger {
         assert isValidTransition(toFile, PASTED);
     }
 
-    public DevEvent head() {
+    public DevEvent mostRecentEvent() {
         return head;
     }
 
     public Set<String> touchedFiles() {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet();
         for (DevEvent fileHead: fileHeadsMap.values())
             if (fileHead.action()==TOUCHED)
                 result.add(fileHead.fileName());

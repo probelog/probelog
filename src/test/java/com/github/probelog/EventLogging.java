@@ -49,7 +49,7 @@ public class EventLogging {
                 "x/CUT/NOT_EXISTING",
                 "y/PASTED/DEFINED:xValue2",
                 "y/DELETED/NOT_EXISTING"
-                ),logger.head().description());
+                ),logger.mostRecentEvent().description());
 
     }
 
@@ -75,7 +75,7 @@ public class EventLogging {
                 "x/COPIED/EMPTY",
                 "y/PASTED/EMPTY",
                 "y/UPDATED/DEFINED:yValue"
-        ), logger.head().description());
+        ), logger.mostRecentEvent().description());
 
     }
 
@@ -104,7 +104,7 @@ public class EventLogging {
                 "x/CREATED/EMPTY",
                 "x/DELETED/NOT_EXISTING",
                 "x/CREATED/EMPTY"
-        ),logger.head().description());
+        ),logger.mostRecentEvent().description());
 
     }
 
