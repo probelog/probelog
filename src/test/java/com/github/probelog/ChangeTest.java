@@ -72,19 +72,14 @@ public class ChangeTest {
     @Test
     public void changes() {
 
-/*        logger.create("x");
+        logger.create("x");
         DevEvent sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue1");
         logger.create("y");
         logger.update("x", "xValue2");
 
-        List<Change> changes = Change.createChanges(sinceThis, logger.mostRecentEvent());
-        Set<String> changeStrings = new HashSet();
-        for (Change change: changes)
-            changeStrings.add(change.toString());
-
-        assertEquals(changeStrings, new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")));*/
-
+        checkPeriod(new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")),
+                new Period(sinceThis, logger.mostRecentEvent()));
 
     }
 

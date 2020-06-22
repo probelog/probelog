@@ -93,4 +93,8 @@ public class DevEvent {
     private FileState previousSiblingState() {
         return previousSibling().fileState();
     }
+
+    public DevEvent previous() {
+        return previous;
+    }
 }
