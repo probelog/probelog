@@ -17,7 +17,7 @@ public class Period {
         Set<String> fileNames = new HashSet();
         List<Change> changes = new ArrayList();
         while(fromAfterThis != upToAndIncludingThis) {
-            if (!fileNames.contains(upToAndIncludingThis.fileName())) {
+            if (!(upToAndIncludingThis.action()==Action.INITIALIZED) && !fileNames.contains(upToAndIncludingThis.fileName())) {
                 fileNames.add(upToAndIncludingThis.fileName());
                 changes.add(new Change(fromAfterThis, upToAndIncludingThis));
             }

@@ -77,7 +77,7 @@ public class DevEvent {
     }
 
     private DevEvent findPreviousInPreviousEpisodes(String fileName, DevEvent thisOrBefore) {
-        return action==NOT_EXISTING || (action==INITIALIZED && fileName.equals(this.fileName)) ? this : this.equals(thisOrBefore) ? findPrevious(fileName) : previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
+        return ((action==NOT_EXISTING || action==INITIALIZED) && fileName.equals(this.fileName)) ? this : this.equals(thisOrBefore) ? findPrevious(fileName) : previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
     public FileState fileState() {
