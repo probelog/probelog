@@ -88,6 +88,16 @@ public class ChangeTest {
         // TODO - its easy ;-)
     }
 
+    @Test
+    public void periodStartAndEndAreSame() {
+        // TODO
+    }
+
+    @Test
+    public void periodStartCantBeAfterEnd() {
+        // TODO
+    }
+
     private void checkPeriod(String expectedChange, Period period) {
 
         checkPeriod(new HashSet(singletonList(expectedChange)), period);
@@ -102,5 +112,9 @@ public class ChangeTest {
         assertEquals(expectedChanges, changeStrings);
 
     }
+
+    /*
+    Get rid of EventLogging Test and just use this test class - with appropriate additions
+     */
 
 }

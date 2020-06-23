@@ -7,28 +7,34 @@ import java.util.Set;
 
 public class Period {
 
-    private List<Change> changes = new ArrayList<>();
+    private final DevEvent fromAfterThis;
+    private final DevEvent upToAndIncludingThis;
+    private List<Change> changes;
 
     public Period(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
-        changes=changes(fromAfterThis, upToAndIncludingThis);
+        this.fromAfterThis=fromAfterThis;
+        this.upToAndIncludingThis=upToAndIncludingThis;
     }
 
-    static List<Change> changes(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
+    public List<Change> changes() {
+        if (changes==null)
+            changes=createChanges();
+        return changes;
+    }
+
+    private List<Change> createChanges() {
         Set<String> fileNames = new HashSet();
         List<Change> changes = new ArrayList();
-        while(fromAfterThis != upToAndIncludingThis) {
-            if (!(upToAndIncludingThis.action()==Action.INITIALIZED) && !fileNames.contains(upToAndIncludingThis.fileName())) {
-                fileNames.add(upToAndIncludingThis.fileName());
-                changes.add(new Change(fromAfterThis, upToAndIncludingThis));
+        DevEvent current =  upToAndIncludingThis;
+        while(fromAfterThis != current) {
+            if (current.isChange() && !fileNames.contains(current.fileName())) {
+                fileNames.add(current.fileName());
+                changes.add(new Change(fromAfterThis, current));
             }
-            upToAndIncludingThis=upToAndIncludingThis.previous();
+            current=current.previous();
         }
         return changes;
     }
 
-
-    public List<Change> changes() {
-        return changes;
-    }
 
 }

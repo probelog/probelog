@@ -97,4 +97,8 @@ public class DevEvent {
     public DevEvent previous() {
         return previous;
     }
+
+    public boolean isChange() {
+        return !(action==INITIALIZED || action==NOT_EXISTING);
+    }
 }
