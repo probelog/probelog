@@ -1,5 +1,8 @@
 package com.github.probelog;
 
+import java.util.Collections;
+import java.util.List;
+
 public class AggregateFileChange implements FileChange {
 
     private DevEvent beforeEvent, afterEvent;
@@ -15,6 +18,12 @@ public class AggregateFileChange implements FileChange {
                 (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change");
     }
 
+    @Override
+    public List<FileChange> fileChanges() { return Collections.singletonList(this);}
+
+    // TODO to implement
+    @Override
+    public List<FileChange>  chronology() { return null;}
 
     @Override
     public String fileName() {

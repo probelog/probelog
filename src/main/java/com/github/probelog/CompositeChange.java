@@ -5,27 +5,37 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Period {
+public class CompositeChange implements Change {
 
     private final DevEvent fromAfterThis;
     private final DevEvent upToAndIncludingThis;
-    private List<AggregateFileChange> changes;
+    private List<FileChange> changes;
 
-    public Period(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
+    public CompositeChange(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
         assert(upToAndIncludingThis.isOrAfter(fromAfterThis));
         this.fromAfterThis=fromAfterThis;
         this.upToAndIncludingThis=upToAndIncludingThis;
     }
 
-    public List<AggregateFileChange> changes() {
+    @Override
+    public List<FileChange> fileChanges() {
+        return changes;
+    }
+
+    @Override // TODO have to implement
+    public List<FileChange> chronology() {
+        return null;
+    }
+
+    public List<FileChange> changes() {
         if (changes==null)
             changes=createChanges();
         return changes;
     }
 
-    private List<AggregateFileChange> createChanges() {
+    private List<FileChange> createChanges() {
         Set<String> fileNames = new HashSet();
-        List<AggregateFileChange> changes = new ArrayList();
+        List<FileChange> changes = new ArrayList();
         DevEvent current =  upToAndIncludingThis;
         while(fromAfterThis != current) {
             if (current.isChange() && !fileNames.contains(current.fileName())) {
@@ -38,6 +48,5 @@ public class Period {
         }
         return changes;
     }
-
 
 }

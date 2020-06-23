@@ -1,6 +1,7 @@
 package com.github.probelog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.probelog.Action.*;
@@ -47,6 +48,10 @@ public class DevEvent implements FileChange {
     private boolean isTail() {
         return previous==null;
     }
+
+    public List<FileChange>  fileChanges() { return Collections.singletonList(this);}
+
+    public List<FileChange>  chronology() { return fileChanges();}
 
     public String fileName() {
         return fileName;

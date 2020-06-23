@@ -26,7 +26,7 @@ public class ChangeTest {
         DevEvent sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue");
 
-        assertTrue(new Period(sinceThis, logger.mostRecentEvent()).changes().isEmpty());
+        assertTrue(new CompositeChange(sinceThis, logger.mostRecentEvent()).changes().isEmpty());
 
     }
 
@@ -40,7 +40,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xValue");
 
-        checkPeriod("File: x / From:NOT_EXISTING / To:DEFINED:xValue", new Period(sinceThis, logger.mostRecentEvent()));
+        checkPeriod("File: x / From:NOT_EXISTING / To:DEFINED:xValue", new CompositeChange(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -53,7 +53,7 @@ public class ChangeTest {
         logger.initialize("y", "blah");
         logger.update("x", "xValue2");
 
-        checkPeriod("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", new Period(sinceThis, logger.mostRecentEvent()));
+        checkPeriod("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", new CompositeChange(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -65,7 +65,7 @@ public class ChangeTest {
         DevEvent sinceThis = logger.mostRecentEvent();
         logger.create("x");
 
-        checkPeriod("File: x / From:NOT_EXISTING / To:EMPTY", new Period(sinceThis, logger.mostRecentEvent()));
+        checkPeriod("File: x / From:NOT_EXISTING / To:EMPTY", new CompositeChange(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -79,7 +79,7 @@ public class ChangeTest {
         logger.update("x", "xValue2");
 
         checkPeriod(new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")),
-                new Period(sinceThis, logger.mostRecentEvent()));
+                new CompositeChange(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -88,7 +88,7 @@ public class ChangeTest {
 
         logger.create("x");
         logger.update("x", "xValue");
-        assertTrue(new Period(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
+        assertTrue(new CompositeChange(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
 
     }
 
@@ -98,7 +98,7 @@ public class ChangeTest {
         DevEvent start = logger.mostRecentEvent();
         logger.create("x");
         try {
-            new Period(logger.mostRecentEvent(), start);
+            new CompositeChange(logger.mostRecentEvent(), start);
             fail();
         }
         catch(AssertionError e) {}
@@ -107,7 +107,7 @@ public class ChangeTest {
 
     @Test
     public void onlyStartEventExists() {
-        assertTrue(new Period(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
+        assertTrue(new CompositeChange(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
     }
 
     @Test
@@ -115,19 +115,19 @@ public class ChangeTest {
         DevEvent start = logger.mostRecentEvent();
         logger.create("x");
         checkPeriod(new HashSet(asList("File: x / From:NOT_EXISTING / To:EMPTY")),
-                new Period(start, logger.mostRecentEvent()));
+                new CompositeChange(start, logger.mostRecentEvent()));
     }
 
-    private void checkPeriod(String expectedChange, Period period) {
+    private void checkPeriod(String expectedChange, CompositeChange period) {
 
         checkPeriod(new HashSet(singletonList(expectedChange)), period);
 
     }
 
-    private void checkPeriod(Set<String> expectedChanges, Period period) {
+    private void checkPeriod(Set<String> expectedChanges, CompositeChange period) {
 
         Set<String> changeStrings = new HashSet();
-        for (AggregateFileChange change: period.changes())
+        for (FileChange change: period.changes())
             changeStrings.add(change.toString());
         assertEquals(expectedChanges, changeStrings);
 
