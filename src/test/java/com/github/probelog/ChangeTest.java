@@ -8,6 +8,7 @@ import java.util.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ChangeTest {
 
@@ -26,7 +27,7 @@ public class ChangeTest {
         DevEvent sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue");
 
-        checkPeriod("File: x / No Change", new Period(sinceThis, logger.mostRecentEvent()));
+        assertTrue(new Period(sinceThis, logger.mostRecentEvent()).changes().isEmpty());
 
     }
 
@@ -81,11 +82,6 @@ public class ChangeTest {
         checkPeriod(new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")),
                 new Period(sinceThis, logger.mostRecentEvent()));
 
-    }
-
-    @Test
-    public void noChanges() {
-        // TODO - its easy ;-)
     }
 
     @Test

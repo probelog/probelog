@@ -1,9 +1,5 @@
 package com.github.probelog;
 
-import java.util.List;
-
-import static com.github.probelog.Action.*;
-
 public class Change {
 
     private DevEvent before, after;
@@ -16,7 +12,10 @@ public class Change {
     @Override
     public String toString() {
         return "File: " + after.fileName() +
-                (before.fileState().toString().equals(after.fileState().toString()) ? " / No Change" : " / From:" + before.fileState() + " / To:" + after.fileState());
+                (isReal() ?  " / From:" + before.fileState() + " / To:" + after.fileState() : " / No Change");
     }
 
+    public boolean isReal() {
+        return !before.fileState().toString().equals(after.fileState().toString());
+    }
 }

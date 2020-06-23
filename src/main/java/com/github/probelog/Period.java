@@ -29,7 +29,9 @@ public class Period {
         while(fromAfterThis != current) {
             if (current.isChange() && !fileNames.contains(current.fileName())) {
                 fileNames.add(current.fileName());
-                changes.add(new Change(fromAfterThis, current));
+                Change change = new Change(fromAfterThis, current);
+                if (change.isReal())
+                    changes.add(change);
             }
             current=current.previous();
         }
