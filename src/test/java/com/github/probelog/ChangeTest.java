@@ -86,7 +86,11 @@ public class ChangeTest {
 
     @Test
     public void periodStartAndEndAreSame() {
-        // TODO
+
+        logger.create("x");
+        logger.update("x", "xValue");
+        assertTrue(new Period(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
+
     }
 
     @Test
@@ -96,7 +100,15 @@ public class ChangeTest {
 
     @Test
     public void onlyStartEventExists() {
-        // TODO
+        assertTrue(new Period(logger.mostRecentEvent(), logger.mostRecentEvent()).changes().isEmpty());
+    }
+
+    @Test
+    public void goingBackToStart() {
+        DevEvent start = logger.mostRecentEvent();
+        logger.create("x");
+        checkPeriod(new HashSet(asList("File: x / From:NOT_EXISTING / To:EMPTY")),
+                new Period(start, logger.mostRecentEvent()));
     }
 
     private void checkPeriod(String expectedChange, Period period) {
