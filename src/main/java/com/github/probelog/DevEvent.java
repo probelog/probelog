@@ -5,7 +5,7 @@ import java.util.List;
 
 import static com.github.probelog.Action.*;
 
-public class DevEvent {
+public class DevEvent implements FileChange {
 
     private final String fileName;
     private final String fileValue;
@@ -48,9 +48,15 @@ public class DevEvent {
         return previous==null;
     }
 
-    String fileName() {
+    public String fileName() {
         return fileName;
     }
+
+    public FileState after() { return fileState(); }
+
+    public FileState before() { return previousSibling().fileState();}
+
+    public boolean isReal() { return !after().toString().equals(before().toString());}
 
     String fileValueString() {
         return action ==TOUCHED ? "UNKNOWN" : fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
@@ -103,6 +109,6 @@ public class DevEvent {
     }
 
     public boolean isOrAfter(DevEvent other) {
-        return this==other ? true : previous==null ? false : previous.isOrAfter(other);
+        return this == other || (previous != null && previous.isOrAfter(other));
     }
 }

@@ -127,7 +127,7 @@ public class ChangeTest {
     private void checkPeriod(Set<String> expectedChanges, Period period) {
 
         Set<String> changeStrings = new HashSet();
-        for (Change change: period.changes())
+        for (AggregateFileChange change: period.changes())
             changeStrings.add(change.toString());
         assertEquals(expectedChanges, changeStrings);
 

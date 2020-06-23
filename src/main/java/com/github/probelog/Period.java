@@ -9,7 +9,7 @@ public class Period {
 
     private final DevEvent fromAfterThis;
     private final DevEvent upToAndIncludingThis;
-    private List<Change> changes;
+    private List<AggregateFileChange> changes;
 
     public Period(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
         assert(upToAndIncludingThis.isOrAfter(fromAfterThis));
@@ -17,20 +17,20 @@ public class Period {
         this.upToAndIncludingThis=upToAndIncludingThis;
     }
 
-    public List<Change> changes() {
+    public List<AggregateFileChange> changes() {
         if (changes==null)
             changes=createChanges();
         return changes;
     }
 
-    private List<Change> createChanges() {
+    private List<AggregateFileChange> createChanges() {
         Set<String> fileNames = new HashSet();
-        List<Change> changes = new ArrayList();
+        List<AggregateFileChange> changes = new ArrayList();
         DevEvent current =  upToAndIncludingThis;
         while(fromAfterThis != current) {
             if (current.isChange() && !fileNames.contains(current.fileName())) {
                 fileNames.add(current.fileName());
-                Change change = new Change(fromAfterThis, current);
+                AggregateFileChange change = new AggregateFileChange(fromAfterThis, current);
                 if (change.isReal())
                     changes.add(change);
             }
