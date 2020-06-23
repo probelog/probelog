@@ -101,4 +101,8 @@ public class DevEvent {
     public boolean isChange() {
         return !(action==INITIALIZED || action==NOT_EXISTING);
     }
+
+    public boolean isOrAfter(DevEvent other) {
+        return this==other ? true : previous==null ? false : previous.isOrAfter(other);
+    }
 }

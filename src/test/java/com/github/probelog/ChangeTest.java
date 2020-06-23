@@ -7,8 +7,7 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ChangeTest {
 
@@ -95,7 +94,15 @@ public class ChangeTest {
 
     @Test
     public void periodStartCantBeAfterEnd() {
-        // TODO
+
+        DevEvent start = logger.mostRecentEvent();
+        logger.create("x");
+        try {
+            new Period(logger.mostRecentEvent(), start);
+            fail();
+        }
+        catch(AssertionError e) {}
+
     }
 
     @Test

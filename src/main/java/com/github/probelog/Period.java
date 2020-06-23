@@ -12,6 +12,7 @@ public class Period {
     private List<Change> changes;
 
     public Period(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
+        assert(upToAndIncludingThis.isOrAfter(fromAfterThis));
         this.fromAfterThis=fromAfterThis;
         this.upToAndIncludingThis=upToAndIncludingThis;
     }
