@@ -70,7 +70,7 @@ public class ChangeTest {
     }
 
     @Test
-    public void changes() {
+    public void moreThanOneFileHasChanges() {
 
         logger.create("x");
         DevEvent sinceThis = logger.mostRecentEvent();
@@ -95,6 +95,11 @@ public class ChangeTest {
 
     @Test
     public void periodStartCantBeAfterEnd() {
+        // TODO
+    }
+
+    @Test
+    public void onlyStartEventExists() {
         // TODO
     }
 
