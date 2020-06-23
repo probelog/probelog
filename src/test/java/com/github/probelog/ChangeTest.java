@@ -134,7 +134,14 @@ public class ChangeTest {
     }
 
     /*
+
+    To do 2 things below should make DevEvent(with isChange=true) be a change have same toString as Change class - they both implement Change (Change class becomes
+    AggregateChange) - also mostRecentEventHead should return most recent DevEvent(with isChange=true) so may be behind actual Head
+    also introduce ChangeFactory that hides implementation class being returned
+
     Get rid of EventLogging Test and just use this test class - with appropriate additions
+
+    Refactor DevEvent - e.g. Start Event and only Initialise and Update have actual file states
      */
 
 }
