@@ -19,6 +19,8 @@ public class CompositeChange implements Change {
 
     @Override
     public List<FileChange> fileChanges() {
+        if (changes==null)
+            changes=ChangeFactory.getChanges(fromAfterThis, upToAndIncludingThis);
         return changes;
     }
 
@@ -27,26 +29,11 @@ public class CompositeChange implements Change {
         return null;
     }
 
-    public List<FileChange> changes() {
-        if (changes==null)
-            changes=createChanges();
-        return changes;
+    public boolean isReal() {
+        for (Change change: changes)
+            if (!change.isReal()) return false;
+        return true;
     }
 
-    private List<FileChange> createChanges() {
-        Set<String> fileNames = new HashSet();
-        List<FileChange> changes = new ArrayList();
-        DevEvent current =  upToAndIncludingThis;
-        while(fromAfterThis != current) {
-            if (current.isChange() && !fileNames.contains(current.fileName())) {
-                fileNames.add(current.fileName());
-                AggregateFileChange change = new AggregateFileChange(fromAfterThis, current);
-                if (change.isReal())
-                    changes.add(change);
-            }
-            current=current.previous();
-        }
-        return changes;
-    }
 
 }

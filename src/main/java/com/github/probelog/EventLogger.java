@@ -83,6 +83,7 @@ public class EventLogger {
         assert isValidTransition(toFile, PASTED);
     }
 
+    // TODO replace with mostRecentChange (that returns change since last time it was called) and also allChange
     public DevEvent mostRecentEvent() {
         return head;
     }

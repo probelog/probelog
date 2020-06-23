@@ -45,6 +45,12 @@ public class DevEvent implements FileChange {
         return fileName!=null ? (fileName +"/" + action + "/" + fileState()) : "Event Log Start";
     }
 
+    @Override
+    public String toString() {
+        return fileName()==null ? "No Changes" : "File: " + fileName() +
+                (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change");
+    }
+
     private boolean isTail() {
         return previous==null;
     }
