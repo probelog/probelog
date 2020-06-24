@@ -5,9 +5,9 @@ import java.util.List;
 
 public class AggregateFileChange implements FileChange {
 
-    private DevEvent beforeEvent, afterEvent;
+    private AtomicFileChange beforeEvent, afterEvent;
 
-    public AggregateFileChange(DevEvent sinceThis, DevEvent afterEvent) {
+    public AggregateFileChange(AtomicFileChange sinceThis, AtomicFileChange afterEvent) {
         this.beforeEvent = afterEvent.previousSibling(sinceThis);
         this.afterEvent = afterEvent;
     }
@@ -23,7 +23,7 @@ public class AggregateFileChange implements FileChange {
 
     // TODO to implement
     @Override
-    public List<FileChange>  chronology() { return null;}
+    public List<AtomicFileChange>  chronology() { return null;}
 
     @Override
     public String fileName() {

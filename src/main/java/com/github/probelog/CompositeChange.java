@@ -1,17 +1,14 @@
 package com.github.probelog;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CompositeChange implements Change {
 
-    private final DevEvent fromAfterThis;
-    private final DevEvent upToAndIncludingThis;
+    private final AtomicFileChange fromAfterThis;
+    private final AtomicFileChange upToAndIncludingThis;
     private List<FileChange> changes;
 
-    public CompositeChange(DevEvent fromAfterThis, DevEvent upToAndIncludingThis) {
+    public CompositeChange(AtomicFileChange fromAfterThis, AtomicFileChange upToAndIncludingThis) {
         assert(upToAndIncludingThis.isOrAfter(fromAfterThis));
         this.fromAfterThis=fromAfterThis;
         this.upToAndIncludingThis=upToAndIncludingThis;
@@ -25,7 +22,7 @@ public class CompositeChange implements Change {
     }
 
     @Override // TODO have to implement
-    public List<FileChange> chronology() {
+    public List<AtomicFileChange> chronology() {
         return null;
     }
 

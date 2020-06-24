@@ -6,22 +6,22 @@ import java.util.List;
 
 import static com.github.probelog.Action.*;
 
-public class DevEvent implements FileChange {
+public class AtomicFileChange implements FileChange {
 
     private final String fileName;
     private final String fileValue;
-    private final DevEvent previous;
+    private final AtomicFileChange previous;
     private final Action action;
 
-    DevEvent() {
+    AtomicFileChange() {
         this(null, null, null);
     }
 
-    DevEvent(DevEvent previous, String fileName, Action action) {
+    AtomicFileChange(AtomicFileChange previous, String fileName, Action action) {
         this(previous,fileName, action,null);
     }
 
-    DevEvent(DevEvent previous, String fileName, Action action, String fileValue) {
+    AtomicFileChange(AtomicFileChange previous, String fileName, Action action, String fileValue) {
         this.previous=previous;
         this.fileName=fileName;
         this.action = action;
@@ -57,7 +57,7 @@ public class DevEvent implements FileChange {
 
     public List<FileChange>  fileChanges() { return Collections.singletonList(this);}
 
-    public List<FileChange>  chronology() { return fileChanges();}
+    public List<AtomicFileChange>  chronology() { return Collections.singletonList(this);}
 
     public String fileName() {
         return fileName;
@@ -81,19 +81,19 @@ public class DevEvent implements FileChange {
         return action;
     }
 
-    public DevEvent previousSibling() {
+    public AtomicFileChange previousSibling() {
         return previous.findPrevious(fileName);
     }
 
-    public DevEvent previousSibling(DevEvent thisOrBefore) {
+    public AtomicFileChange previousSibling(AtomicFileChange thisOrBefore) {
         return previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
-    private DevEvent findPrevious(String fileName) {
+    private AtomicFileChange findPrevious(String fileName) {
         return fileName.equals(this.fileName) ? this : previous.findPrevious(fileName);
     }
 
-    private DevEvent findPreviousInPreviousEpisodes(String fileName, DevEvent thisOrBefore) {
+    private AtomicFileChange findPreviousInPreviousEpisodes(String fileName, AtomicFileChange thisOrBefore) {
         return ((action==NOT_EXISTING || action==INITIALIZED) && fileName.equals(this.fileName)) ? this : this.equals(thisOrBefore) ? findPrevious(fileName) : previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
@@ -111,7 +111,7 @@ public class DevEvent implements FileChange {
         return previousSibling().fileState();
     }
 
-    public DevEvent previous() {
+    public AtomicFileChange previous() {
         return previous;
     }
 
@@ -119,7 +119,7 @@ public class DevEvent implements FileChange {
         return !(action==INITIALIZED || action==NOT_EXISTING);
     }
 
-    public boolean isOrAfter(DevEvent other) {
+    public boolean isOrAfter(AtomicFileChange other) {
         return this == other || (previous != null && previous.isOrAfter(other));
     }
 }

@@ -23,7 +23,7 @@ public class ChangeTest {
 
         logger.create("x");
         logger.update("x", "xValue");
-        DevEvent sinceThis = logger.mostRecentEvent();
+        AtomicFileChange sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue");
 
         assertFalse(ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()).isReal());
@@ -36,7 +36,7 @@ public class ChangeTest {
         logger.create("x");
         logger.delete("x");
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.mostRecentEvent();
+        AtomicFileChange sinceThis = logger.mostRecentEvent();
         logger.create("x");
         logger.update("x", "xValue");
 
@@ -48,7 +48,7 @@ public class ChangeTest {
     public void initialiseEventsAreAtTimeZero() {
 
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.mostRecentEvent();
+        AtomicFileChange sinceThis = logger.mostRecentEvent();
         logger.initialize("x", "xValue1");
         logger.initialize("y", "blah");
         logger.update("x", "xValue2");
@@ -62,7 +62,7 @@ public class ChangeTest {
     public void notExistingEventsAtTimeZero() {
 
         logger.create("anotherFile");
-        DevEvent sinceThis = logger.mostRecentEvent();
+        AtomicFileChange sinceThis = logger.mostRecentEvent();
         logger.create("x");
 
         checkChange("File: x / From:NOT_EXISTING / To:EMPTY", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
@@ -73,7 +73,7 @@ public class ChangeTest {
     public void moreThanOneFileHasChanges() {
 
         logger.create("x");
-        DevEvent sinceThis = logger.mostRecentEvent();
+        AtomicFileChange sinceThis = logger.mostRecentEvent();
         logger.update("x", "xValue1");
         logger.create("y");
         logger.update("x", "xValue2");
@@ -95,7 +95,7 @@ public class ChangeTest {
     @Test
     public void periodStartCantBeAfterEnd() {
 
-        DevEvent start = logger.mostRecentEvent();
+        AtomicFileChange start = logger.mostRecentEvent();
         logger.create("x");
         try {
             ChangeFactory.createChanges(logger.mostRecentEvent(), start);
@@ -112,7 +112,7 @@ public class ChangeTest {
 
     @Test
     public void goingBackToStart() {
-        DevEvent start = logger.mostRecentEvent();
+        AtomicFileChange start = logger.mostRecentEvent();
         logger.create("x");
         checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY"),
                 ChangeFactory.createChanges(start, logger.mostRecentEvent()));
@@ -149,8 +149,6 @@ public class ChangeTest {
     }
 
     /*
-
-    Rename DevEvent to AtomicChange
 
     replace mostRecentEventHead with build() returns change since last time build called, and buildAll() returns the whole change
 
