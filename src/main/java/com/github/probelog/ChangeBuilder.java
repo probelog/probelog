@@ -8,7 +8,7 @@ import java.util.Set;
 import static com.github.probelog.Action.*;
 import static com.github.probelog.ActionMap.validFollowOnActions;
 
-public class EventLogger {
+public class ChangeBuilder {
 
     private Map<String, DevEvent> fileHeadsMap = new HashMap<>();
     private final DevEvent start = new DevEvent();

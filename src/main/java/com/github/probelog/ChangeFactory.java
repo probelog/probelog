@@ -23,7 +23,7 @@ public class ChangeFactory {
             if (current.isChange() && !fileNames.contains(current.fileName())) {
                 fileNames.add(current.fileName());
                 FileChange change = getFileChange(fromAfterThis, current);
-                changes.add(change);
+                changes.add(0,change);
             }
             current=current.previous();
         }

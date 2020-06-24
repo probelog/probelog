@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 
 public class ChangeTest {
 
-    EventLogger logger;
+    ChangeBuilder logger;
 
     @Before
     public void setUp() {
-        logger = new EventLogger();
+        logger = new ChangeBuilder();
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ChangeTest {
         logger.create("x");
         logger.update("x", "xValue");
 
-        checkPeriod("File: x / From:NOT_EXISTING / To:DEFINED:xValue", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
+        checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -53,7 +53,7 @@ public class ChangeTest {
         logger.initialize("y", "blah");
         logger.update("x", "xValue2");
 
-        checkPeriod("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
+        checkChange("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -65,7 +65,7 @@ public class ChangeTest {
         DevEvent sinceThis = logger.mostRecentEvent();
         logger.create("x");
 
-        checkPeriod("File: x / From:NOT_EXISTING / To:EMPTY", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
+        checkChange("File: x / From:NOT_EXISTING / To:EMPTY", ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
 
     }
 
@@ -78,7 +78,7 @@ public class ChangeTest {
         logger.create("y");
         logger.update("x", "xValue2");
 
-        checkPeriod(new HashSet(asList("File: x / From:EMPTY / To:DEFINED:xValue2","File: y / From:NOT_EXISTING / To:EMPTY")),
+        checkChange(asList("File: y / From:NOT_EXISTING / To:EMPTY","File: x / From:EMPTY / To:DEFINED:xValue2"),
                 ChangeFactory.createChanges(sinceThis, logger.mostRecentEvent()));
 
     }
@@ -114,8 +114,23 @@ public class ChangeTest {
     public void goingBackToStart() {
         DevEvent start = logger.mostRecentEvent();
         logger.create("x");
-        checkPeriod(new HashSet(asList("File: x / From:NOT_EXISTING / To:EMPTY")),
+        checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY"),
                 ChangeFactory.createChanges(start, logger.mostRecentEvent()));
+    }
+
+    private void checkChange(String expectedChange, Change change) {
+
+        checkChange(singletonList(expectedChange), change);
+
+    }
+
+    private void checkChange(List<String> expectedChanges, Change change) {
+
+        List<String> changeStrings = new ArrayList();
+        for (FileChange child: change.fileChanges())
+            changeStrings.add(child.toString());
+        assertEquals(expectedChanges, changeStrings);
+
     }
 
     private void checkPeriod(String expectedChange, Change period) {
@@ -135,9 +150,9 @@ public class ChangeTest {
 
     /*
 
-    To do 2 things below should make DevEvent(with isChange=true) be a change have same toString as Change class - they both implement Change (Change class becomes
-    AggregateChange) - also mostRecentEventHead should return most recent DevEvent(with isChange=true) so may be behind actual Head
-    also introduce ChangeFactory that hides implementation class being returned
+    Rename DevEvent to AtomicChange
+
+    replace mostRecentEventHead with build() returns change since last time build called, and buildAll() returns the whole change
 
     Get rid of EventLogging Test and just use this test class - with appropriate additions
 

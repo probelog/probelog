@@ -8,13 +8,13 @@ import java.util.HashSet;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
-public class EventLogging {
+public class ChangeBuilding {
 
-    EventLogger logger;
+    ChangeBuilder logger;
 
     @Before
     public void setUp() {
-        logger = new EventLogger();
+        logger = new ChangeBuilder();
     }
 
 
