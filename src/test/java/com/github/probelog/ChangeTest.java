@@ -152,6 +152,10 @@ public class ChangeTest {
 
     replace mostRecentEventHead with build() returns change since last time build called, and buildAll() returns the whole change
 
+    Implement chronology and use this in test results in changebuilding test
+
+    Change changeAB = changeA.add(changeB)
+
     Add in sequence number for AtomicFileChange - needed for persistence
 
     Refactor DevEvent - e.g. Start Event and only Initialise and Update have actual file states
