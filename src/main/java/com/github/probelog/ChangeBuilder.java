@@ -14,6 +14,7 @@ public class ChangeBuilder {
     private Map<String, AtomicFileChange> fileHeadsMap = new HashMap<>();
     private final AtomicFileChange start = new AtomicFileChange();
     private AtomicFileChange head = start;
+    private AtomicFileChange latestBuild = start;
 
     private Action state(String fileName) {
         return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).action() : UNKNOWN;
@@ -26,6 +27,12 @@ public class ChangeBuilder {
 
     public Change buildAll() {
         return createChanges(start, head);
+    }
+
+    public Change build() {
+        Change result = createChanges(latestBuild, head);
+        latestBuild = head;
+        return result;
     }
 
     public void create(String fileName) {
@@ -75,10 +82,6 @@ public class ChangeBuilder {
         setHead(fileName, new AtomicFileChange(head, fileName, DELETED));
     }
 
-    public void testRun() {
-
-    }
-
     private boolean isValidTransition(String fileName, Action newState) {
         return validFollowOnActions(state(fileName)).contains(newState);
     }
@@ -87,8 +90,8 @@ public class ChangeBuilder {
         assert isValidTransition(fromFile, cutOrCopy);
         assert isValidTransition(toFile, PASTED);
     }
-
     // TODO replace with mostRecentChange (that returns change since last time it was called) and also allChange
+
     public AtomicFileChange mostRecentEvent() {
         return head;
     }

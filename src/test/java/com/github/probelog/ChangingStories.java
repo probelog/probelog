@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
-public class ChangeTest {
+public class ChangingStories {
 
     ChangeBuilder builder;
 
@@ -94,48 +94,73 @@ public class ChangeTest {
 
     }
 
-    @Test  // TODO convert to build()
+    @Test
     public void goBackBeforeSinceThisToFindBeforeState() {
 
         builder.create("x");
         builder.delete("x");
         builder.create("anotherFile");
-        AtomicFileChange sinceThis = builder.mostRecentEvent();
+        Change change1 = builder.build();
         builder.create("x");
         builder.update("x", "xValue");
+        Change change2 = builder.build();
 
-        checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue", ChangeFactory.createChanges(sinceThis, builder.mostRecentEvent()));
+        checkChange(asList("File: x / No Change", "File: anotherFile / From:NOT_EXISTING / To:EMPTY"), change1);
+        checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue", change2);
 
     }
 
-    @Test  // TODO convert to build()
+    @Test
     public void initialiseEventsAreAtTimeZero() {
 
         builder.create("anotherFile");
-        AtomicFileChange sinceThis = builder.mostRecentEvent();
+        Change change1 = builder.build();
         builder.initialize("x", "xValue1");
         builder.initialize("y", "blah");
         builder.update("x", "xValue2");
+        Change change2 = builder.build();
 
-        checkChange("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", ChangeFactory.createChanges(sinceThis, builder.mostRecentEvent()));
+        checkChange("File: anotherFile / From:NOT_EXISTING / To:EMPTY", change1);
+        checkChange("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", change2);
 
     }
 
-
-    @Test  // TODO convert to build()
+    @Test
     public void notExistingEventsAtTimeZero() {
 
         builder.create("anotherFile");
-        AtomicFileChange sinceThis = builder.mostRecentEvent();
+        Change change1 = builder.build();
         builder.create("x");
+        Change change2 = builder.build();
 
-        checkChange("File: x / From:NOT_EXISTING / To:EMPTY", ChangeFactory.createChanges(sinceThis, builder.mostRecentEvent()));
+        checkChange("File: anotherFile / From:NOT_EXISTING / To:EMPTY", change1);
+        checkChange("File: x / From:NOT_EXISTING / To:EMPTY", change2);
 
     }
 
     @Test
     public void onlyStartEventExists() {
         assertEquals("No Changes",builder.buildAll().toString());
+    }
+
+    @Test // TODO
+    public void testChronologyInAggregateFileChange() {
+
+    }
+
+    @Test // TODO
+    public void testChronologyInAtomicFileChange() {
+
+    }
+
+    @Test // TODO
+    public void testIgnoreNotExistingIsOnlyFileChangeForFileInCompositeChange() {
+
+    }
+
+    @Test // TODO
+    public void testIgnoreInitialisedIsOnlyFileChangeForFileInCompositeChange() {
+
     }
 
     @Test
@@ -177,10 +202,6 @@ public class ChangeTest {
 
 
     /*
-
-    replace mostRecentEventHead with build() returns change since last time build called, and buildAll() returns the whole change
-
-    Implement chronology and use this in test results in changebuilding test
 
     Change changeAB = changeA.add(changeB)
 
