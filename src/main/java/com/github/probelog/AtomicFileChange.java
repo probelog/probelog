@@ -48,7 +48,7 @@ public class AtomicFileChange implements FileChange {
     @Override
     public String toString() {
         return fileName()==null ? "No Changes" : "File: " + fileName() +
-                (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change");
+                (isChange() ? (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change") : " / Initial State: " + after());
     }
 
     private boolean isTail() {

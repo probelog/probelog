@@ -1,5 +1,6 @@
 package com.github.probelog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompositeChange implements Change {
@@ -23,7 +24,13 @@ public class CompositeChange implements Change {
 
     @Override // TODO have to implement
     public List<AtomicFileChange> chronology() {
-        return null;
+        List<AtomicFileChange> atomicChanges = new ArrayList();
+        AtomicFileChange current = upToAndIncludingThis;
+        while (current!=fromAfterThis) {
+            atomicChanges.add(0,current);
+            current=current.previous();
+        }
+        return atomicChanges;
     }
 
     public boolean isReal() {

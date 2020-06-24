@@ -7,6 +7,7 @@ import java.util.Set;
 
 import static com.github.probelog.Action.*;
 import static com.github.probelog.ActionMap.validFollowOnActions;
+import static com.github.probelog.ChangeFactory.createChanges;
 
 public class ChangeBuilder {
 
@@ -21,6 +22,10 @@ public class ChangeBuilder {
     private void setHead(String fileName, AtomicFileChange atomicFileChange) {
         head= atomicFileChange;
         fileHeadsMap.put(fileName, atomicFileChange);
+    }
+
+    public Change buildAll() {
+        return createChanges(start, head);
     }
 
     public void create(String fileName) {
