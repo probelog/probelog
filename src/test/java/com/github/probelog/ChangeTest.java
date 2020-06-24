@@ -152,7 +152,7 @@ public class ChangeTest {
 
     replace mostRecentEventHead with build() returns change since last time build called, and buildAll() returns the whole change
 
-    Get rid of EventLogging Test and just use this test class - with appropriate additions
+    Add in sequence number for AtomicFileChange - needed for persistence
 
     Refactor DevEvent - e.g. Start Event and only Initialise and Update have actual file states
      */
