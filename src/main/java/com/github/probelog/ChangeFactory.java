@@ -7,34 +7,10 @@ import java.util.Set;
 
 public class ChangeFactory {
 
-    public static Change createChanges(AtomicFileChange fromAfterThis, AtomicFileChange upToAndIncludingThis) {
+    public static FileChangeEpisode createChanges(AtomicFileChange fromAfterThis, AtomicFileChange upToAndIncludingThis) {
         assert(upToAndIncludingThis.isOrAfter(fromAfterThis));
-        List<FileChange> changes = getChanges(fromAfterThis, upToAndIncludingThis);
-        return changes.size()>1 ? new CompositeChange(fromAfterThis, upToAndIncludingThis) : changes.size()==1 ? changes.get(0) : upToAndIncludingThis;
+        return new FileChangeEpisode(fromAfterThis, upToAndIncludingThis);
     }
 
-    // TODO tidy uo feature envy etc whrn fresh
-
-    public static List<FileChange> getChanges(AtomicFileChange fromAfterThis, AtomicFileChange upToAndIncludingThis) {
-        Set<String> fileNames = new HashSet();
-        List<FileChange> changes = new ArrayList();
-        AtomicFileChange current =  upToAndIncludingThis;
-        while(fromAfterThis != current) {
-            if (current.isChange() && !fileNames.contains(current.fileName())) {
-                fileNames.add(current.fileName());
-                FileChange change = getFileChange(fromAfterThis, current);
-                changes.add(0,change);
-            }
-            current=current.previous();
-        }
-        return changes;
-    }
-
-    private static FileChange getFileChange(AtomicFileChange fromAfterThis, AtomicFileChange upToAndIncludingThis) {
-
-        return upToAndIncludingThis.previousSibling(fromAfterThis).equals(upToAndIncludingThis.previousSibling())
-                ? upToAndIncludingThis : new AggregateFileChange(fromAfterThis, upToAndIncludingThis);
-
-    }
 
 }

@@ -19,13 +19,6 @@ public class AggregateFileChange implements FileChange {
     }
 
     @Override
-    public List<FileChange> fileChanges() { return Collections.singletonList(this);}
-
-    // TODO to implement
-    @Override
-    public List<AtomicFileChange>  chronology() { return null;}
-
-    @Override
     public String fileName() {
         return afterEvent.fileName();
     }

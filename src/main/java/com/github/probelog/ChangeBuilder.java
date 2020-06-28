@@ -25,12 +25,12 @@ public class ChangeBuilder {
         fileHeadsMap.put(fileName, atomicFileChange);
     }
 
-    public Change buildAll() {
-        return createChanges(start, head);
+    public FileChangeEpisode buildAll() {
+        return new FileChangeEpisode(start, head);
     }
 
-    public Change build() {
-        Change result = createChanges(latestBuild, head);
+    public FileChangeEpisode build() {
+        FileChangeEpisode result = new FileChangeEpisode(latestBuild, head);
         latestBuild = head;
         return result;
     }

@@ -1,6 +1,6 @@
 package com.github.probelog;
 
-public interface FileChange extends Change {
+public interface FileChange  {
 
     String fileName();
     FileState before();

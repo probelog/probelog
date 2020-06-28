@@ -37,7 +37,7 @@ public class ChangingStories {
         }
         builder.delete("y");
 
-        Change change = builder.buildAll();
+        FileChangeEpisode change = builder.buildAll();
         checkChange(asList("File: x / No Change", "File: y / From:DEFINED:yValue / To:NOT_EXISTING"), change);
         checkChronology(asList(
                 "File: x / Initial State: NOT_EXISTING",
@@ -87,10 +87,10 @@ public class ChangingStories {
 
         builder.create("x");
         builder.update("x", "xValue");
-        AtomicFileChange sinceThis = builder.mostRecentEvent();
+        builder.build();
         builder.update("x", "xValue");
 
-        assertFalse(ChangeFactory.createChanges(sinceThis, builder.mostRecentEvent()).isReal());
+        assertFalse(builder.build().fileChanges().get(0).isReal());
 
     }
 
@@ -100,10 +100,10 @@ public class ChangingStories {
         builder.create("x");
         builder.delete("x");
         builder.create("anotherFile");
-        Change change1 = builder.build();
+        FileChangeEpisode change1 = builder.build();
         builder.create("x");
         builder.update("x", "xValue");
-        Change change2 = builder.build();
+        FileChangeEpisode change2 = builder.build();
 
         checkChange(asList("File: x / No Change", "File: anotherFile / From:NOT_EXISTING / To:EMPTY"), change1);
         checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue", change2);
@@ -114,11 +114,11 @@ public class ChangingStories {
     public void initialiseEventsAreAtTimeZero() {
 
         builder.create("anotherFile");
-        Change change1 = builder.build();
+        FileChangeEpisode change1 = builder.build();
         builder.initialize("x", "xValue1");
         builder.initialize("y", "blah");
         builder.update("x", "xValue2");
-        Change change2 = builder.build();
+        FileChangeEpisode change2 = builder.build();
 
         checkChange("File: anotherFile / From:NOT_EXISTING / To:EMPTY", change1);
         checkChange("File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2", change2);
@@ -129,9 +129,9 @@ public class ChangingStories {
     public void notExistingEventsAtTimeZero() {
 
         builder.create("anotherFile");
-        Change change1 = builder.build();
+        FileChangeEpisode change1 = builder.build();
         builder.create("x");
-        Change change2 = builder.build();
+        FileChangeEpisode change2 = builder.build();
 
         checkChange("File: anotherFile / From:NOT_EXISTING / To:EMPTY", change1);
         checkChange("File: x / From:NOT_EXISTING / To:EMPTY", change2);
@@ -140,17 +140,7 @@ public class ChangingStories {
 
     @Test
     public void onlyStartEventExists() {
-        assertEquals("No Changes",builder.buildAll().toString());
-    }
-
-    @Test // TODO
-    public void testChronologyInAggregateFileChange() {
-
-    }
-
-    @Test // TODO
-    public void testChronologyInAtomicFileChange() {
-
+        assertTrue(builder.buildAll().fileChanges().isEmpty());
     }
 
     @Test // TODO
@@ -175,13 +165,13 @@ public class ChangingStories {
 
     }
 
-    private void checkChange(String expectedChange, Change change) {
+    private void checkChange(String expectedChange, FileChangeEpisode change) {
 
         checkChange(singletonList(expectedChange), change);
 
     }
 
-    private void checkChange(List<String> expectedChanges, Change change) {
+    private void checkChange(List<String> expectedChanges, FileChangeEpisode change) {
 
         List<String> changeStrings = new ArrayList();
         for (FileChange child: change.fileChanges())
@@ -190,7 +180,7 @@ public class ChangingStories {
 
     }
 
-    private void checkChronology(List<String> expectedChanges, Change change) {
+    private void checkChronology(List<String> expectedChanges, FileChangeEpisode change) {
 
         List<String> changeStrings = new ArrayList();
         for (AtomicFileChange child: change.chronology())
@@ -203,11 +193,22 @@ public class ChangingStories {
 
     /*
 
-    Change changeAB = changeA.add(changeB)
+    Finish Model...
+    1) Remove Touched file code
 
-    Add in sequence number for AtomicFileChange - needed for persistence
+    2) Refactor AtomicFileChange - e.g. Start Event and only Initialise and Update have actual file states
 
-    Refactor DevEvent - e.g. Start Event and only Initialise and Update have actual file states
+    3) Add in TestRunBuilder - put TestRunstuff in separate package
+
+    For Release
+
+    1) Add in intellij wiring - which also saves files and stores checksum in model
+
+    2) Add in log - which can also restore builds after intellij restart
+
+    3) Add in save - which writes to HTML page and uses third party diff package
+
+
      */
 
 }
