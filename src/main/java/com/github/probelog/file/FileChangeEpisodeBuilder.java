@@ -79,10 +79,5 @@ public class FileChangeEpisodeBuilder {
         assert isValidTransition(fromFile, cutOrCopy);
         assert isValidTransition(toFile, Action.PASTED);
     }
-    // TODO replace with mostRecentChange (that returns change since last time it was called) and also allChange
-
-    public AtomicFileChange mostRecentEvent() {
-        return head;
-    }
 
 }

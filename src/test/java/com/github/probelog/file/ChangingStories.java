@@ -21,7 +21,6 @@ public class ChangingStories {
     @Test
     public void lifecycle() {
 
-        AtomicFileChange start = builder.mostRecentEvent();
         builder.create("x");
         builder.initialize("y","yValue");
         builder.update("x","xValue1");
