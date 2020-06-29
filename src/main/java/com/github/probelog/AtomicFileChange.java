@@ -55,10 +55,6 @@ public class AtomicFileChange implements FileChange {
         return previous==null;
     }
 
-    public List<FileChange>  fileChanges() { return Collections.singletonList(this);}
-
-    public List<AtomicFileChange>  chronology() { return Collections.singletonList(this);}
-
     public String fileName() {
         return fileName;
     }
@@ -68,10 +64,6 @@ public class AtomicFileChange implements FileChange {
     public FileState before() { return previousSibling().fileState();}
 
     public boolean isReal() { return !after().toString().equals(before().toString());}
-
-    String fileValueString() {
-        return fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
-    }
 
     String fileValue() {
         return action ==PASTED ? previous.fileValue : fileValue;

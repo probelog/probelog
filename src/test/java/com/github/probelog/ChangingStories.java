@@ -180,11 +180,10 @@ public class ChangingStories {
     /*
 
     Finish Model...
-    1) Remove Touched file code
 
-    2) Refactor AtomicFileChange - e.g. Start Event and only Initialise and Update have actual file states
+    1) Refactor AtomicFileChange - e.g. Start Event and only Initialise and Update have actual file states
 
-    3) Add in TestRunBuilder - put TestRunstuff in separate package
+    2) Add in TestRunBuilder - put TestRunstuff in separate package
 
     For Release
 

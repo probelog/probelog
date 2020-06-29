@@ -7,7 +7,6 @@ import java.util.Set;
 
 import static com.github.probelog.Action.*;
 import static com.github.probelog.ActionMap.validFollowOnActions;
-import static com.github.probelog.ChangeFactory.createChanges;
 
 public class FileChangeEpisodeBuilder {
 
