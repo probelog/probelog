@@ -17,9 +17,7 @@ public class ActionMap {
         if (previousAction==NOT_EXISTING)
            return createActionSet(PASTED);
         if (existingAndValid.contains(previousAction))
-            return createActionSet(DELETED, CUT, COPIED, PASTED, TOUCHED, UPDATED);
-        if (previousAction==TOUCHED)
-            return createActionSet(UPDATED, TOUCHED);
+            return createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED);
         if (deleted.contains(previousAction))
             return createActionSet(CREATED, PASTED, NOT_EXISTING);
         throw new RuntimeException("BUG !! Broken State Map !!");

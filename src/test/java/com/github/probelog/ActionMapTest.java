@@ -15,12 +15,11 @@ public class ActionMapTest {
     public void testValidFollowOnActions() {
         assertEquals(createActionSet(CREATED, INITIALIZED, NOT_EXISTING), validFollowOnActions(UNKNOWN));
         assertEquals(createActionSet(PASTED), validFollowOnActions(NOT_EXISTING));
-        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validFollowOnActions(CREATED));
-        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validFollowOnActions(INITIALIZED));
-        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validFollowOnActions(UPDATED));
-        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validFollowOnActions(PASTED));
-        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED, TOUCHED), validFollowOnActions(COPIED));
-        assertEquals(createActionSet(UPDATED, TOUCHED), validFollowOnActions(TOUCHED));
+        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED), validFollowOnActions(CREATED));
+        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED), validFollowOnActions(INITIALIZED));
+        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED), validFollowOnActions(UPDATED));
+        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED), validFollowOnActions(PASTED));
+        assertEquals(createActionSet(DELETED, CUT, COPIED, PASTED, UPDATED), validFollowOnActions(COPIED));
         assertEquals(createActionSet(CREATED, PASTED, NOT_EXISTING), validFollowOnActions(DELETED));
         assertEquals(createActionSet(CREATED, PASTED, NOT_EXISTING), validFollowOnActions(CUT));
     }

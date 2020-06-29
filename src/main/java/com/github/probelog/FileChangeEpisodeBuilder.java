@@ -9,7 +9,7 @@ import static com.github.probelog.Action.*;
 import static com.github.probelog.ActionMap.validFollowOnActions;
 import static com.github.probelog.ChangeFactory.createChanges;
 
-public class ChangeBuilder {
+public class FileChangeEpisodeBuilder {
 
     private Map<String, AtomicFileChange> fileHeadsMap = new HashMap<>();
     private final AtomicFileChange start = new AtomicFileChange();
@@ -58,11 +58,6 @@ public class ChangeBuilder {
         setHead(fileName, new AtomicFileChange(head, fileName, UPDATED, fileValue));
     }
 
-    public void touch(String fileName) {
-        assert isValidTransition(fileName, TOUCHED);
-        setHead(fileName, new AtomicFileChange(head, fileName, TOUCHED));
-    }
-
     public void copyPaste(String fromFile, String toFile) {
         doCopy(COPIED, fromFile,toFile);
         String copyValue = fileHeadsMap.get(fromFile).fileValue();
@@ -96,11 +91,4 @@ public class ChangeBuilder {
         return head;
     }
 
-    public Set<String> touchedFiles() {
-        Set<String> result = new HashSet();
-        for (AtomicFileChange fileHead: fileHeadsMap.values())
-            if (fileHead.action()==TOUCHED)
-                result.add(fileHead.fileName());
-        return result;
-    }
 }

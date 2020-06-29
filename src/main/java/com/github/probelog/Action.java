@@ -8,7 +8,6 @@ public enum Action {
     CUT,
     COPIED,
     PASTED,
-    TOUCHED,
     UPDATED,
     DELETED
 }

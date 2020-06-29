@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 
 public class ChangingStories {
 
-    ChangeBuilder builder;
+    FileChangeEpisodeBuilder builder;
 
     @Before
     public void setUp() {
-        builder = new ChangeBuilder();
+        builder = new FileChangeEpisodeBuilder();
     }
 
     @Test
@@ -24,7 +24,6 @@ public class ChangingStories {
         AtomicFileChange start = builder.mostRecentEvent();
         builder.create("x");
         builder.initialize("y","yValue");
-        builder.touch("x");
         builder.update("x","xValue1");
         builder.copyPaste("x","y");
         builder.update("x","xValue2");
@@ -43,8 +42,7 @@ public class ChangingStories {
                 "File: x / Initial State: NOT_EXISTING",
                 "File: x / From:NOT_EXISTING / To:EMPTY",
                 "File: y / Initial State: DEFINED:yValue",
-                "File: x / From:EMPTY / To:EXISTING_UNDEFINED",
-                "File: x / From:EXISTING_UNDEFINED / To:DEFINED:xValue1",
+                "File: x / From:EMPTY / To:DEFINED:xValue1",
                 "File: x / No Change",
                 "File: y / From:DEFINED:yValue / To:DEFINED:xValue1",
                 "File: x / From:DEFINED:xValue1 / To:DEFINED:xValue2",
@@ -150,18 +148,6 @@ public class ChangingStories {
 
     @Test // TODO
     public void testIgnoreInitialisedIsOnlyFileChangeForFileInCompositeChange() {
-
-    }
-
-    @Test
-    public void listOfFilesInTouchedState() {
-
-        builder.create("x");
-        builder.create("y");
-        builder.notExisting("z");
-        builder.touch("x");
-        builder.touch("y");
-        assertEquals(new HashSet(asList("x","y")),builder.touchedFiles());
 
     }
 

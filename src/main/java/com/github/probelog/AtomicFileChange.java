@@ -70,7 +70,7 @@ public class AtomicFileChange implements FileChange {
     public boolean isReal() { return !after().toString().equals(before().toString());}
 
     String fileValueString() {
-        return action ==TOUCHED ? "UNKNOWN" : fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
+        return fileValue()==null ? "EMPTY" : "(" + fileValue() + ")";
     }
 
     String fileValue() {
@@ -102,7 +102,6 @@ public class AtomicFileChange implements FileChange {
         if (action==COPIED) return previousSiblingState();
         if (action==CUT || action==DELETED || action==NOT_EXISTING) return FileState.NOT_EXISTING;
         if (action==CREATED) return FileState.EMPTY;
-        if (action==TOUCHED) return FileState.EXISTING_UNDEFINED;
         if (action==UPDATED || action==INITIALIZED) return new FileState(fileValue);
         throw new RuntimeException("Bug - Missing Action");
     }
