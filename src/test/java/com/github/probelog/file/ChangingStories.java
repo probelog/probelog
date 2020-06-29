@@ -150,13 +150,13 @@ public class ChangingStories {
 
     }
 
-    private void checkChange(String expectedChange, FileChangeEpisode change) {
+    public static void checkChange(String expectedChange, FileChangeEpisode change) {
 
         checkChange(singletonList(expectedChange), change);
 
     }
 
-    private void checkChange(List<String> expectedChanges, FileChangeEpisode change) {
+    public static void checkChange(List<String> expectedChanges, FileChangeEpisode change) {
 
         List<String> changeStrings = new ArrayList<>();
         for (FileChange child: change.fileChanges())
@@ -165,7 +165,7 @@ public class ChangingStories {
 
     }
 
-    private void checkChronology(List<String> expectedChanges, FileChangeEpisode change) {
+    private static void checkChronology(List<String> expectedChanges, FileChangeEpisode change) {
 
         List<String> changeStrings = new ArrayList<>();
         for (AtomicFileChange child: change.chronology())
