@@ -179,11 +179,11 @@ public class ChangingStories {
     /*
 
 
-    1) Add in TestRunBuilder - put TestRunstuff in separate package
+    1) write the 2 new tests for the file package
 
-    2) Add in intellij wiring - which also saves files and stores checksum in model
+    2) Make TestRun, FileChangeEpisode Serializable
 
-    3) Add in log - which can also restore builds after intellij restart
+    3) Add in intellij wiring - which also saves files and stores checksum in model
 
     4) Add in save - which writes to HTML page and uses third party diff package
 
