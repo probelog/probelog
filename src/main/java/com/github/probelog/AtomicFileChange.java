@@ -28,31 +28,10 @@ public class AtomicFileChange implements FileChange {
         this.fileValue=fileValue;
     }
 
-    public List<String> description() {
-        List<String> lines = new ArrayList<>();
-        collectDescription(lines);
-        return lines;
-    }
-
-    private void collectDescription(List<String> lines) {
-        lines.add(0, doDescription());
-        if (isTail())
-            return;
-        previous.collectDescription(lines);
-    }
-
-    private String doDescription() {
-        return fileName!=null ? (fileName +"/" + action + "/" + fileState()) : "Event Log Start";
-    }
-
     @Override
     public String toString() {
         return fileName()==null ? "No Changes" : "File: " + fileName() +
                 (isChange() ? (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change") : " / Initial State: " + after());
-    }
-
-    private boolean isTail() {
-        return previous==null;
     }
 
     public String fileName() {
@@ -65,19 +44,15 @@ public class AtomicFileChange implements FileChange {
 
     public boolean isReal() { return !after().toString().equals(before().toString());}
 
-    String fileValue() {
-        return action ==PASTED ? previous.fileValue : fileValue;
-    }
-
     Action action() {
         return action;
     }
 
-    public AtomicFileChange previousSibling() {
+    AtomicFileChange previousSibling() {
         return previous.findPrevious(fileName);
     }
 
-    public AtomicFileChange previousSibling(AtomicFileChange thisOrBefore) {
+    AtomicFileChange previousSibling(AtomicFileChange thisOrBefore) {
         return previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
@@ -89,28 +64,24 @@ public class AtomicFileChange implements FileChange {
         return ((action==NOT_EXISTING || action==INITIALIZED) && fileName.equals(this.fileName)) ? this : this.equals(thisOrBefore) ? findPrevious(fileName) : previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
     }
 
-    public FileState fileState() {
-        if (action==PASTED) return previous.previousSiblingState();
-        if (action==COPIED) return previousSiblingState();
+    FileState fileState() {
+        if (action==PASTED) return previous.before();
+        if (action==COPIED) return before();
         if (action==CUT || action==DELETED || action==NOT_EXISTING) return FileState.NOT_EXISTING;
         if (action==CREATED) return FileState.EMPTY;
         if (action==UPDATED || action==INITIALIZED) return new FileState(fileValue);
         throw new RuntimeException("Bug - Missing Action");
     }
 
-    private FileState previousSiblingState() {
-        return previousSibling().fileState();
-    }
-
-    public AtomicFileChange previous() {
+    AtomicFileChange previous() {
         return previous;
     }
 
-    public boolean isChange() {
+    boolean isChange() {
         return !(action==INITIALIZED || action==NOT_EXISTING);
     }
 
-    public boolean isOrAfter(AtomicFileChange other) {
+    boolean isOrAfter(AtomicFileChange other) {
         return this == other || (previous != null && previous.isOrAfter(other));
     }
 }

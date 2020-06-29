@@ -59,15 +59,13 @@ public class FileChangeEpisodeBuilder {
 
     public void copyPaste(String fromFile, String toFile) {
         doCopy(COPIED, fromFile,toFile);
-        String copyValue = fileHeadsMap.get(fromFile).fileValue();
-        setHead(fromFile, new AtomicFileChange(head, fromFile, COPIED, copyValue));
+        setHead(fromFile, new AtomicFileChange(head, fromFile, COPIED));
         setHead(toFile, new AtomicFileChange(head, toFile, PASTED));
     }
 
     public void cutPaste(String fromFile, String toFile) {
         doCopy(CUT, fromFile,toFile);
-        String copyValue = fileHeadsMap.get(fromFile).fileValue();
-        setHead(fromFile, new AtomicFileChange(head, fromFile, CUT, copyValue));
+        setHead(fromFile, new AtomicFileChange(head, fromFile, CUT));
         setHead(toFile, new AtomicFileChange(head, toFile, PASTED));
     }
 
