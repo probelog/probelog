@@ -1,6 +1,4 @@
-package com.github.probelog;
-
-import static com.github.probelog.State.*;
+package com.github.probelog.file;
 
 public class FileState {
 
@@ -20,15 +18,15 @@ public class FileState {
     }
 
     public String toString() {
-        return state() + (state()==DEFINED ? ":" + value() : "");
+        return state() + (state()== State.DEFINED ? ":" + value() : "");
     }
 
     public State state() {
-        return value==null ? state : DEFINED;
+        return value==null ? state : State.DEFINED;
     }
 
     public String value() {
-        assert(state()==DEFINED);
+        assert(state()== State.DEFINED);
         return value;
     }
 

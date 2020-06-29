@@ -1,10 +1,6 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.github.probelog.Action.*;
+import static com.github.probelog.file.Action.*;
 
 public class AtomicFileChange implements FileChange {
 
@@ -34,14 +30,18 @@ public class AtomicFileChange implements FileChange {
                 (isChange() ? (isReal() ?  " / From:" + before() + " / To:" + after() : " / No Change") : " / Initial State: " + after());
     }
 
+    @Override
     public String fileName() {
         return fileName;
     }
 
+    @Override
     public FileState after() { return fileState(); }
 
+    @Override
     public FileState before() { return previousSibling().fileState();}
 
+    @Override
     public boolean isReal() { return !after().toString().equals(before().toString());}
 
     Action action() {

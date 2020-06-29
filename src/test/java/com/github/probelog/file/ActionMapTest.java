@@ -1,11 +1,11 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
 import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.probelog.Action.*;
-import static com.github.probelog.ActionMap.validFollowOnActions;
+import static com.github.probelog.file.Action.*;
+import static com.github.probelog.file.ActionMap.validFollowOnActions;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 

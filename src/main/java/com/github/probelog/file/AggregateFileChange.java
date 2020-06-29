@@ -1,7 +1,4 @@
-package com.github.probelog;
-
-import java.util.Collections;
-import java.util.List;
+package com.github.probelog.file;
 
 public class AggregateFileChange implements FileChange {
 
@@ -33,6 +30,7 @@ public class AggregateFileChange implements FileChange {
         return afterEvent.fileState();
     }
 
+    @Override
     public boolean isReal() {
         return !before().toString().equals(after().toString());
     }

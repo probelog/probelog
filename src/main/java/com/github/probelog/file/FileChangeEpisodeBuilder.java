@@ -1,12 +1,9 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import static com.github.probelog.Action.*;
-import static com.github.probelog.ActionMap.validFollowOnActions;
+import static com.github.probelog.file.ActionMap.validFollowOnActions;
 
 public class FileChangeEpisodeBuilder {
 
@@ -16,7 +13,7 @@ public class FileChangeEpisodeBuilder {
     private AtomicFileChange latestBuild = start;
 
     private Action state(String fileName) {
-        return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).action() : UNKNOWN;
+        return fileHeadsMap.containsKey(fileName) ? fileHeadsMap.get(fileName).action() : Action.UNKNOWN;
     }
 
     private void setHead(String fileName, AtomicFileChange atomicFileChange) {
@@ -35,43 +32,43 @@ public class FileChangeEpisodeBuilder {
     }
 
     public void create(String fileName) {
-        assert isValidTransition(fileName, CREATED);
-        if (state(fileName).equals(UNKNOWN))
-            setHead(fileName, new AtomicFileChange(head, fileName, NOT_EXISTING));
-        setHead(fileName, new AtomicFileChange(head, fileName, CREATED));
+        assert isValidTransition(fileName, Action.CREATED);
+        if (state(fileName).equals(Action.UNKNOWN))
+            setHead(fileName, new AtomicFileChange(head, fileName, Action.NOT_EXISTING));
+        setHead(fileName, new AtomicFileChange(head, fileName, Action.CREATED));
     }
 
     public void initialize(String fileName, String fileValue) {
-        assert isValidTransition(fileName, INITIALIZED);
-        AtomicFileChange initializeEvent = new AtomicFileChange(head, fileName, INITIALIZED, fileValue);
+        assert isValidTransition(fileName, Action.INITIALIZED);
+        AtomicFileChange initializeEvent = new AtomicFileChange(head, fileName, Action.INITIALIZED, fileValue);
         setHead(fileName, initializeEvent);
     }
 
     public void notExisting(String fileName) {
-        assert isValidTransition(fileName, NOT_EXISTING);
-        setHead(fileName, new AtomicFileChange(head, fileName, NOT_EXISTING));
+        assert isValidTransition(fileName, Action.NOT_EXISTING);
+        setHead(fileName, new AtomicFileChange(head, fileName, Action.NOT_EXISTING));
     }
 
     public void update(String fileName, String fileValue) {
-        assert isValidTransition(fileName, UPDATED);
-        setHead(fileName, new AtomicFileChange(head, fileName, UPDATED, fileValue));
+        assert isValidTransition(fileName, Action.UPDATED);
+        setHead(fileName, new AtomicFileChange(head, fileName, Action.UPDATED, fileValue));
     }
 
     public void copyPaste(String fromFile, String toFile) {
-        doCopy(COPIED, fromFile,toFile);
-        setHead(fromFile, new AtomicFileChange(head, fromFile, COPIED));
-        setHead(toFile, new AtomicFileChange(head, toFile, PASTED));
+        doCopy(Action.COPIED, fromFile,toFile);
+        setHead(fromFile, new AtomicFileChange(head, fromFile, Action.COPIED));
+        setHead(toFile, new AtomicFileChange(head, toFile, Action.PASTED));
     }
 
     public void cutPaste(String fromFile, String toFile) {
-        doCopy(CUT, fromFile,toFile);
-        setHead(fromFile, new AtomicFileChange(head, fromFile, CUT));
-        setHead(toFile, new AtomicFileChange(head, toFile, PASTED));
+        doCopy(Action.CUT, fromFile,toFile);
+        setHead(fromFile, new AtomicFileChange(head, fromFile, Action.CUT));
+        setHead(toFile, new AtomicFileChange(head, toFile, Action.PASTED));
     }
 
     public void delete(String fileName) {
-        assert isValidTransition(fileName, DELETED);
-        setHead(fileName, new AtomicFileChange(head, fileName, DELETED));
+        assert isValidTransition(fileName, Action.DELETED);
+        setHead(fileName, new AtomicFileChange(head, fileName, Action.DELETED));
     }
 
     private boolean isValidTransition(String fileName, Action newState) {
@@ -80,7 +77,7 @@ public class FileChangeEpisodeBuilder {
 
     private void doCopy(Action cutOrCopy, String fromFile, String toFile) {
         assert isValidTransition(fromFile, cutOrCopy);
-        assert isValidTransition(toFile, PASTED);
+        assert isValidTransition(toFile, Action.PASTED);
     }
     // TODO replace with mostRecentChange (that returns change since last time it was called) and also allChange
 

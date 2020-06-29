@@ -1,4 +1,4 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -159,7 +159,7 @@ public class ChangingStories {
 
     private void checkChange(List<String> expectedChanges, FileChangeEpisode change) {
 
-        List<String> changeStrings = new ArrayList();
+        List<String> changeStrings = new ArrayList<>();
         for (FileChange child: change.fileChanges())
             changeStrings.add(child.toString());
         assertEquals(expectedChanges, changeStrings);
@@ -168,7 +168,7 @@ public class ChangingStories {
 
     private void checkChronology(List<String> expectedChanges, FileChangeEpisode change) {
 
-        List<String> changeStrings = new ArrayList();
+        List<String> changeStrings = new ArrayList<>();
         for (AtomicFileChange child: change.chronology())
             changeStrings.add(child.toString());
         assertEquals(expectedChanges, changeStrings);
@@ -179,19 +179,14 @@ public class ChangingStories {
 
     /*
 
-    Finish Model...
 
-    1) Refactor AtomicFileChange - e.g. Start Event and only Initialise and Update have actual file states
+    1) Add in TestRunBuilder - put TestRunstuff in separate package
 
-    2) Add in TestRunBuilder - put TestRunstuff in separate package
+    2) Add in intellij wiring - which also saves files and stores checksum in model
 
-    For Release
+    3) Add in log - which can also restore builds after intellij restart
 
-    1) Add in intellij wiring - which also saves files and stores checksum in model
-
-    2) Add in log - which can also restore builds after intellij restart
-
-    3) Add in save - which writes to HTML page and uses third party diff package
+    4) Add in save - which writes to HTML page and uses third party diff package
 
 
      */

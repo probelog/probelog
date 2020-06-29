@@ -1,4 +1,4 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
 public enum State {
     NOT_EXISTING,

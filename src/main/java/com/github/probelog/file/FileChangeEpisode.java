@@ -1,4 +1,4 @@
-package com.github.probelog;
+package com.github.probelog.file;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class FileChangeEpisode  {
     }
 
     public List<AtomicFileChange> chronology() {
-        List<AtomicFileChange> atomicChanges = new ArrayList();
+        List<AtomicFileChange> atomicChanges = new ArrayList<>();
         AtomicFileChange current = upToAndIncludingThis;
         while (current!=fromAfterThis) {
             atomicChanges.add(0,current);
@@ -34,8 +34,8 @@ public class FileChangeEpisode  {
     }
 
     private List<FileChange> getChanges() {
-        Set<String> fileNames = new HashSet();
-        List<FileChange> changes = new ArrayList();
+        Set<String> fileNames = new HashSet<>();
+        List<FileChange> changes = new ArrayList<>();
         AtomicFileChange current =  upToAndIncludingThis;
         while(fromAfterThis != current) {
             if (current.isChange() && !fileNames.contains(current.fileName())) {
