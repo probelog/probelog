@@ -16,15 +16,36 @@ public class TestRunBuilder {
     }
 
     public void testRun(List<String> failingTests) {
-        if (!testRuns.isEmpty()) {
-            if (!testRuns.get(testRuns.size()-1).isDefined()) {
-                FileChangeEpisode oldEpisode = testRuns.get(testRuns.size()-1).change();
-                testRuns.remove(testRuns.size()-1);
-                testRuns.add(new TestRun(failingTests, oldEpisode.join(episodeBuilder.build())));
-                return;
-            }
-        }
-        testRuns.add(new TestRun(failingTests, episodeBuilder.build()));
+        if (testRunsExist() && !top().isDefined())
+            replaceTop(failingTests, episodeBuilder.build());
+        else
+            addTop(failingTests, episodeBuilder.build());
+    }
+
+    private void replaceTop(List<String> failingTests, FileChangeEpisode episode) {
+        TestRun oldTop = top();
+        removeTop();
+        addTop(failingTests, oldTop.change().join(episode));
+    }
+
+    private boolean addTop(List<String> failingTests, FileChangeEpisode episode) {
+        return testRuns.add(new TestRun(failingTests, episode));
+    }
+
+    private TestRun removeTop() {
+        return testRuns.remove(topIndex());
+    }
+
+    private boolean testRunsExist() {
+        return !testRuns.isEmpty();
+    }
+
+    private TestRun top() {
+        return testRuns.get(topIndex());
+    }
+
+    private int topIndex() {
+        return testRuns.size() - 1;
     }
 
     public List<TestRun> build() {
