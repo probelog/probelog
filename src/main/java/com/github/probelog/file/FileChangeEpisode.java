@@ -55,5 +55,9 @@ public class FileChangeEpisode  {
 
     }
 
+    // TODO - write test that allows you to transpose
+    public FileChangeEpisode join(FileChangeEpisode other) {
+        return new FileChangeEpisode(fromAfterThis, other.upToAndIncludingThis);
+    }
 
 }

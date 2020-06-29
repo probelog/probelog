@@ -80,4 +80,8 @@ public class FileChangeEpisodeBuilder {
         assert isValidTransition(toFile, Action.PASTED);
     }
 
+    // TODO write a test
+    public boolean hasChange() {
+        return head!=latestBuild;
+    }
 }

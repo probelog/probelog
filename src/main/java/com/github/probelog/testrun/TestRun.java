@@ -9,12 +9,17 @@ public class TestRun {
     private final List<String> failedTests;
     private final FileChangeEpisode fileChangeEpisode;
 
+    TestRun(FileChangeEpisode fileChangeEpisode) {
+        this(null, fileChangeEpisode);
+    }
+
     TestRun(List<String> failedTests, FileChangeEpisode fileChangeEpisode) {
         this.failedTests=failedTests;
         this.fileChangeEpisode=fileChangeEpisode;
     }
 
     public boolean isFail() {
+        assert(isDefined());
         return !failedTests.isEmpty();
     }
 
@@ -24,5 +29,9 @@ public class TestRun {
 
     public List<String> failingTests() {
         return failedTests;
+    }
+
+    public boolean isDefined() {
+        return failedTests!=null;
     }
 }
