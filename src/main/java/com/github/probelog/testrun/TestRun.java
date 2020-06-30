@@ -2,10 +2,12 @@ package com.github.probelog.testrun;
 
 import com.github.probelog.file.FileChangeEpisode;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TestRun {
+public class TestRun implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final List<String> failedTests;
     private final FileChangeEpisode fileChangeEpisode;
 

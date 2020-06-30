@@ -2,6 +2,7 @@ package com.github.probelog.file;
 
 public class AggregateFileChange implements FileChange {
 
+    private static final long serialVersionUID = 1L;
     private AtomicFileChange beforeEvent, afterEvent;
 
     public AggregateFileChange(AtomicFileChange sinceThis, AtomicFileChange afterEvent) {

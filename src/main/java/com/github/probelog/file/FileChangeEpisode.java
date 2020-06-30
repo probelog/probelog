@@ -1,12 +1,14 @@
 package com.github.probelog.file;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class FileChangeEpisode  {
+public class FileChangeEpisode implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final AtomicFileChange fromAfterThis;
     private final AtomicFileChange upToAndIncludingThis;
     private List<FileChange> changes;

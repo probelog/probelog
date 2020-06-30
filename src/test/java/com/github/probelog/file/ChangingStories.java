@@ -215,11 +215,9 @@ public class ChangingStories {
 
     /*
 
-    1) Make TestRun, FileChangeEpisode Serializable and write Serialization test
+    1) Add in intellij wiring - which also saves files and stores checksum in model
 
-    2) Add in intellij wiring - which also saves files and stores checksum in model
-
-    3) Add in save - which writes to HTML page and uses third party diff package
+    2) Add in save - which writes to HTML page and uses third party diff package
 
 
      */

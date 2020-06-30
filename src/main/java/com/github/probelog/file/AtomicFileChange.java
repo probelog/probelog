@@ -4,6 +4,7 @@ import static com.github.probelog.file.Action.*;
 
 public class AtomicFileChange implements FileChange {
 
+    private static final long serialVersionUID = 1L;
     private final String fileName;
     private final String fileValue;
     private final AtomicFileChange previous;

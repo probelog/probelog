@@ -1,6 +1,8 @@
 package com.github.probelog.file;
 
-public interface FileChange  {
+import java.io.Serializable;
+
+public interface FileChange extends Serializable {
 
     String fileName();
     FileState before();
