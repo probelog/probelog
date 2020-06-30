@@ -92,6 +92,17 @@ public class ChangingStories {
     }
 
     @Test
+    public void hasChange() {
+
+        assertFalse(builder.hasChange());
+        builder.create("x");
+        assertTrue(builder.hasChange());
+        builder.build();
+        assertFalse(builder.hasChange());
+
+    }
+
+    @Test
     public void goBackBeforeSinceThisToFindBeforeState() {
 
         builder.create("x");
@@ -147,6 +158,20 @@ public class ChangingStories {
 
     @Test // TODO
     public void testIgnoreInitialisedIsOnlyFileChangeForFileInCompositeChange() {
+
+    }
+
+    @Test
+    public void joining() {
+
+        builder.create("x");
+        builder.update("x", "xValue1");
+        FileChangeEpisode episode1 = builder.build();
+        builder.update("x", "xValue2");
+        FileChangeEpisode episode2 = builder.build();
+
+        checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue2", episode1.join(episode2));
+        checkChange("File: x / From:NOT_EXISTING / To:DEFINED:xValue2", episode2.join(episode1));
 
     }
 
