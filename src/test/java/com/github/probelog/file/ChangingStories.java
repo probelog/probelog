@@ -151,13 +151,25 @@ public class ChangingStories {
         assertTrue(builder.buildAll().fileChanges().isEmpty());
     }
 
-    @Test // TODO
+    @Test
     public void testIgnoreNotExistingIsOnlyFileChangeForFileInCompositeChange() {
+
+        builder.create("x");
+        builder.build();
+        builder.notExisting("y");
+        builder.update("x", "xValue");
+        checkChange("File: x / From:EMPTY / To:DEFINED:xValue", builder.build());
 
     }
 
-    @Test // TODO
+    @Test
     public void testIgnoreInitialisedIsOnlyFileChangeForFileInCompositeChange() {
+
+        builder.create("x");
+        builder.build();
+        builder.initialize("y", "yValue");
+        builder.update("x", "xValue");
+        checkChange("File: x / From:EMPTY / To:DEFINED:xValue", builder.build());
 
     }
 
@@ -203,14 +215,11 @@ public class ChangingStories {
 
     /*
 
+    1) Make TestRun, FileChangeEpisode Serializable and write Serialization test
 
-    1) write the 2 new tests for the file package
+    2) Add in intellij wiring - which also saves files and stores checksum in model
 
-    2) Make TestRun, FileChangeEpisode Serializable
-
-    3) Add in intellij wiring - which also saves files and stores checksum in model
-
-    4) Add in save - which writes to HTML page and uses third party diff package
+    3) Add in save - which writes to HTML page and uses third party diff package
 
 
      */
