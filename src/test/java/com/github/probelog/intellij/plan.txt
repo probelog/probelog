@@ -2,3 +2,16 @@
    1.1) Plugin Config (regular expressions for files to watch, place to save serialised probelog and files)
    1.2) Checksum
 2) Save Probelog (option to stop, export name)
+
+
+Current capturing file create
+
+public void after(@NotNull List<? extends VFileEvent> events)
+VFileCreateEvent - VfsEvent[create file file:///Users/dave.halpin/git/dave/spike/src/main/java/test5]
+event.getFile().getCanonicalPath()
+/Users/dave.halpin/git/dave/spike/src/main/java/test5
+
+before and after
+VFileContentChangeEvent - VfsEvent[update: file:///Users/dave.halpin/git/dave/spike/src/main/java/test5]
+event.getFile().getCanonicalPath()
+/Users/dave.halpin/git/dave/spike/src/main/java/test5

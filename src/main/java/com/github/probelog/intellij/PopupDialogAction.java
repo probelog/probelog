@@ -1,10 +1,12 @@
 package com.github.probelog.intellij;
 
+import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
+import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
@@ -82,11 +84,14 @@ public class PopupDialogAction extends AnAction {
 
         MessageBusConnection connection = ApplicationManager.getApplication().getMessageBus().connect();
 
+        FileChangeEpisodeBuilder episodeBuilder = new FileChangeEpisodeBuilder();
+
         connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
 
             @Override
             public void before(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
+
                     System.out.println("Spike event before = " + event);
                     VirtualFile file = event.getFile();
                     System.out.println("Spike length before  = " + file.getLength());
@@ -95,6 +100,11 @@ public class PopupDialogAction extends AnAction {
             @Override
             public void after(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
+                    // TODO see if there is a Visitor interface i can use here
+                    if (event instanceof VFileCreateEvent)  { // tested this - works ok
+                        episodeBuilder.create(event.getPath());
+                    }
+
                     System.out.println("Spike event after = " + event);
                     VirtualFile file = event.getFile();
                     System.out.println("Spike length after  = " + file.getLength());
