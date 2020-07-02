@@ -1,4 +1,4 @@
-package com.github.probelog.spike;
+package com.github.probelog.intellij;
 
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.TestStatusListener;

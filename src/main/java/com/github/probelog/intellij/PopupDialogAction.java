@@ -1,18 +1,13 @@
-package com.github.probelog.spike;
+package com.github.probelog.intellij;
 
-import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter;
-import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener;
-import com.intellij.execution.testframework.sm.runner.SMTestProxy;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
-import com.intellij.rt.execution.junit.IDEAJUnitListener;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

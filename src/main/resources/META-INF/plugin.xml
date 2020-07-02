@@ -13,11 +13,11 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <testStatusListener implementation="com.github.probelog.spike.MyTestStatusListener"/>
+        <testStatusListener implementation="com.github.probelog.intellij.MyTestStatusListener"/>
     </extensions>
 
     <actions>
-        <action id="com.github.probelog.spike.PopupDialogAction" class="com.github.probelog.spike.PopupDialogAction"
+        <action id="com.github.probelog.intellij.PopupDialogAction" class="com.github.probelog.intellij.PopupDialogAction"
                 text="Pop Dialog Action" description="SDK action example">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
