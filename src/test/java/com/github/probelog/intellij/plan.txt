@@ -11,6 +11,11 @@ VFileCreateEvent - VfsEvent[create file file:///Users/dave.halpin/git/dave/spike
 event.getFile().getCanonicalPath()
 /Users/dave.halpin/git/dave/spike/src/main/java/test5
 
+java.lang.Object
+com.intellij.openapi.vfs.newvfs.events.VFileEvent
+Direct Known Subclasses:
+VFileContentChangeEvent, VFileCopyEvent, VFileCreateEvent, VFileDeleteEvent, VFileMoveEvent, VFilePropertyChangeEvent
+
 before and after
 VFileContentChangeEvent - VfsEvent[update: file:///Users/dave.halpin/git/dave/spike/src/main/java/test5]
 event.getFile().getCanonicalPath()
