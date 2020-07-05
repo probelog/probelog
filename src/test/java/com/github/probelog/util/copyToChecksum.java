@@ -18,11 +18,11 @@ public class copyToChecksum {
     public void testCopyToCheckSum() throws IOException {
 
         String expectedCheckSum = "DD562DA33DDA879116D36CBB75042E7D";
-        File copy = new File("src/test/resources/" + expectedCheckSum);
+        File copy = new File("src/test/resources/" + expectedCheckSum + ".probelog");
         copy.delete();
 
         File file = new File("src/test/resources/check-sum-test-file");
-        String checksum  = new FileUtil().copyToCheckSum(file.getAbsolutePath(), "src/test/resources/");
+        String checksum  = new FileUtil("src/test/resources/").copyToCheckSum(file.getAbsolutePath());
         assertEquals(expectedCheckSum, checksum);
         assertEquals(Arrays.asList("line 1","line 2"),
                 Files.readLines(copy, defaultCharset()));

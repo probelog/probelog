@@ -10,9 +10,15 @@ import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
 public class FileUtil {
 
-    public String copyToCheckSum(String fromFileName, String destinationDir) {
+    private String destinationDir;
+
+    public FileUtil(String destinationDir) {
+        this.destinationDir=destinationDir;
+    }
+
+    public String copyToCheckSum(String fromFileName) {
         String checksum = checksum(fromFileName);
-        copyFile(fromFileName, destinationDir + checksum);
+        copyFile(fromFileName, checksum);
         return checksum;
     }
 
@@ -29,8 +35,9 @@ public class FileUtil {
 
     }
 
-    private void copyFile(String fromFileName, String toFileName) {
+    private void copyFile(String fromFileName, String checksum) {
 
+        String toFileName = destinationDir + checksum + ".probelog";
         if (Files.exists(Paths.get(toFileName)))
             return;
 
@@ -41,5 +48,6 @@ public class FileUtil {
         }
 
     }
+
 
 }

@@ -1,11 +1,13 @@
 package com.github.probelog.intellij;
 
 import com.github.probelog.file.FileChangeEpisodeBuilder;
+import com.github.probelog.util.FileUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
+import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
 import com.intellij.util.messages.MessageBusConnection;
@@ -85,12 +87,22 @@ public class PopupDialogAction extends AnAction {
         MessageBusConnection connection = ApplicationManager.getApplication().getMessageBus().connect();
 
         FileChangeEpisodeBuilder episodeBuilder = new FileChangeEpisodeBuilder();
+        FileUtil fileUtil = new FileUtil("/Users/dave.halpin/git/dave/probelog/testbed/");
+
 
         connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
 
             @Override
             public void before(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
+                    String path = event.getPath();
+                    if (!path.endsWith(".probelog")) {
+                        if (event instanceof VFileContentChangeEvent) {
+                            if (episodeBuilder.isUnknown(path))
+                                episodeBuilder.initialize(path, fileUtil.copyToCheckSum(path));
+                        }
+                    }
+
 
                     System.out.println("Spike event before = " + event);
                     VirtualFile file = event.getFile();
@@ -100,9 +112,14 @@ public class PopupDialogAction extends AnAction {
             @Override
             public void after(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
-                    // TODO see if there is a Visitor interface i can use here
-                    if (event instanceof VFileCreateEvent)  { // tested this - works ok
-                        episodeBuilder.create(event.getPath());
+                    String path = event.getPath();
+                    if (!path.endsWith(".probelog")) {
+                        if (event instanceof VFileCreateEvent) { // tested this - works ok
+                            episodeBuilder.create(path);
+                        }
+                        if (event instanceof VFileContentChangeEvent) {
+                            episodeBuilder.update(path, fileUtil.copyToCheckSum(path));
+                        }
                     }
 
                     System.out.println("Spike event after = " + event);
