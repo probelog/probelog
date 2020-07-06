@@ -25,9 +25,9 @@ public class TestingChanges {
 
         episodeBuilder.create("x");
         episodeBuilder.create("y");
-        testRunBuilder.testRun(asList("failingTest1", "failingTest2"));
+        testRunBuilder.testRun(asList("test1", "test2", "test3"),asList("test1", "test2"));
         episodeBuilder.update("x", "xValue");
-        testRunBuilder.testRun(emptyList());
+        testRunBuilder.testRun(asList("test1", "test2", "test3"),emptyList());
         episodeBuilder.update("y", "yValue");
         List<TestRun> testRuns = testRunBuilder.build();
 
@@ -36,20 +36,24 @@ public class TestingChanges {
         TestRun run2 = testRuns.get(1);
         TestRun run3 = testRuns.get(2);
 
+        assertEquals(run1, run3.previous().previous());
+
         assertTrue(run1.isFail());
         assertTrue(run1.isDefined());
-        assertEquals(asList("failingTest1", "failingTest2"), run1.failingTests());
+        assertEquals(asList("test1", "test2", "test3"), run1.allTests());
+        assertEquals(asList("test1", "test2"), run1.failingTests());
         checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY", "File: y / From:NOT_EXISTING / To:EMPTY"), run1.change());
 
         assertFalse(run2.isFail());
         assertTrue(run2.isDefined());
+        assertEquals(asList("test1", "test2", "test3"), run2.allTests());
         checkChange(singletonList("File: x / From:EMPTY / To:DEFINED:xValue"), run2.change());
 
         assertFalse(run3.isDefined());
         checkChange(singletonList("File: y / From:EMPTY / To:DEFINED:yValue"), run3.change());
 
         episodeBuilder.update("x", "xValue1");
-        testRunBuilder.testRun(emptyList());
+        testRunBuilder.testRun(asList("test1", "test2", "test3"), emptyList());
 
         testRuns = testRunBuilder.build();
         assertEquals(3, testRuns.size());
@@ -58,6 +62,7 @@ public class TestingChanges {
 
         assertFalse(run3.isFail());
         assertTrue(run3.isDefined());
+        assertEquals(asList("test1", "test2", "test3"), run3.allTests());
         checkChange(asList("File: y / From:EMPTY / To:DEFINED:yValue", "File: x / From:DEFINED:xValue / To:DEFINED:xValue1"), run3.change());
 
     }
@@ -70,9 +75,9 @@ public class TestingChanges {
 
         episodeBuilder.create("x");
         episodeBuilder.create("y");
-        testRunBuilder.testRun(asList("failingTest1", "failingTest2"));
+        testRunBuilder.testRun(asList("test1", "test2"),asList("test1", "test2"));
         episodeBuilder.update("x", "xValue");
-        testRunBuilder.testRun(emptyList());
+        testRunBuilder.testRun(asList("test1", "test2", "test3"),emptyList());
 
         List<TestRun> testRuns = deserialize(serialize(testRunBuilder.build()));
 
@@ -82,11 +87,13 @@ public class TestingChanges {
 
         assertTrue(run1.isFail());
         assertTrue(run1.isDefined());
-        assertEquals(asList("failingTest1", "failingTest2"), run1.failingTests());
+        assertEquals(asList("test1", "test2"), run1.allTests());
+        assertEquals(asList("test1", "test2"), run1.failingTests());
         checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY", "File: y / From:NOT_EXISTING / To:EMPTY"), run1.change());
 
         assertFalse(run2.isFail());
         assertTrue(run2.isDefined());
+        assertEquals(asList("test1", "test2", "test3"), run2.allTests());
         checkChange(singletonList("File: x / From:EMPTY / To:DEFINED:xValue"), run2.change());
 
     }
@@ -109,5 +116,19 @@ public class TestingChanges {
         return deserialized;
 
     }
+
+    /*
+
+    To provide a meanignfull title for each episode
+
+    - keep track of all tests run/failed tests
+    - have pointer to previous test
+    - Header is
+        if failedtests exist then its the failedtests
+        else if a all tests have one or more tests not in previous all tests then its these new test names
+        else its the first diff line that has not got @Test or void from a test file change (look for @Test in the file)
+        else if no test diff lines its a refactoring and its first diff line
+
+     */
 
 }

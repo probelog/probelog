@@ -4,18 +4,23 @@ import com.github.probelog.file.FileChangeEpisode;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TestRun implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private TestRun previous;
+    private final List<String> allTests;
     private final List<String> failedTests;
     private final FileChangeEpisode fileChangeEpisode;
 
-    TestRun(FileChangeEpisode fileChangeEpisode) {
-        this(null, fileChangeEpisode);
+    TestRun(TestRun previous, FileChangeEpisode fileChangeEpisode) {
+        this(previous, null, null, fileChangeEpisode);
     }
 
-    TestRun(List<String> failedTests, FileChangeEpisode fileChangeEpisode) {
+    TestRun(TestRun previous,List<String> allTests, List<String> failedTests, FileChangeEpisode fileChangeEpisode) {
+        this.previous=previous;
+        this.allTests=allTests;
         this.failedTests=failedTests;
         this.fileChangeEpisode=fileChangeEpisode;
     }
@@ -34,6 +39,14 @@ public class TestRun implements Serializable {
     }
 
     public boolean isDefined() {
-        return failedTests!=null;
+        return allTests!=null;
+    }
+
+    public List<String> allTests() {
+        return allTests;
+    }
+
+    public TestRun previous() {
+        return previous;
     }
 }

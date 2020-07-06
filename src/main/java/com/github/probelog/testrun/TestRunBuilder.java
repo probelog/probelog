@@ -4,6 +4,7 @@ import com.github.probelog.file.FileChangeEpisode;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TestRunBuilder {
@@ -15,21 +16,21 @@ public class TestRunBuilder {
         this.episodeBuilder=episodeBuilder;
     }
 
-    public void testRun(List<String> failingTests) {
+    public void testRun(List<String> allTests, List<String> failingTests) {
         if (testRunsExist() && !top().isDefined())
-            replaceTop(failingTests, episodeBuilder.build());
+            replaceTop(allTests, failingTests, episodeBuilder.build());
         else
-            addTop(failingTests, episodeBuilder.build());
+            addTop(allTests, failingTests, episodeBuilder.build());
     }
 
-    private void replaceTop(List<String> failingTests, FileChangeEpisode episode) {
+    private void replaceTop(List<String> allTests, List<String> failingTests, FileChangeEpisode episode) {
         TestRun oldTop = top();
         removeTop();
-        addTop(failingTests, oldTop.change().join(episode));
+        addTop(allTests, failingTests, oldTop.change().join(episode));
     }
 
-    private boolean addTop(List<String> failingTests, FileChangeEpisode episode) {
-        return testRuns.add(new TestRun(failingTests, episode));
+    private boolean addTop(List<String> allTests, List<String> failingTests, FileChangeEpisode episode) {
+        return testRuns.add(new TestRun(top(), allTests, failingTests, episode));
     }
 
     private TestRun removeTop() {
@@ -41,7 +42,7 @@ public class TestRunBuilder {
     }
 
     private TestRun top() {
-        return testRuns.get(topIndex());
+        return testRuns.isEmpty() ? null : testRuns.get(topIndex());
     }
 
     private int topIndex() {
@@ -50,7 +51,7 @@ public class TestRunBuilder {
 
     public List<TestRun> build() {
         if (episodeBuilder.hasChange())
-            testRuns.add(new TestRun(episodeBuilder.build()));
+            testRuns.add(new TestRun(top(), episodeBuilder.build()));
         return testRuns;
     }
 }
