@@ -3,8 +3,12 @@ package com.github.probelog.testrun;
 import com.github.probelog.file.FileChangeEpisode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+
+import static java.util.Collections.*;
 
 public class TestRun implements Serializable {
 
@@ -39,7 +43,7 @@ public class TestRun implements Serializable {
     }
 
     public boolean isDefined() {
-        return allTests!=null;
+        return allTests!=null && failedTests!=null;
     }
 
     public List<String> allTests() {
@@ -48,5 +52,27 @@ public class TestRun implements Serializable {
 
     public TestRun previous() {
         return previous;
+    }
+
+    public List<String> title() {
+        return isFail() ? failedTests : noDefinedPrevious() ? allTests : newTestsExist() ? newTests() : previous.findFailedTests();
+    }
+
+    private List<String> findFailedTests() {
+        return isFail() ? failedTests : noDefinedPrevious() ? emptyList() : previous.findFailedTests();
+    }
+
+    private boolean newTestsExist() {
+        return !newTests().isEmpty();
+    }
+
+    private boolean noDefinedPrevious() {
+        return previous==null || !previous.isDefined();
+    }
+
+    private List<String> newTests() {
+        List<String> result = new ArrayList<>(allTests);
+        result.removeAll(previous.allTests);
+        return result;
     }
 }
