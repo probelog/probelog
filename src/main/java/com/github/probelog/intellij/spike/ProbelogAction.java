@@ -102,7 +102,7 @@ public class ProbelogAction extends AnAction {
             public void before(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
                     String path = event.getPath();
-                    if (!path.endsWith(".probelog")) {
+                    if (path.endsWith(".java")) {
                         if (event instanceof VFileContentChangeEvent) {
                             if (episodeBuilder.isUnknown(path))
                                 episodeBuilder.initialize(path, fileUtil.copyToCheckSum(path));
@@ -114,7 +114,7 @@ public class ProbelogAction extends AnAction {
             public void after(@NotNull List<? extends VFileEvent> events) {
                 for (VFileEvent event : events) {
                     String path = event.getPath();
-                    if (!path.endsWith(".probelog")) {
+                    if (path.endsWith(".java")) {
                         if (event instanceof VFileCreateEvent) { // tested this - works ok
                             episodeBuilder.create(path);
                         }

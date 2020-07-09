@@ -30,10 +30,15 @@ public class TestRunExporter {
     public void export() {
 
         TestRun testRun = testRunBuilder.top();
-        System.out.println(testRun.title());
+        System.out.println(testRun.title()+"<br>");
+        System.out.println("<pre>");
         for(FileChange fileChange: testRun.change().fileChanges()) {
             export(fileChange);
         }
+        System.out.println("</pre>");
+        System.out.println("<br>");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("<br>");
 
     }
 
@@ -70,12 +75,12 @@ public class TestRunExporter {
     List<String> lines(DiffRow row) {
 
         if (row.getTag()==DiffRow.Tag.EQUAL)
-            return asList(row.getOldLine());
+            return asList("" + row.getOldLine()+ "<br>");
         if (row.getTag()==DiffRow.Tag.INSERT)
-            return asList("<b>"+row.getNewLine()+"</b>");
+            return asList("<b>"+row.getNewLine()+"</b><br>");
         if (row.getTag()==DiffRow.Tag.DELETE)
-            return asList("<s>"+row.getOldLine()+"</s>");
-        return asList(new String[]{"<s>"+row.getOldLine()+"</s>","<b>"+row.getNewLine()+"</b>"});
+            return asList("<s>"+row.getOldLine()+"</s><br>");
+        return asList(new String[]{"<s>"+row.getOldLine()+"</s><br>","<b>"+row.getNewLine()+"</b><br>"});
 
     }
 }
