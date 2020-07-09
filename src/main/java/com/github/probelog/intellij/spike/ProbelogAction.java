@@ -1,6 +1,8 @@
-package com.github.probelog.intellij;
+package com.github.probelog.intellij.spike;
 
 import com.github.probelog.file.FileChangeEpisodeBuilder;
+import com.github.probelog.testrun.TestRunBuilder;
+import com.github.probelog.ui.spike.TestRunExporter;
 import com.github.probelog.util.FileUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PopupDialogAction extends AnAction {
+public class ProbelogAction extends AnAction {
 
     @Override
     public void update(AnActionEvent e) {
@@ -86,8 +88,12 @@ public class PopupDialogAction extends AnAction {
 
         MessageBusConnection connection = ApplicationManager.getApplication().getMessageBus().connect();
 
+
         FileChangeEpisodeBuilder episodeBuilder = new FileChangeEpisodeBuilder();
+        TestRunBuilder testRunBuilder = new TestRunBuilder(episodeBuilder);
         FileUtil fileUtil = new FileUtil("/Users/dave.halpin/git/dave/probelog/testbed/");
+        ProbelogTestStatusListener.testRunBuilder = testRunBuilder;
+        ProbelogTestStatusListener.testRunExporter = new TestRunExporter(testRunBuilder, fileUtil);
 
 
         connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
@@ -102,11 +108,6 @@ public class PopupDialogAction extends AnAction {
                                 episodeBuilder.initialize(path, fileUtil.copyToCheckSum(path));
                         }
                     }
-
-
-                    System.out.println("Spike event before = " + event);
-                    VirtualFile file = event.getFile();
-                    System.out.println("Spike length before  = " + file.getLength());
                 }
             }
             @Override
@@ -121,14 +122,6 @@ public class PopupDialogAction extends AnAction {
                             episodeBuilder.update(path, fileUtil.copyToCheckSum(path));
                         }
                     }
-
-                    System.out.println("Spike event after = " + event);
-                    VirtualFile file = event.getFile();
-                    System.out.println("Spike length after  = " + file.getLength());
-                    System.out.println("Spike canonicalPath = " + file.getCanonicalPath());
-                    System.out.println("Spike name          = " + file.getName());
-                    System.out.println("Spike path          = " + file.getPath());
-                    System.out.println("Spike parent name   = " + file.getParent().getName());
                 }
             }
         });

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<p>
+
+    HelloWorldTest.testSayHello - FAIL<br>
+
+    <b>import org.junit.Test;</b><br>
+    <b></b><br>
+    <b>import static org.junit.Assert.assertEquals;</b><br>
+    <b></b><br>
+    <b>public class HelloWorldTest {</b><br>
+    <b></b><br>
+    <b>    @Test</b><br>
+    <b>    public void testSayHello() {</b><br>
+    <b>        assertEquals("Hello World", sayHello());</b><br>
+    <b>    }</b><br>
+    <b></b><br>
+    <b>    private String sayHello() {</b><br>
+    <b>        return null;</b><br>
+    <b>    }</b><br>
+    <b>}</b><br>
+    <br>
+    ~~~~~~~~~~~~~~<br>
+    <br>
+    HelloWorldTest.testSayHello - PASS<br>
+    <br>
+    import org.junit.Test;<br>
+    <br>
+    import static org.junit.Assert.assertEquals;<br>
+    <br>
+    public class HelloWorldTest {<br>
+    <br>
+    @Test<br>
+    public void testSayHello() {<br>
+    assertEquals("Hello World", sayHello());<br>
+    }<br>
+    <br>
+    private String sayHello() {<br>
+    <s>        return null;</s><br>
+    <b>        return "Hello World";</b><br>
+    }<br>
+    }<br>
+
+</p>
+
+</body>
+</html>

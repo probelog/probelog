@@ -41,7 +41,7 @@ public class TestRunBuilder {
         return !testRuns.isEmpty();
     }
 
-    private TestRun top() {
+    public TestRun top() {
         return testRuns.isEmpty() ? null : testRuns.get(topIndex());
     }
 
