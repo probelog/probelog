@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<p>
+   [creating]<br>
+    <pre>
+
+<b>public class CapturingChange {</b><br>
+<b>    </b><br>
+<b>    @Test</b><br>
+<b>    public void creating() {</b><br>
+<b></b><br>
+<b>        ChangeCapturer capturer = new ChangeCapturer();</b><br>
+<b>        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));</b><br>
+<b></b><br>
+<b></b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>public class ChangeCapturer {</b><br>
+<b>    public String captureCreate(String fileName) {</b><br>
+<b>        return "x / NotExisting / Empty";;</b><br>
+<b>    }</b><br>
+<b>}</b><br>
+</pre>
+    <br>
+ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [creating] <br>
+    <pre>
+
+    public void creating() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));<br>
+<b>        assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));</b><br>
+<br>
+<s></s><br>
+    }<br>
+<br>
+public class ChangeCapturer {<br>
+    public String captureCreate(String fileName) {<br>
+<s>        return "x / NotExisting / Empty";</s><br>
+<b>        return fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [updating]<br>
+    <pre>
+public class CapturingChange {<br>
+<br>
+<b>    ChangeCapturer capturer = new ChangeCapturer();</b><br>
+<b></b><br>
+<b>    @Before</b><br>
+<b>    public void setUp() {</b><br>
+<b>        capturer = new ChangeCapturer();</b><br>
+<b>    }</b><br>
+<b></b><br>
+    @Test<br>
+    public void creating() {<br>
+<br>
+<s>        ChangeCapturer capturer = new ChangeCapturer();</s><br>
+        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));<br>
+        assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));<br>
+<br>
+    }<br>
+<br>
+<b>    @Test</b><br>
+<b>    public void updating() {</b><br>
+<b></b><br>
+<b>        capturer.captureCreate("x");</b><br>
+<b>        assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));</b><br>
+<b></b><br>
+<b>    }</b><br>
+<b></b><br>
+}<br>
+public class ChangeCapturer {<br>
+    public String captureCreate(String fileName) {<br>
+        return fileName + " / NotExisting / Empty";<br>
+    }<br>
+<b></b><br>
+<b>    public String captureUpdate(String fileName, String fileValue) {</b><br>
+<b>        return "x / Empty / xValue1";</b><br>
+<b>    }</b><br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [updating] <br>
+    <pre>
+    public void updating() {<br>
+<br>
+        capturer.captureCreate("x");<br>
+        assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));<br>
+<b>        capturer.captureCreate("y");</b><br>
+<b>        assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+<br>
+public class ChangeCapturer {<br>
+    public String captureCreate(String fileName) {<br>
+        return fileName + " / NotExisting / Empty";<br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        return "x / Empty / xValue1";</s><br>
+<b>        return fileName + " / Empty / " + fileValue;</b><br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [capturingChange]<br>
+    <pre>
+public class CapturingChange {<br>
+<br>
+<s>    ChangeCapturer capturer = new ChangeCapturer();</s><br>
+<s></s><br>
+<s>    @Before</s><br>
+<s>    public void setUp() {</s><br>
+<s>        capturer = new ChangeCapturer();</s><br>
+<s>    }</s><br>
+<s></s><br>
+    @Test<br>
+<s>    public void creating() {</s><br>
+<b>    public void capturingChange() {</b><br>
+<br>
+<b>        ChangeCapturer capturer = new ChangeCapturer();</b><br>
+        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));<br>
+        assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));<br>
+<s></s><br>
+<s>    }</s><br>
+<s></s><br>
+<s>    @Test</s><br>
+<s>    public void updating() {</s><br>
+<s></s><br>
+<s>        capturer.captureCreate("x");</s><br>
+        assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));<br>
+<s>        capturer.captureCreate("y");</s><br>
+        assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));<br>
+<br>
+    }<br>
+<s></s><br>
+<b>    </b><br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [capturingChange]<br>
+    <pre>
+    public void capturingChange() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));<br>
+        assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));<br>
+        assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));<br>
+        assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));<br>
+<b>        assertEquals("x / xValue1 / xValue2",capturer.captureUpdate("x","xValue2"));</b><br>
+<br>
+    }<br>
+public class ChangeCapturer {<br>
+<b></b><br>
+<b>    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();</b><br>
+<b></b><br>
+    public String captureCreate(String fileName) {<br>
+<b>        fileStates.put(fileName, "Empty");</b><br>
+        return fileName + " / NotExisting / Empty";<br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        return fileName + " / Empty / " + fileValue;</s><br>
+<b>        String change = fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</b><br>
+<s></s><br>
+<b>        fileStates.put(fileName, fileValue);</b><br>
+<s></s><br>
+<b>        return change;</b><br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [capturingChange] FAIL <br>
+    <pre>
+public class CapturingChange {<br>
+<br>
+    @Test<br>
+    public void capturingChange() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+<s>        assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));</s><br>
+<b>        assertEquals("1 / x / NotExisting / Empty",capturer.captureCreate("x"));</b><br>
+<s>        assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));</s><br>
+<b>        assertEquals("2 / y / NotExisting / Empty",capturer.captureCreate("y"));</b><br>
+<s>        assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));</s><br>
+<b>        assertEquals("3 / x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));</b><br>
+<s>        assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));</s><br>
+<b>        assertEquals("4 / y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));</b><br>
+<s>        assertEquals("x / xValue1 / xValue2",capturer.captureUpdate("x","xValue2"));</s><br>
+<b>        assertEquals("5 / x / xValue1 / xValue2",capturer.captureUpdate("x","xValue2"));</b><br>
+<br>
+    }<br>
+<br>
+<b>    @Test</b><br>
+<b>    public void zoomingOut() {</b><br>
+<b></b><br>
+<b>    }</b><br>
+<b></b><br>
+}<br>
+        <br>
+public class ChangeCapturer {<br>
+<br>
+<b>    private int time = 0;</b><br>
+    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();<br>
+<br>
+    public String captureCreate(String fileName) {<br>
+        fileStates.put(fileName, "Empty");<br>
+<s>        return fileName + " / NotExisting / Empty";</s><br>
+<b>        return time++ + " / " + fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        String change = fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</s><br>
+<b>        String change = time++ + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</b><br>
+        fileStates.put(fileName, fileValue);<br>
+        return change;<br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [capturingChange] FIXED <br>
+    <pre>
+public class ChangeCapturer {<br>
+<br>
+    private int time = 0;<br>
+    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();<br>
+<br>
+    public String captureCreate(String fileName) {<br>
+        fileStates.put(fileName, "Empty");<br>
+<s>        return time++ + " / " + fileName + " / NotExisting / Empty";</s><br>
+<b>        return ++time + " / " + fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        String change = time++ + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</s><br>
+<b>        String change = ++time + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</b><br>
+        fileStates.put(fileName, fileValue);<br>
+        return change;<br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [zoomingOut]<br>
+    <pre>
+    public void zoomingOut() {<br>
+<br>
+<b>        ChangeCapturer capturer = new ChangeCapturer();</b><br>
+<b>        capturer.captureCreate("x");</b><br>
+<b>        capturer.captureUpdate("x","xValue1");</b><br>
+<b>        capturer.captureUpdate("x","xValue2");</b><br>
+<b>        assertEquals("5 / x / Empty / xValue2",capturer.changesSince(1));</b><br>
+<b></b><br>
+    }<br>
+<br>
+}<br>
+public class ChangeCapturer {.....<br>
+<b></b><br>
+<b>    public String changesSince(int since) {</b><br>
+<b>        return "5 / x / Empty / xValue2";</b><br>
+<b>    }......</b><br>
+}<br>
+
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [zoomingOut] FAIL <br>
+    <pre>
+    public void zoomingOut() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        capturer.captureCreate("x");<br>
+        capturer.captureUpdate("x","xValue1");<br>
+        capturer.captureUpdate("x","xValue2");<br>
+        assertEquals("5 / x / Empty / xValue2",capturer.changesSince(1));<br>
+<b>        // starting to feel unsure how to get this working - on shakey ground</b><br>
+<b>        assertEquals("5 / x / xValue1 / xValue2",capturer.changesSince(2));</b><br>
+<br>
+    }
+
+    <br>
+public class ChangeCapturer {<br>
+<br>
+    private int time = 0;<br>
+<s>    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();</s><br>
+<b>    private Map&lt;String, List&lt;TimedState&gt;&gt; fileStates = new HashMap&lt;&gt;();</b><br>
+<br>
+    public String captureCreate(String fileName) {<br>
+<s>        fileStates.put(fileName, "Empty");</s><br>
+<b>        List&lt;TimedState&gt; timedStates = new LinkedList&lt;&gt;();</b><br>
+<s>        return ++time + " / " + fileName + " / NotExisting / Empty";</s><br>
+<b>        timedStates.add(new TimedState(++time,"Empty"));</b><br>
+<s></s><br>
+<b>        fileStates.put(fileName,timedStates);</b><br>
+<s></s><br>
+<b>        return time + " / " + fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        String change = ++time + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</s><br>
+<b>        String change = ++time + " / " + fileName + " / " + mostRecentState(fileName) + " / " + fileValue;</b><br>
+<s>        fileStates.put(fileName, fileValue);</s><br>
+<b>        fileStates.get(fileName).add(new TimedState(time, fileValue));</b><br>
+        return change;<br>
+    }<br>
+<br>
+    public String changesSince(int since) {<br>
+<s>        return "5 / x / Empty / xValue2";</s><br>
+<b>        return "5 / x / " + beforeState("x" ,since) + " / " + mostRecentState("x");</b><br>
+    }<br>
+<b></b><br>
+<b>    private String mostRecentState(String fileName) {</b><br>
+<b></b><br>
+<b>        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);</b><br>
+<b>        return timedStates.get(timedStates.size()-1).state;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    private String beforeState(String fileName, int beforeThisTime) {</b><br>
+<b></b><br>
+<b>        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);</b><br>
+<b>        for (TimedState timedState: timedStates) {</b><br>
+<b>            if (timedState.time&lt;beforeThisTime)</b><br>
+<b>                return timedState.state;</b><br>
+<b>        }</b><br>
+<b>        return null;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    private static class TimedState {</b><br>
+<b>        int time;</b><br>
+<b>        String state;</b><br>
+<b></b><br>
+<b>        public TimedState(int time, String state) {</b><br>
+<b>            this.time = time;</b><br>
+<b>            this.state = state;</b><br>
+<b>        }</b><br>
+<b>    }</b><br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+ <br>
+    [zoomingOut] FAIL !<br>
+    <pre>
+public class ChangeCapturer {.....<br>
+    private String beforeState(String fileName, int beforeThisTime) {<br>
+<br>
+<b>        // Using debugger</b><br>
+        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);<br>
+        for (TimedState timedState: timedStates) {<br>
+            if (timedState.time&lt;beforeThisTime)<br>
+                return timedState.state;<br>
+        }<br>
+        return null;<br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [zoomingOut] FAIL !!<br>
+    <pre>
+public class ChangeCapturer {.......<br>
+    private String beforeState(String fileName, int beforeThisTime) {<br>
+<br>
+<s>        // Using debugger</s><br>
+        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);<br>
+        for (TimedState timedState: timedStates) {<br>
+<s>            if (timedState.time&lt;beforeThisTime)</s><br>
+<b>            if (timedState.time&lt;=beforeThisTime)</b><br>
+                return timedState.state;<br>
+        }<br>
+        return null;<br>
+    }......<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [zoomingOut] FIXED <br>
+    <pre>
+    public void zoomingOut() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        capturer.captureCreate("x");<br>
+        capturer.captureUpdate("x","xValue1");<br>
+        capturer.captureUpdate("x","xValue2");<br>
+<s>        assertEquals("5 / x / Empty / xValue2",capturer.changesSince(1));</s><br>
+<b>        assertEquals("5 / x / Empty / xValue2",capturer.changesSince(0));</b><br>
+        // starting to feel unsure how to get this working - on shakey ground<br>
+<s>        assertEquals("5 / x / xValue1 / xValue2",capturer.changesSince(2));</s><br>
+<b>        assertEquals("5 / x / xValue1 / xValue2",capturer.changesSince(1));</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+public class ChangeCapturer {<br>
+<br>
+    private int time = 0;<br>
+    private Map&lt;String, List&lt;TimedState&gt;&gt; fileStates = new HashMap&lt;&gt;();......<br>
+<br>
+    public String changesSince(int since) {<br>
+        return "5 / x / " + beforeState("x" ,since) + " / " + mostRecentState("x");<br>
+    }<br>
+<br>
+    private String mostRecentState(String fileName) {<br>
+<br>
+        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);<br>
+        return timedStates.get(timedStates.size()-1).state;<br>
+    }<br>
+<br>
+<s>    private String beforeState(String fileName, int beforeThisTime) {</s><br>
+<b>    private String beforeState(String fileName, int since) {</b><br>
+<br>
+<b>        // Debugger again !!</b><br>
+        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);<br>
+        for (TimedState timedState: timedStates) {<br>
+<s>            if (timedState.time&lt;=beforeThisTime)</s><br>
+<b>            if (timedState.time&gt;since)</b><br>
+                return timedState.state;<br>
+        }<br>
+        return null;<br>
+    }.....<br>
+}<br>
+</pre>
+    <br>
+    [zoomingOut]<br>
+    <pre>
+<br>
+    public void zoomingOut() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        capturer.captureCreate("x");<br>
+        capturer.captureUpdate("x","xValue1");<br>
+        capturer.captureUpdate("x","xValue2");<br>
+<s>        assertEquals("5 / x / Empty / xValue2",capturer.changesSince(0));</s><br>
+<b>        assertEquals("3 / x / Empty / xValue2",capturer.changesSince(0));</b><br>
+<s>        // starting to feel unsure how to get this working - on shakey ground</s><br>
+<b>        assertEquals("3 / x / xValue1 / xValue2",capturer.changesSince(1));</b><br>
+<s>        assertEquals("5 / x / xValue1 / xValue2",capturer.changesSince(1));</s><br>
+<b></b><br>
+<br>
+    }<br>
+<br>
+}<br>
+public class ChangeCapturer {.....<br>
+    public String changesSince(int since) {<br>
+<s>        return "5 / x / " + beforeState("x" ,since) + " / " + mostRecentState("x");</s><br>
+<b>        return time + " / x / " + beforeState("x" ,since) + " / " + mostRecentState("x");</b><br>
+    }.....<br>
+}<br>
+</pre>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [zoomingOut] FAIL <br>
+    <pre>
+    public void zoomingOut() {<br>
+<br>
+        ChangeCapturer capturer = new ChangeCapturer();<br>
+        capturer.captureCreate("x");<br>
+<b>        capturer.captureCreate("y");</b><br>
+        capturer.captureUpdate("x","xValue1");<br>
+        capturer.captureUpdate("x","xValue2");<br>
+<s>        assertEquals("3 / x / Empty / xValue2",capturer.changesSince(0));</s><br>
+<b>        // leaving with broken test</b><br>
+<s>        assertEquals("3 / x / xValue1 / xValue2",capturer.changesSince(1));</s><br>
+<b>        assertEquals("(2 / y / NotExisting / Empty),(4 / x / Empty / xValue2)",capturer.changesSince(0));</b><br>
+<s></s><br>
+<b>        assertEquals("4 / x / xValue1 / xValue2",capturer.changesSince(2));</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+</p>
+
+</body>
+</html>
+
