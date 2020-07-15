@@ -1,0 +1,19 @@
+Imagine the code is the patient and the programmer is the surgeon.  Here is a graph of the patients vital signs (think heartbeat and blood pressure) during the course of the operation (programming session).
+
+1, 1, 1, 1, 6, 3!, 2, 1, 19!!!, 1, 1
+
+Each number tells you how many lines of code needed to be changed to add a new feature. ! mark means that the patient ended up in an unstable state during the feature addition - not good.  The more exclamations after the number the more distressed the state - !!! is as bad as it gets.  In the case the patient survived and the graph normalised, but it was touch and go with the spike - 19!!!, and it looks like we got a bit of warning a few cycles before with the 3! blip.
+
+So whats the story behind the figures.....
+
+
+* Show the very end test what the code is doing
+
+* Space first and then time - the line were Map changed to Map of lists thats the key change - reflection on getting the key abstractions right as early as possible by asking the right questions that build outs the structure frokm which things start to hang naturally.
+
+* Now step through the change starting with how time was brought in by stealth
+
+* If doing again start with time
+
+
+* Final Thoughts on Probelog - Bad Code like unhappy families - multitudes - need all this analysis and explanation - happy family - no analysis needed the graph is stable
