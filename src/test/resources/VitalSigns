@@ -1,19 +1,166 @@
-Imagine the code is the patient and the programmer is the surgeon.  Here is a graph of the patients vital signs (think heartbeat and blood pressure) during the course of the operation (programming session).
+This is a review of a programming episode that went seriously off the rails.
+
+Imagining the code is a patient undergoing an operation, Here is a graph that represents the patients vital signs.
 
 1, 1, 1, 1, 6, 3!, 2, 1, 19!!!, 1, 1
 
-Each number tells you how many lines of code needed to be changed to add a new feature. ! mark means that the patient ended up in an unstable state during the feature addition - not good.  The more exclamations after the number the more distressed the state - !!! is as bad as it gets.  In the case the patient survived and the graph normalised, but it was touch and go with the spike - 19!!!, and it looks like we got a bit of warning a few cycles before with the 3! blip.
+Each number is a count of lines changed to get a new test to pass, ! indicates the change did not work first time, !!! indicates it took three goes to get the test to pass - not good.
 
-So whats the story behind the figures.....
+In the end patient survived and the graph normalised, but it was touch and go with the spike - 19!!!,
+and it looks like we got a bit of warning a few cycles before with the 3! blip.
+
+There graph indicates a rough ride for both surgeon and patient, it seems lessons need to be learnt, and improvements made.
+
+Ok so some minimal context - At probelogs heart there is code that keeps track of file changes and allows you to view the file changes that occurred between two points in time. e.g. between two successive junit test runs.
+So in this episode we are at the embryonic stage of probelogs developmentm, the stage where I am grappling to find the key abstractions, and get traction on the design path.
+
+The Opening Moves
+
+So the opening moves leave us with this test
+
+ChangeCapturer capturer = new ChangeCapturer();
+assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));
+assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
+assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));
+assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));
+
+So we have 2 methods - captureCreate a method which captures a files creation, it takes one argument the files name, and we have another method captureUpdate which captures details of a file update,
+i.e. a file name and a file state (actually a checksum based on the files contents).  Each method returns a string value which is a description of the change that was caused by the create or update,
+so when for example we update a newly created file called x with the value xValue1 we see this....
+
+assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));
+
+We have this test passing with the following code
+
+public class ChangeCapturer {
+
+    public String captureCreate(String fileName) {
+        return fileName + " / NotExisting / Empty";
+    }
+
+    public String captureUpdate(String fileName, String fileValue) {
+        return "x / Empty / xValue1";
+        return fileName + " / Empty / " + fileValue;
+    }
+}
+
+The graph is reading
+
+1, 1, 1, 1
+
+That is we have progressed to this point with minimal fuss and stress.  Now this solution works fine in a universe where the only thing that ever happens to a file is it gets created and then updated once and then
+sits around untouched until the end of time.  Maybe such a universe will one day exist when we have machines that write perfect code all the time every time, and nothing ever needs to be modified,
+and we dont need a probelog to help us analyse all our programming blunders.  But thats not our current predicament, in our world we need to be able to update a file more than once.
+
+So lets add an extra assert to our test, lets update x twice and see where that takes us
+
+assertEquals("x / xValue1 / xValue2",capturer.captureUpdate("x","xValue2"));
+
+this forces us to do some work at last
+
+public class ChangeCapturer {<br>
+<b></b><br>
+<b>    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();</b><br>
+<b></b><br>
+    public String captureCreate(String fileName) {<br>
+<b>        fileStates.put(fileName, "Empty");</b><br>
+        return fileName + " / NotExisting / Empty";<br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        return fileName + " / Empty / " + fileValue;</s><br>
+<b>        String change = fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</b><br>
+<s></s><br>
+<b>        fileStates.put(fileName, fileValue);</b><br>
+<s></s><br>
+<b>        return change;</b><br>
+    }<br>
+}<br>
+
+Our vital signs graph shows this at this point,
+
+1, 1, 1, 1, 6
+
+So we made a bit of a jump, but managed it well enough, we never broke any tests, and we felt confident making the change so stress levels were not raised.
 
 
-* Show the very end test what the code is doing
+The Middle Game
 
-* Space first and then time - the line were Map changed to Map of lists thats the key change - reflection on getting the key abstractions right as early as possible by asking the right questions that build outs the structure frokm which things start to hang naturally.
+Ok so we have got through the opening moves of the programming episode and we now move into the middle game with the opening having set the scene. Lets just take a second to reflect on this opening and how it impacts
+where we are heading.
 
-* Now step through the change starting with how time was brought in by stealth
+The problem we are addressing is tracking changes to files over time.  If we look at what we have done so far we have addressed very well the fact that we are tracking multiple things but we have not addressed the time
+element of the problem really.  We have tackled the static space aspect of the problem, i.e. we can keep track of the state of things in our domain, i.e. files with a Map, but we have done nothing to deal with the time/change
+aspect of the problem.  We have kidded ourselves that we have by the fact that we can see the before and after effects of a change, we can do this cause we can capture the before value of the map entry and the after value.
+But we are screwed if we try and ask what the before the before value was - its gone.
 
-* If doing again start with time
+So the thing is we have got off on completely the wrong foot, probelog is all about tracking a file changing over time, and a secondary concern is the fact that we have to track multiple files over time.
+
+We have not driven out the key abstraction from the start so we are now on shakey ground as we try to wheezle it into our solution by the back door.
+
+At this point instead of what we currently have the tests/questions which naturally led to the Map/State based solution
+
+assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));
+assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
+assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));
+assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));
+
+we would have been better asking the following questions of the design and driven out the key abstraction - time.  Such a solution would have undoubetly some sort of list as its solution.
+
+int probeLogStarted = capturer.time();
+capturer.captureFileCreate();
+int created = capturer.time();
+capturer.captureFileUpdate("xValue1");
+int setToValue1 = capturer.time();
+capturer.captureFileUpdate("xValue2");
+
+assertEquals("NotExisting / value2",capturer.changesSince(probeLogStarted));
+assertEquals("Empty / value2",capturer.changesSince(created));
+assertEquals("value1 / value2",capturer.changesSince(setToValue1));
+
+Ok so have got off to the wrong foot lets just see how it plays our from here, warning it alls starts to get a bit ugly now and is not for the feint of hearth.
+
+Ok i start to realise i need to be able to capture a composite change and so i start to usher in by the back door the concept of time.  Its painful (but instructive) to watch.
+
+I make the following change to the asserts in the test
+
+assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));
+assertEquals("1 / x / NotExisting / Empty",capturer.captureCreate("x"));
+assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
+assertEquals("2 / y / NotExisting / Empty",capturer.captureCreate("y"));
+
+ok so each change now ticks a clock along by 1, we are starting to introduce time.  The test is not really communicating this, we have to look in the implementation to get an idea whats going on - this is awful!
+
+public class ChangeCapturer {<br>
+<br>
+    private int time = 0;<br>
+    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();<br>
+<br>
+    public String captureCreate(String fileName) {<br>
+        fileStates.put(fileName, "Empty");<br>
+<s>        return time++ + " / " + fileName + " / NotExisting / Empty";</s><br>
+<b>        return ++time + " / " + fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        String change = time++ + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</s><br>
+<b>        String change = ++time + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</b><br>
+        fileStates.put(fileName, fileValue);<br>
+        return change;<br>
+    }<br>
+}<br>
 
 
-* Final Thoughts on Probelog - Bad Code like unhappy families - multitudes - need all this analysis and explanation - happy family - no analysis needed the graph is stable
+We are at 3! in our graph
+
+1, 1, 1, 1, 6, 3!
+
+the ! being caused by as me by doing my usual trick of getting mixed up about ++ being a suffix or a prefix.
+
+Ok now we are in position to write our composite time change test.
+
+
+
+Reflection on fractal nature of engineering circle back to vital signs and have bubble going out to stresses programmer
+
+attach the probelog, Final Thoughts on Probelog - Bad Code like unhappy families - multitudes - need all this analysis and explanation - happy family - no analysis needed the graph is stable
