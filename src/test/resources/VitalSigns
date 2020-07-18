@@ -1,22 +1,19 @@
-This is a review of a programming episode that went seriously off the rails.
-
-Imagining the code is a patient undergoing an operation, Here is a graph that represents the patients vital signs.
+Imagining the code is a patient undergoing an operation, here is a graph of the patient's vital signs.
 
 1, 1, 1, 1, 6, 3!, 2, 1, 19!!!, 1, 1
 
 Each number is a count of lines changed to get a new test to pass, ! indicates the change did not work first time, !!! indicates it took three goes to get the test to pass - not good.
 
-In the end patient survived and the graph normalised, but it was touch and go with the spike - 19!!!,
-and it looks like we got a bit of warning a few cycles before with the 3! blip.
+In the end patient survived and the graph normalised, but it was touch and go at the spike - 19!!!, and it looks like we got a bit of warning a few cycles before with the 3! blip.
 
-There graph indicates a rough ride for both surgeon and patient, it seems lessons need to be learnt, and improvements made.
+The graph indicates a rough ride for both surgeon and patient, lets analyse what happened.
 
-Ok so some minimal context - At probelogs heart there is code that keeps track of file changes and allows you to view the file changes that occurred between two points in time. e.g. between two successive junit test runs.
-So in this episode we are at the embryonic stage of probelogs developmentm, the stage where I am grappling to find the key abstractions, and get traction on the design path.
+So first some minimal context - At probelogs heart there is code that keeps track of file changes and allows you to view the file changes that occurred between two points in time. e.g. between two successive junit test runs.
+So in this episode we are at the embryonic stage of probelog's development, the stage where I am grappling to find the key abstractions, and get traction on the design path.
 
-The Opening Moves
+The Opening - Space Before Time
 
-So the opening moves leave us with this test
+The first few moves leave us at this point
 
 ChangeCapturer capturer = new ChangeCapturer();
 assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));
@@ -24,7 +21,7 @@ assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
 assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));
 assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));
 
-So we have 2 methods - captureCreate a method which captures a files creation, it takes one argument the files name, and we have another method captureUpdate which captures details of a file update,
+We have two methods - captureCreate a method which captures a files creation, it takes one argument the files name, and we have another method captureUpdate which captures details of a file update,
 i.e. a file name and a file state (actually a checksum based on the files contents).  Each method returns a string value which is a description of the change that was caused by the create or update,
 so when for example we update a newly created file called x with the value xValue1 we see this....
 
@@ -39,18 +36,13 @@ public class ChangeCapturer {
     }
 
     public String captureUpdate(String fileName, String fileValue) {
-        return "x / Empty / xValue1";
         return fileName + " / Empty / " + fileValue;
     }
 }
 
-The graph is reading
-
-1, 1, 1, 1
-
-That is we have progressed to this point with minimal fuss and stress.  Now this solution works fine in a universe where the only thing that ever happens to a file is it gets created and then updated once and then
+The graph looks very healthy 1, 1, 1, 1.  Now this solution works fine in a universe where the only thing that ever happens to a file is it gets created and then updated once and then
 sits around untouched until the end of time.  Maybe such a universe will one day exist when we have machines that write perfect code all the time every time, and nothing ever needs to be modified,
-and we dont need a probelog to help us analyse all our programming blunders.  But thats not our current predicament, in our world we need to be able to update a file more than once.
+and we dont need a probelog to help us analyse all our programming blunders.  But thats not our current predicament, in our world we need to be able change code.
 
 So lets add an extra assert to our test, lets update x twice and see where that takes us
 
@@ -83,29 +75,14 @@ Our vital signs graph shows this at this point,
 
 So we made a bit of a jump, but managed it well enough, we never broke any tests, and we felt confident making the change so stress levels were not raised.
 
+Ok so we have got through the opening moves of the programming episode and we now move into the middle game. Lets just take a second to reflect on this opening.
 
-The Middle Game
-
-Ok so we have got through the opening moves of the programming episode and we now move into the middle game with the opening having set the scene. Lets just take a second to reflect on this opening and how it impacts
-where we are heading.
-
-The problem we are addressing is tracking changes to files over time.  If we look at what we have done so far we have addressed very well the fact that we are tracking multiple things but we have not addressed the time
-element of the problem really.  We have tackled the static space aspect of the problem, i.e. we can keep track of the state of things in our domain, i.e. files with a Map, but we have done nothing to deal with the time/change
+The problem we are addressing is tracking changes to files over time.  If we look at what we have done so far we have addressed very well the fact that we are tracking multiple things but we have not directly addressed the time
+element of the problem.  We have tackled the static space aspect of the problem, i.e. we can keep track of the state of things in our domain, i.e. files with a Map, but we have done nothing to deal with the time/change
 aspect of the problem.  We have kidded ourselves that we have by the fact that we can see the before and after effects of a change, we can do this cause we can capture the before value of the map entry and the after value.
-But we are screwed if we try and ask what the before the before value was - its gone.
+But we are screwed if we try and ask about "before the before".
 
-So the thing is we have got off on completely the wrong foot, probelog is all about tracking a file changing over time, and a secondary concern is the fact that we have to track multiple files over time.
-
-We have not driven out the key abstraction from the start so we are now on shakey ground as we try to wheezle it into our solution by the back door.
-
-At this point instead of what we currently have the tests/questions which naturally led to the Map/State based solution
-
-assertEquals("x / NotExisting / Empty",capturer.captureCreate("x"));
-assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
-assertEquals("x / Empty / xValue1",capturer.captureUpdate("x","xValue1"));
-assertEquals("y / Empty / yValue1",capturer.captureUpdate("y","yValue1"));
-
-we would have been better asking the following questions of the design and driven out the key abstraction - time.  Such a solution would have undoubetly some sort of list as its solution.
+If i had focused on time rather than space the test at this point would probably look something like this.
 
 int probeLogStarted = capturer.time();
 capturer.captureFileCreate();
@@ -118,7 +95,8 @@ assertEquals("NotExisting / value2",capturer.changesSince(probeLogStarted));
 assertEquals("Empty / value2",capturer.changesSince(created));
 assertEquals("value1 / value2",capturer.changesSince(setToValue1));
 
-Ok so have got off to the wrong foot lets just see how it plays our from here, warning it alls starts to get a bit ugly now and is not for the feint of hearth.
+
+The Middle Game - Patching on Time
 
 Ok i start to realise i need to be able to capture a composite change and so i start to usher in by the back door the concept of time.  Its painful (but instructive) to watch.
 
@@ -129,7 +107,7 @@ assertEquals("1 / x / NotExisting / Empty",capturer.captureCreate("x"));
 assertEquals("y / NotExisting / Empty",capturer.captureCreate("y"));
 assertEquals("2 / y / NotExisting / Empty",capturer.captureCreate("y"));
 
-ok so each change now ticks a clock along by 1, we are starting to introduce time.  The test is not really communicating this, we have to look in the implementation to get an idea whats going on - this is awful!
+ok so each change now ticks a clock along by 1, we are starting to introduce time.  The test is not really communicating this, we have to look in the implementation to get an idea whats going on.
 
 public class ChangeCapturer {<br>
 <br>
@@ -159,8 +137,104 @@ the ! being caused by as me by doing my usual trick of getting mixed up about ++
 
 Ok now we are in position to write our composite time change test.
 
+capturer.captureCreate("x");
+capturer.captureUpdate("x","xValue1");
+capturer.captureUpdate("x","xValue2");
+assertEquals("5 / x / Empty / xValue2",capturer.changesSince(1));
 
+ok so 5 in "5 / x / Empty / xValue2" is a cut and paste bug it should be 3, and the 1 in capturer.changesSince(1) is anemic, much better would have been
 
-Reflection on fractal nature of engineering circle back to vital signs and have bubble going out to stresses programmer
+capturer.captureCreate("x");
+int xCreated = capture.time()
+capturer.captureUpdate("x","xValue1");
+capturer.captureUpdate("x","xValue2");
+assertEquals("x / Empty / xValue2",capturer.changesSince(xCreated));
 
-attach the probelog, Final Thoughts on Probelog - Bad Code like unhappy families - multitudes - need all this analysis and explanation - happy family - no analysis needed the graph is stable
+Ok so i can postpone the pain with a fake solution,
+
+public String changesSince(int since) {
+        return "5 / x / Empty / xValue2";
+}
+
+I add in the the following test to flush out a real solution
+
+// starting to feel unsure how to get this working - on shakey ground
+assertEquals("5 / x / xValue1 / xValue2",capturer.changesSince(2));
+
+Ok now i have to face up to the reality of time, i document my feelings in the comment, at this point i should have scrubbed everything and started from fresh, or at least taken a break, but no i press on,
+and make my 19 line change.  This is not good i am going against all the values i believe in, i am chancing my arm that i can wing this, this is not how a professional would work, its definetly not how i would like a surgoen
+behave wielding the knife over me.
+
+So here is the change Map<String, String> becomes Map<String, List<TimedState>> and we now are dealing with Time in earnest.  A single test assert introduces a major structural change, a new class and a 200% increase in program size,
+not exactly incremental development.  The strange thing is nearly pulled it off, after three further test fails and two visits to the debugger, i realise i am trying to read the list from the wrong end, and once i cop this all is ok, and
+i get out of jail.  So i am over this major hump the patient has survived, time has been introduced, but it was all done in an awkward stressfull way, its a hollow victory.  At the physical level i feel a wave of fatigue and the desire to close
+down the lid on my laptop.
+
+I also am mindful that i have messed up on my goal to produce a log of my work that speaks for itself, thats blunder free and in no need of annotation or commentary.  Instead i get a log alright, but a log that needs to be
+explained and excused.
+
+public class ChangeCapturer {<br>
+<br>
+    private int time = 0;<br>
+<s>    private Map&lt;String, String&gt; fileStates = new HashMap&lt;&gt;();</s><br>
+<b>    private Map&lt;String, List&lt;TimedState&gt;&gt; fileStates = new HashMap&lt;&gt;();</b><br>
+<br>
+    public String captureCreate(String fileName) {<br>
+<s>        fileStates.put(fileName, "Empty");</s><br>
+<b>        List&lt;TimedState&gt; timedStates = new LinkedList&lt;&gt;();</b><br>
+<s>        return ++time + " / " + fileName + " / NotExisting / Empty";</s><br>
+<b>        timedStates.add(new TimedState(++time,"Empty"));</b><br>
+<s></s><br>
+<b>        fileStates.put(fileName,timedStates);</b><br>
+<s></s><br>
+<b>        return time + " / " + fileName + " / NotExisting / Empty";</b><br>
+    }<br>
+<br>
+    public String captureUpdate(String fileName, String fileValue) {<br>
+<s>        String change = ++time + " / " + fileName + " / " + fileStates.get(fileName) + " / " + fileValue;</s><br>
+<b>        String change = ++time + " / " + fileName + " / " + mostRecentState(fileName) + " / " + fileValue;</b><br>
+<s>        fileStates.put(fileName, fileValue);</s><br>
+<b>        fileStates.get(fileName).add(new TimedState(time, fileValue));</b><br>
+        return change;<br>
+    }<br>
+<br>
+    public String changesSince(int since) {<br>
+<s>        return "5 / x / Empty / xValue2";</s><br>
+<b>        return "5 / x / " + beforeState("x" ,since) + " / " + mostRecentState("x");</b><br>
+    }<br>
+<b></b><br>
+<b>    private String mostRecentState(String fileName) {</b><br>
+<b></b><br>
+<b>        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);</b><br>
+<b>        return timedStates.get(timedStates.size()-1).state;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    private String beforeState(String fileName, int beforeThisTime) {</b><br>
+<b></b><br>
+<b>        List&lt;TimedState&gt; timedStates = fileStates.get(fileName);</b><br>
+<b>        for (TimedState timedState: timedStates) {</b><br>
+<b>            if (timedState.time&lt;beforeThisTime)</b><br>
+<b>                return timedState.state;</b><br>
+<b>        }</b><br>
+<b>        return null;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    private static class TimedState {</b><br>
+<b>        int time;</b><br>
+<b>        String state;</b><br>
+<b></b><br>
+<b>        public TimedState(int time, String state) {</b><br>
+<b>            this.time = time;</b><br>
+<b>            this.state = state;</b><br>
+<b>        }</b><br>
+<b>    }</b><br>
+}<br>
+
+The End Game Abandoned
+
+Ok so i have time and space implemented, but i am not happy how i achieved this, i will start from scratch again and this time focus on the time element from the start.
+
+I fell into the trap of not focusing on the signficant aspect of the design from the start, i chose a weak opening move, and when the key element of the design was eventually summoned from the wings
+it made an awkward and confusing entrance.
+
+Hope this session gave you some food for thought.  Please find attached the full probelog of the session. I will post the second attempt here soon.
