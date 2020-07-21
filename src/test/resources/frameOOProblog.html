@@ -1,0 +1,2068 @@
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String previousFileValue="NotExisting";<br>
+    private String fileValue;<br>
+<br>
+    public void create(String fileName) {<br>
+<s>            fileValue="Empty";</s><br>
+<b>        fileValue="Empty";</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>            this.fileValue="("+fileValue+")";</s><br>
+<b>        this.fileValue="("+fileValue+")";</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (fileValue==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + previousFileValue + "/"  + fileValue));<br>
+        previousFileValue=fileValue;<br>
+        fileValue=null;<br>
+        return result;<br>
+    }<br>
+<b></b><br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+<s>import org.jetbrains.annotations.NotNull;</s><br>
+<s></s><br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String previousFileValue="NotExisting";<br>
+    private String fileValue;<br>
+<br>
+    public void create(String fileName) {<br>
+<s>        fileValue="Empty";</s><br>
+<b>        setFileValue("Empty");</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        this.fileValue="("+fileValue+")";</s><br>
+<b>        setFileValue("("+fileValue+")");</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<s>        if (fileValue==null)</s><br>
+<b>        if (getFileValue() ==null)</b><br>
+            return emptySet();<br>
+<s>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + previousFileValue + "/"  + fileValue));</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));</b><br>
+<s>        previousFileValue=fileValue;</s><br>
+<b>        setPreviousFileValue(getFileValue());</b><br>
+<s>        fileValue=null;</s><br>
+<b>        setFileValue(null);</b><br>
+        return result;<br>
+    }<br>
+<br>
+<b>    public String getPreviousFileValue() {</b><br>
+<b>        return previousFileValue;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    public void setPreviousFileValue(String previousFileValue) {</b><br>
+<b>        this.previousFileValue = previousFileValue;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    public String getFileValue() {</b><br>
+<b>        return fileValue;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    public void setFileValue(String fileValue) {</b><br>
+<b>        this.fileValue = fileValue;</b><br>
+<b>    }</b><br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<s></s><br>
+<b>    </b><br>
+<s>    private String previousFileValue="NotExisting";</s><br>
+<b></b><br>
+    private String fileValue;<br>
+<b>    private Change change = new Change();</b><br>
+<br>
+    public void create(String fileName) {<br>
+        setFileValue("Empty");<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        setPreviousFileValue(getFileValue());<br>
+        setFileValue(null);<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+<s>        return previousFileValue;</s><br>
+<b>        return change.previousFileValue;</b><br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+<s>        this.previousFileValue = previousFileValue;</s><br>
+<b>        change.previousFileValue = previousFileValue;</b><br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        this.fileValue = fileValue;<br>
+    }<br>
+<b></b><br>
+<b>    private static class Change {</b><br>
+<b>        private String previousFileValue="NotExisting";</b><br>
+<b>    }</b><br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<s>    </s><br>
+<b></b><br>
+<s>    private String fileValue;</s><br>
+<b></b><br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+        setFileValue("Empty");<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        setPreviousFileValue(getFileValue());<br>
+        setFileValue(null);<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+<s>        return fileValue;</s><br>
+<b>        return change.fileValue;</b><br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+<s>        this.fileValue = fileValue;</s><br>
+<b>        change.fileValue = fileValue;</b><br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+<b>        private String fileValue;</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+<s>        setFileValue("Empty");</s><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        setPreviousFileValue(getFileValue());<br>
+        setFileValue(null);<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        change.fileValue = fileValue;<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+<s>        private String fileValue;</s><br>
+<b>        private String fileValue="Empty";</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        setFileValue("("+fileValue+")");</s><br>
+<b>        setFileValue(fileValue);</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        setPreviousFileValue(getFileValue());<br>
+        setFileValue(null);<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+<s>        change.fileValue = fileValue;</s><br>
+<b>        change.fileValue = "("+fileValue+")";</b><br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        setFileValue(fileValue);</s><br>
+<b>        setFileValue("("+fileValue+")");</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        setPreviousFileValue(getFileValue());<br>
+        setFileValue(null);<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+<s>        change.fileValue = "("+fileValue+")";</s><br>
+<b>        change.fileValue = fileValue;</b><br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+<s>        setPreviousFileValue(getFileValue());</s><br>
+<b>        change.reset()</b><br>
+<s>        setFileValue(null);</s><br>
+<b></b><br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        change.fileValue = fileValue;<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<b></b><br>
+<b>        private void reset() {</b><br>
+<b>            previousFileValue=fileValue;</b><br>
+<b>            fileValue=null;</b><br>
+<b>        }</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+<s>        change.reset()</s><br>
+<b>        change.reset();</b><br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public void setPreviousFileValue(String previousFileValue) {<br>
+        change.previousFileValue = previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        change.fileValue = fileValue;<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        setFileValue("("+fileValue+")");<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<s></s><br>
+<b>    </b><br>
+<s>    public void setPreviousFileValue(String previousFileValue) {</s><br>
+<b></b><br>
+<s>        change.previousFileValue = previousFileValue;</s><br>
+<b></b><br>
+<s>    }</s><br>
+<b></b><br>
+<s></s><br>
+<b></b><br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        change.fileValue = fileValue;<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        setFileValue("("+fileValue+")");</s><br>
+<b>        change.setFileValue(fileValue);</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<s>    </s><br>
+<b></b><br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<br>
+    public void setFileValue(String fileValue) {<br>
+        change.fileValue = fileValue;<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<b></b><br>
+<b>        public void setFileValue(String fileValue) {</b><br>
+<b>            this.fileValue="("+fileValue+")";</b><br>
+<b>        }</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (getFileValue() ==null)<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<s></s><br>
+<b>    </b><br>
+<s>    public void setFileValue(String fileValue) {</s><br>
+<b></b><br>
+<s>        change.fileValue = fileValue;</s><br>
+<b></b><br>
+<s>    }</s><br>
+<b></b><br>
+<s></s><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<s>        if (getFileValue() ==null)</s><br>
+<b>        if (change.noChange())</b><br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));<br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+    public String getPreviousFileValue() {<br>
+        return change.previousFileValue;<br>
+    }<br>
+<br>
+    public String getFileValue() {<br>
+        return change.fileValue;<br>
+    }<br>
+<s>    </s><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<b></b><br>
+<b>        public boolean noChange() {</b><br>
+<b>            return fileValue==null;</b><br>
+<b>        }</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (change.noChange())<br>
+            return emptySet();<br>
+<s>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + getPreviousFileValue() + "/"  + getFileValue()));</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + change.previousFileValue + "/"  + change.fileValue));</b><br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+<s>    public String getPreviousFileValue() {</s><br>
+<s>        return change.previousFileValue;</s><br>
+<s>    }</s><br>
+<s></s><br>
+<s>    public String getFileValue() {</s><br>
+<s>        return change.fileValue;</s><br>
+<s>    }</s><br>
+<s></s><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<b></b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (change.noChange())<br>
+            return emptySet();<br>
+<s>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + change.previousFileValue + "/"  + change.fileValue));</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + changeString()));</b><br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<br>
+<b>    private String changeString() {</b><br>
+<b>        return change.previousFileValue + "/"  + change.fileValue;</b><br>
+<b>    }</b><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (change.noChange())<br>
+            return emptySet();<br>
+<s>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + changeString()));</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + change));</b><br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<s></s><br>
+<b>    </b><br>
+<s>    private String changeString() {</s><br>
+<b></b><br>
+<s>        return change.previousFileValue + "/"  + change.fileValue;</s><br>
+<b></b><br>
+<s>    }</s><br>
+<b></b><br>
+<s></s><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+<b>        public String toString() {</b><br>
+<b>            return previousFileValue + "/"  + fileValue;</b><br>
+<b>        }</b><br>
+<b></b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+    public void strip() {<br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+<s>        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());</s><br>
+<b>        frameBuilder.create("fileY");</b><br>
+<s></s><br>
+<b>        assertEquals(new HashSet(asList("fileX/NotExisting/Empty","fileY/NotExisting/Empty")), frameBuilder.nextFrame());</b><br>
+        frameBuilder.update("fileX", "fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX", "fileXSecondValue");<br>
+        frameBuilder.update("fileX", "fileXThirdValue");<br>
+        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXThirdValue)")), frameBuilder.nextFrame());<br>
+        assertTrue(frameBuilder.nextFrame().isEmpty());<br>
+        frameBuilder.update("fileX", "fileXFourthValue");<br>
+        assertEquals(new HashSet(asList("fileX/(fileXThirdValue)/(fileXFourthValue)")), frameBuilder.nextFrame());<br>
+<br>
+    }<br>
+<br>
+}<br>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        change.setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        if (change.noChange())<br>
+            return emptySet();<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + change));<br>
+        change.reset();<br>
+        return result;<br>
+    }<br>
+<s>    </s><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<b>    private Map&lt;String,Change&gt; fileChanges;</b><br>
+<br>
+    public void create(String fileName) {<br>
+<b>        fileChanges.put(fileName, new Change());</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        change.setFileValue(fileValue);</s><br>
+<b>        fileChanges.get(fileName).setFileValue(fileValue);</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<s>        if (change.noChange())</s><br>
+<b></b><br>
+<s>            return emptySet();</s><br>
+<b>        Set&lt;String&gt; result = new HashSet&lt;&gt;();</b><br>
+<s>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + change));</s><br>
+<b>        for (String fileName: fileChanges.keySet()) {</b><br>
+<s>        change.reset();</s><br>
+<b>            if (!fileChanges.get(fileName).noChange()) {</b><br>
+<s></s><br>
+<b>                result.add(fileName + "/" + fileChanges.get(fileName));</b><br>
+<s></s><br>
+<b>                fileChanges.get(fileName).reset();</b><br>
+<s></s><br>
+<b>            }</b><br>
+<s></s><br>
+<b>        }</b><br>
+        return result;<br>
+<b>        </b><br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+<s>    private Map&lt;String,Change&gt; fileChanges;</s><br>
+<b>    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();</b><br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change());<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        fileChanges.get(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (String fileName: fileChanges.keySet()) {<br>
+            if (!fileChanges.get(fileName).noChange()) {<br>
+                result.add(fileName + "/" + fileChanges.get(fileName));<br>
+                fileChanges.get(fileName).reset();<br>
+            }<br>
+        }<br>
+        return result;<br>
+<s>        </s><br>
+<b></b><br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change());<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        fileChanges.get(fileName).setFileValue(fileValue);</s><br>
+<b>        getChange(fileName).setFileValue(fileValue);</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+<s>        for (String fileName: fileChanges.keySet()) {</s><br>
+<b>        for (String fileName: activeFiles()) {</b><br>
+<s>            if (!fileChanges.get(fileName).noChange()) {</s><br>
+<b>            result.add(fileName + "/" + getChange(fileName));</b><br>
+<s>                result.add(fileName + "/" + fileChanges.get(fileName));</s><br>
+<b>            getChange(fileName).reset();</b><br>
+<s>                fileChanges.get(fileName).reset();</s><br>
+<b></b><br>
+<s>            }</s><br>
+<b></b><br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+<b>    Set&lt;String&gt; activeFiles() {</b><br>
+<b>        Set&lt;String&gt; result = fileChanges.keySet();</b><br>
+<b>        for (String fileName: fileChanges.keySet())</b><br>
+<b>            if (getChange(fileName).noChange())</b><br>
+<b>                result.remove(fileName);</b><br>
+<b>        return result;</b><br>
+<b>    }</b><br>
+<b></b><br>
+<b>    private Change getChange(String fileName) {</b><br>
+<b>        return fileChanges.get(fileName);</b><br>
+<b>    }</b><br>
+<b></b><br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Change change = new Change();<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change());<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (String fileName: activeFiles()) {<br>
+            result.add(fileName + "/" + getChange(fileName));<br>
+            getChange(fileName).reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;String&gt; activeFiles() {<br>
+<s>        Set&lt;String&gt; result = fileChanges.keySet();</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(fileChanges.keySet());</b><br>
+        for (String fileName: fileChanges.keySet())<br>
+            if (getChange(fileName).noChange())<br>
+                result.remove(fileName);<br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+<s>    private Change change = new Change();</s><br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change());<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (String fileName: activeFiles()) {<br>
+            result.add(fileName + "/" + getChange(fileName));<br>
+            getChange(fileName).reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;String&gt; activeFiles() {<br>
+        Set&lt;String&gt; result = new HashSet(fileChanges.keySet());<br>
+        for (String fileName: fileChanges.keySet())<br>
+            if (getChange(fileName).noChange())<br>
+                result.remove(fileName);<br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change());<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+<s>        for (String fileName: activeFiles()) {</s><br>
+<b>        for (Change change: activeChanges()) {</b><br>
+<s>            result.add(fileName + "/" + getChange(fileName));</s><br>
+<b>            result.add(change.toString());</b><br>
+<s>            getChange(fileName).reset();</s><br>
+<b>            change.reset();</b><br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+<s>    Set&lt;String&gt; activeFiles() {</s><br>
+<b>    Set&lt;Change&gt; activeChanges() {</b><br>
+<s>        Set&lt;String&gt; result = new HashSet(fileChanges.keySet());</s><br>
+<b>        Set&lt;Change&gt; result = new HashSet(fileChanges.values());</b><br>
+<s>        for (String fileName: fileChanges.keySet())</s><br>
+<b>        for (Change change: result)</b><br>
+<s>            if (getChange(fileName).noChange())</s><br>
+<b>            if (change.noChange())</b><br>
+<s>                result.remove(fileName);</s><br>
+<b>                result.remove(change);</b><br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+<b></b><br>
+<b>        private String fileName;</b><br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+<b>        Change(String fileName) {</b><br>
+<b>            this.fileName=fileName;</b><br>
+<b>        }</b><br>
+<b></b><br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+<s>            return previousFileValue + "/"  + fileValue;</s><br>
+<b>            return fileName + "/" + previousFileValue + "/"  + fileValue;</b><br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[[root]] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+<s>        fileChanges.put(fileName, new Change());</s><br>
+<b>        fileChanges.put(fileName, new Change(fileName));</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (Change change: activeChanges()) {<br>
+            result.add(change.toString());<br>
+            change.reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;Change&gt; activeChanges() {<br>
+        Set&lt;Change&gt; result = new HashSet(fileChanges.values());<br>
+        for (Change change: result)<br>
+            if (change.noChange())<br>
+                result.remove(change);<br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+<br>
+        private String fileName;<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        Change(String fileName) {<br>
+            this.fileName=fileName;<br>
+        }<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return fileName + "/" + previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change(fileName));<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (Change change: activeChanges()) {<br>
+            result.add(change.toString());<br>
+            change.reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;Change&gt; activeChanges() {<br>
+<s>        Set&lt;Change&gt; result = new HashSet(fileChanges.values());</s><br>
+<b>        Set&lt;Change&gt; result = new HashSet();</b><br>
+<s>        for (Change change: result)</s><br>
+<b>        for (Change change: fileChanges.values())</b><br>
+            if (change.noChange())<br>
+<s>                result.remove(change);</s><br>
+<b>                result.add(change);</b><br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+<br>
+        private String fileName;<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        Change(String fileName) {<br>
+            this.fileName=fileName;<br>
+        }<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return fileName + "/" + previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change(fileName));<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (Change change: activeChanges()) {<br>
+            result.add(change.toString());<br>
+            change.reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;Change&gt; activeChanges() {<br>
+        Set&lt;Change&gt; result = new HashSet();<br>
+        for (Change change: fileChanges.values())<br>
+<s>            if (change.noChange())</s><br>
+<b>            if (!change.noChange())</b><br>
+                result.add(change);<br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+<br>
+        private String fileName;<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        Change(String fileName) {<br>
+            this.fileName=fileName;<br>
+        }<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean noChange() {<br>
+            return fileValue==null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return fileName + "/" + previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static java.util.Collections.*;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();<br>
+<br>
+    public void create(String fileName) {<br>
+        fileChanges.put(fileName, new Change(fileName));<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+        for (Change change: activeChanges()) {<br>
+            result.add(change.toString());<br>
+            change.reset();<br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+    Set&lt;Change&gt; activeChanges() {<br>
+        Set&lt;Change&gt; result = new HashSet();<br>
+        for (Change change: fileChanges.values())<br>
+<s>            if (!change.noChange())</s><br>
+<b>            if (change.isActive())</b><br>
+                result.add(change);<br>
+        return result;<br>
+    }<br>
+<br>
+    private Change getChange(String fileName) {<br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+    private static class Change {<br>
+<br>
+        private String fileName;<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+        Change(String fileName) {<br>
+            this.fileName=fileName;<br>
+        }<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+<s>        public boolean noChange() {</s><br>
+<b>        public boolean isActive() {</b><br>
+<s>            return fileValue==null;</s><br>
+<b>            return fileValue!=null;</b><br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return fileName + "/" + previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+2020-07-21 08:40:18,256 [3426734]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinClassifierProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-21 08:40:18,258 [3426736]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinFunctionProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-21 08:40:18,260 [3426738]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinPropertyProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-21 08:40:18,261 [3426739]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinParameterProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-21 08:40:18,263 [3426741]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinFileProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-21 08:40:18,280 [3426758]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinTypeParameterProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+<s>import static java.util.Arrays.asList;</s><br>
+<s>import static java.util.Collections.*;</s><br>
+<s></s><br>
+public class FrameBuilder {<br>
+<br>
+<s>    private Map&lt;String,Change&gt; fileChanges=new HashMap&lt;&gt;();</s><br>
+<b>    private Map&lt;String, FileChange&gt; fileChanges=new HashMap&lt;&gt;();</b><br>
+<br>
+    public void create(String fileName) {<br>
+<s>        fileChanges.put(fileName, new Change(fileName));</s><br>
+<b>        fileChanges.put(fileName, new FileChange(fileName));</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        getChange(fileName).setFileValue(fileValue);<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<br>
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();<br>
+<s>        for (Change change: activeChanges()) {</s><br>
+<b>        for (FileChange fileChange : activeChanges()) {</b><br>
+<s>            result.add(change.toString());</s><br>
+<b>            result.add(fileChange.toString());</b><br>
+<s>            change.reset();</s><br>
+<b>            fileChange.reset();</b><br>
+        }<br>
+        return result;<br>
+<br>
+    }<br>
+<br>
+<s>    Set&lt;Change&gt; activeChanges() {</s><br>
+<b>    Set&lt;FileChange&gt; activeChanges() {</b><br>
+<s>        Set&lt;Change&gt; result = new HashSet();</s><br>
+<b>        Set&lt;FileChange&gt; result = new HashSet();</b><br>
+<s>        for (Change change: fileChanges.values())</s><br>
+<b>        for (FileChange fileChange : fileChanges.values())</b><br>
+<s>            if (change.isActive())</s><br>
+<b>            if (fileChange.isActive())</b><br>
+<s>                result.add(change);</s><br>
+<b>                result.add(fileChange);</b><br>
+        return result;<br>
+    }<br>
+<br>
+<s>    private Change getChange(String fileName) {</s><br>
+<b>    private FileChange getChange(String fileName) {</b><br>
+        return fileChanges.get(fileName);<br>
+    }<br>
+<br>
+<s>    private static class Change {</s><br>
+<b>    private static class FileChange {</b><br>
+<br>
+        private String fileName;<br>
+        private String previousFileValue="NotExisting";<br>
+        private String fileValue="Empty";<br>
+<br>
+<s>        Change(String fileName) {</s><br>
+<b>        FileChange(String fileName) {</b><br>
+            this.fileName=fileName;<br>
+        }<br>
+<br>
+        private void reset() {<br>
+            previousFileValue=fileValue;<br>
+            fileValue=null;<br>
+        }<br>
+<br>
+        public void setFileValue(String fileValue) {<br>
+            this.fileValue="("+fileValue+")";<br>
+        }<br>
+<br>
+        public boolean isActive() {<br>
+            return fileValue!=null;<br>
+        }<br>
+<br>
+        public String toString() {<br>
+            return fileName + "/" + previousFileValue + "/"  + fileValue;<br>
+        }<br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
