@@ -1,0 +1,30 @@
+Harmony / Discord
+
+Discord - starts with 2 reds and continues until it hits a harmony start point - i.e. (green, green) or (green, red, green), the discord
+point ends on the point before this harmony start point, or is a special case Discord - i.e. probelog does not complete on a test run i this case all of
+file changes that happened after the last test run, or in the case of no test run ever being done - all of the file changes of the probelog.  If this special
+case discord comes after a normal discord (i.e one that ended in a test run) then they should remain two separate discords
+or - a red followed by just file changes in which case the discor starts on the red
+
+Harmony - Not Discord
+
+____________
+
+Inside Harmony there are
+
+TFP episode - red (with a test code change), green
+
+Refactoring - Not a TFP cycle and not a discord
+
+
+
+Composition
+
+                          Probelog
+                    /                    \
+                Harmony    -            Discord
+                /     \                 /      \
+              TFP     Refactoring   Test Run    File Changes
+            episode      episode                after last test run
+               |            |
+            Test Run      Test Run
