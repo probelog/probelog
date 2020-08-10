@@ -1,0 +1,32 @@
+Flow / Stagger
+
+Stagger - starts with 2 reds and continues until it hits a Flow start point - i.e. (green, green) or (green, red, green), the Stagger
+ends on the point before this Flow start point, or is a special case Stagger - i.e. probelog does not complete on a test run i this case all of
+file changes that happened after the last test run, or in the case of no test run ever being done - all of the file changes of the probelog.  If this special
+case stagger comes after a normal stagger (i.e one that ended in a test run) then they should remain two separate staggers
+or - a red followed by just file changes in which case the stagger starts on the red
+
+Flow - Not Stagger
+
+____________
+
+Inside Flow there are
+
+TFP episode - red (with a test code change), green
+
+Refactoring - Not a TFP cycle and not a discord
+
+
+
+Composition
+
+                          Probelog
+                    /                    \
+                Flow    -               Stagger
+                /     \                 /      \
+              TFP     Refactoring   Test Run    File Changes
+            episode      episode                after last test run
+               |            |
+            Test Run      Test Run
+
+Note - Flow/Stagger was Harmony/Discord - flow is more about how programmer feels - harmony emphasises the state of the system

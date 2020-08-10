@@ -1,0 +1,1211 @@
+23:23:56: Executing task ':runIde'...
+
+Starting Gradle Daemon...
+Gradle Daemon started in 818 ms
+> Task :compileJava UP-TO-DATE
+> Task :patchPluginXml UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :instrumentCode UP-TO-DATE
+> Task :postInstrumentCode
+> Task :jar UP-TO-DATE
+> Task :prepareSandbox UP-TO-DATE
+
+> Task :runIde
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.intellij.util.ReflectionUtil to method sun.java2d.SunGraphicsEnvironment.isUIScaleEnabled()
+WARNING: Please consider reporting this to the maintainers of com.intellij.util.ReflectionUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2020-07-27 23:24:08,144 [   3773]   WARN - j.internal.DebugAttachDetector - Unable to start DebugAttachDetector, please add `--add-exports=java.base/jdk.internal.vm=ALL-UNNAMED` to VM options
+2020-07-27 23:24:08,539 [   4168]   WARN - j.ui.mac.MacMainFrameDecorator - no url bundle present.
+To use platform protocol handler to open external links specify required protocols in the mac app layout section of the build file
+Example: args.urlSchemes = ["your-protocol"] will handle following links: your-protocol://open?file=file&line=line
+2020-07-27 23:24:12,095 [   7724]   WARN - com.intellij.util.xmlb.Binding - no accessors for class org.jetbrains.kotlin.idea.highlighter.KotlinDefaultHighlightingSettingsProvider
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+    public void strip() {<br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX", "fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());<br>
+<s></s><br>
+<b>        </b><br>
+    }<br>
+<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+    public void strip() {<br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX", "fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());<br>
+<s>        </s><br>
+<b>        frameBuilder.update("fileX", "fileXSecondValue");</b><br>
+<s></s><br>
+<b>        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXSecondValue)")), frameBuilder.nextFrame());</b><br>
+<s></s><br>
+<b></b><br>
+    }<br>
+<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String fileValue;<br>
+<b>    private String fileValue1;</b><br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        this.fileValue = fileValue;</s><br>
+<b>        if (fileValue != null)</b><br>
+<s></s><br>
+<b>            fileValue1 = fileValue;</b><br>
+<s></s><br>
+<b>        else</b><br>
+<s></s><br>
+<b>            this.fileValue = fileValue;</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        return fileValue == null ?<br>
+                new HashSet(asList("fileX/NotExisting/Empty")) :<br>
+<s>                new HashSet(asList("fileX/Empty/(" + fileValue + ")"));</s><br>
+<b>                fileValue1 == null ?</b><br>
+<s></s><br>
+<b>                    new HashSet(asList("fileX/Empty/(" + fileValue + ")")) :</b><br>
+<s></s><br>
+<b>                        new HashSet(asList("fileX/(" + fileValue + ")/(" + fileValue1 + ")"));</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String fileValue;<br>
+    private String fileValue1;<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        if (fileValue != null)</s><br>
+<b>        if (this.fileValue != null)</b><br>
+            fileValue1 = fileValue;<br>
+        else<br>
+            this.fileValue = fileValue;<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        return fileValue == null ?<br>
+                new HashSet(asList("fileX/NotExisting/Empty")) :<br>
+                fileValue1 == null ?<br>
+                    new HashSet(asList("fileX/Empty/(" + fileValue + ")")) :<br>
+                        new HashSet(asList("fileX/(" + fileValue + ")/(" + fileValue1 + ")"));<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+2020-07-27 23:46:56,974 [1372603]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinClassifierProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:46:56,977 [1372606]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinFunctionProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:46:56,979 [1372608]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinPropertyProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:46:56,979 [1372608]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinParameterProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:46:56,980 [1372609]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinFileProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:46:56,994 [1372623]   WARN - name.RenamePsiElementProcessor - org.jetbrains.kotlin.idea.refactoring.rename.RenameKotlinTypeParameterProcessor overrides deprecated findReferences(..).
+Override findReferences(PsiElement, SearchScope, boolean) instead.
+2020-07-27 23:49:27.192 java[69045:1483321] *** Assertion failure in -[NSScrubberDocumentView executePendingChanges:completionHandler:], /AppleInternal/BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1894.60.100/AppKit.subproj/NSScrubberDocumentView.m:602
+2020-07-27 23:49:27.194 java[69045:1483321] ERROR: After performing updates, expected -numberOfItemsForScrubber: on NSScrubberDataSource <NSScrubberContainer: 0x7fad4c76bec0> identifier = "popup_scrubber_barcom.intellij.ui.popup.list.ListPopupImpl@740409be.scrubber.0" to be (0), got (3) instead.
+    [roll] FAIL <br>
+    <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+<s>public class FrameBuilder {</s><br>
+<b>public class StateRoller {</b><br>
+<br>
+<s>    private String fileValue;</s><br>
+<b>    public String before() {</b><br>
+<s>    private String fileValue1;</s><br>
+<b>        return null;</b><br>
+<s></s><br>
+<b></b><br>
+<s>    public void create(String fileName) {</s><br>
+<b></b><br>
+    }<br>
+<br>
+<s>    public void update(String fileName, String fileValue) {</s><br>
+<b>    public String after() {</b><br>
+<s>        if (this.fileValue != null)</s><br>
+<b>        return null;</b><br>
+<s>            fileValue1 = fileValue;</s><br>
+<b></b><br>
+<s>        else</s><br>
+<b></b><br>
+<s>            this.fileValue = fileValue;</s><br>
+<b></b><br>
+    }<br>
+<s></s><br>
+<s>    public Set&lt;String&gt; nextFrame() {</s><br>
+<s>        return fileValue == null ?</s><br>
+<s>                new HashSet(asList("fileX/NotExisting/Empty")) :</s><br>
+<s>                fileValue1 == null ?</s><br>
+<s>                    new HashSet(asList("fileX/Empty/(" + fileValue + ")")) :</s><br>
+<s>                        new HashSet(asList("fileX/(" + fileValue + ")/(" + fileValue1 + ")"));</s><br>
+<s>    }</s><br>
+}<br>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+<s>public class FrameBuilderTest {</s><br>
+<b>public class StateRollerTest {</b><br>
+<br>
+    @Test<br>
+<s>    public void strip() {</s><br>
+<b>    public void roll() {</b><br>
+<br>
+<s>        FrameBuilder frameBuilder = new FrameBuilder();</s><br>
+<b>        StateRoller roller = new StateRoller();</b><br>
+<s>        frameBuilder.create("fileX");</s><br>
+<b>        assertEquals("NotExisting", roller.before());</b><br>
+<s>        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());</s><br>
+<b>        assertEquals("Empty", roller.after());</b><br>
+<s>        frameBuilder.update("fileX", "fileXInitialValue");</s><br>
+<b></b><br>
+<s>        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());</s><br>
+<b></b><br>
+<s>        frameBuilder.update("fileX", "fileXSecondValue");</s><br>
+<b></b><br>
+<s>        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXSecondValue)")), frameBuilder.nextFrame());</s><br>
+<b></b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [roll] FAIL <br>
+    <pre>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [roll] PASS <br>
+    <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    public String before() {<br>
+<s>        return null;</s><br>
+<b>        return "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return null;</s><br>
+<b>        return "Empty";</b><br>
+    }<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [roll] PASS <br>
+    <pre>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [[root]] FAIL <br>
+    <pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class StateRollerTest {<br>
+<br>
+    @Test<br>
+    public void roll() {<br>
+<br>
+        StateRoller roller = new StateRoller();<br>
+        assertEquals("NotExisting", roller.before());<br>
+        assertEquals("Empty", roller.after());<br>
+<b>        roller.roll("state1");</b><br>
+<b>        assertEquals("Empty", roller.before());</b><br>
+<b>        assertEquals("(state1)}", roller.after());</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    [[root]] FAIL <br>
+    <pre>
+</pre>
+    <br>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br>
+    2020-07-27 23:51:56.949 java[69045:1483321] *** Assertion failure in -[NSScrubberDocumentView executePendingChanges:completionHandler:], /AppleInternal/BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1894.60.100/AppKit.subproj/NSScrubberDocumentView.m:602
+    2020-07-27 23:51:56.949 java[69045:1483321] ERROR: After performing updates, expected -numberOfItemsForScrubber: on NSScrubberDataSource <NSScrubberContainer: 0x7fad4b6f1e50> identifier = "popup_scrubber_barcom.intellij.ui.popup.list.ListPopupImpl@22762216.scrubber.0" to be (0), got (2) instead.
+        [roll] FAIL <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+<b>    private String state;</b><br>
+<b></b><br>
+    public String before() {<br>
+<s>        return "NotExisting";</s><br>
+<b>        return state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return "Empty";</s><br>
+<b>        return state!=null ? "(" + state + ")" : "Empty";</b><br>
+    }<br>
+<b></b><br>
+<b>    public void roll(String state) {</b><br>
+<b>        this.state=state;</b><br>
+<b>    }</b><br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class StateRollerTest {<br>
+<br>
+    @Test<br>
+    public void roll() {<br>
+<br>
+        StateRoller roller = new StateRoller();<br>
+        assertEquals("NotExisting", roller.before());<br>
+        assertEquals("Empty", roller.after());<br>
+        roller.roll("state1");<br>
+        assertEquals("Empty", roller.before());<br>
+<s>        assertEquals("(state1)}", roller.after());</s><br>
+<b>        assertEquals("(state1)", roller.after());</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+<br>
+    public String before() {<br>
+        return state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+        return state!=null ? "(" + state + ")" : "Empty";<br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        this.state=state;<br>
+    }<br>
+<b></b><br>
+<b></b><br>
+}<br>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class StateRollerTest {<br>
+<br>
+    @Test<br>
+    public void roll() {<br>
+<br>
+        StateRoller roller = new StateRoller();<br>
+        assertEquals("NotExisting", roller.before());<br>
+        assertEquals("Empty", roller.after());<br>
+        roller.roll("state1");<br>
+        assertEquals("Empty", roller.before());<br>
+        assertEquals("(state1)", roller.after());<br>
+<b>        roller.roll("state2");</b><br>
+<b>        assertEquals("(state1)", roller.before());</b><br>
+<b>        assertEquals("(state2)", roller.after());</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+<b>    private String state1;</b><br>
+<br>
+    public String before() {<br>
+<s>        return state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state!=null ? "(" + state + ")" : "Empty";</s><br>
+<b>        return state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</b><br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+<s>        this.state=state;</s><br>
+<b>        if (this.state==null)</b><br>
+<s></s><br>
+<b>            this.state=state;</b><br>
+<s></s><br>
+<b>        else</b><br>
+<s></s><br>
+<b>            this.state1=state;</b><br>
+    }<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+<b>    private String state2;</b><br>
+<br>
+    public String before() {<br>
+<s>        return state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state2!=null ? state2 : state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</s><br>
+<b>        return state2!=null ? state2 : state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</b><br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+            this.state=state;<br>
+        else<br>
+<s>            this.state1=state;</s><br>
+<b>            if (this.state1==null)</b><br>
+<s></s><br>
+<b>                this.state1=state;</b><br>
+<s></s><br>
+<b>            else</b><br>
+<s></s><br>
+<b>                this.state2=state;</b><br>
+    }<br>
+<br>
+<br>
+}<br>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class StateRollerTest {<br>
+<br>
+    @Test<br>
+    public void roll() {<br>
+<br>
+        StateRoller roller = new StateRoller();<br>
+        assertEquals("NotExisting", roller.before());<br>
+        assertEquals("Empty", roller.after());<br>
+        roller.roll("state1");<br>
+        assertEquals("Empty", roller.before());<br>
+        assertEquals("(state1)", roller.after());<br>
+        roller.roll("state2");<br>
+        assertEquals("(state1)", roller.before());<br>
+        assertEquals("(state2)", roller.after());<br>
+<b>        roller.roll("state3");</b><br>
+<b>        assertEquals("(state2)", roller.before());</b><br>
+<b>        assertEquals("(state3)", roller.after());</b><br>
+<br>
+    }<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+<s>        return state2!=null ? state2 : state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state2!=null ? "(" + state1 + ")" : state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? state2 : state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</s><br>
+<b>        return state2!=null ? "(" + state2 + ")": state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</b><br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+            this.state=state;<br>
+        else<br>
+            if (this.state1==null)<br>
+                this.state1=state;<br>
+            else<br>
+                this.state2=state;<br>
+    }<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+<b>import org.jetbrains.annotations.NotNull;</b><br>
+<b></b><br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+<s>        return state2!=null ? "(" + state1 + ")" : state1!=null ? "(" + state + ")" : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state2!=null ? bracket(state1) : state1!=null ? bracket(state) : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? "(" + state2 + ")": state1!=null ? "(" + state1 + ")" : state!=null ? "(" + state + ")" : "Empty";</s><br>
+<b>        return state2!=null ? bracket(state2) : state1!=null ? bracket(state1) : state!=null ? bracket(state) : "Empty";</b><br>
+    }<br>
+<br>
+<b>    @NotNull</b><br>
+<b>    private String bracket(String state2) {</b><br>
+<b>        return "(" + state2 + ")";</b><br>
+<b>    }</b><br>
+<b></b><br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+            this.state=state;<br>
+        else<br>
+            if (this.state1==null)<br>
+                this.state1=state;<br>
+            else<br>
+                this.state2=state;<br>
+    }<br>
+<br>
+<br>
+<b></b><br>
+<b></b><br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+<s>        return state2!=null ? bracket(state1) : state1!=null ? bracket(state) : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state2!=null ? bracket(state1) : state1!=null ? state : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? bracket(state2) : state1!=null ? bracket(state1) : state!=null ? bracket(state) : "Empty";</s><br>
+<b>        return state2!=null ? bracket(state2) : state1!=null ? bracket(state1) : state!=null ? state : "Empty";</b><br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+<s>            this.state=state;</s><br>
+<b>            this.state=bracket(state);</b><br>
+        else<br>
+            if (this.state1==null)<br>
+                this.state1=state;<br>
+            else<br>
+                this.state2=state;<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+<s>        return state2!=null ? bracket(state1) : state1!=null ? state : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? bracket(state2) : state1!=null ? bracket(state1) : state!=null ? state : "Empty";</s><br>
+<b>        return state2!=null ? bracket(state2) : state1!=null ? state1 : state!=null ? state : "Empty";</b><br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+            this.state=bracket(state);<br>
+        else<br>
+            if (this.state1==null)<br>
+<s>                this.state1=state;</s><br>
+<b>                this.state1=bracket(state);</b><br>
+            else<br>
+                this.state2=state;<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? bracket(state2) : state1!=null ? state1 : state!=null ? state : "Empty";</s><br>
+<b>        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";</b><br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String state) {<br>
+        if (this.state==null)<br>
+            this.state=bracket(state);<br>
+        else<br>
+            if (this.state1==null)<br>
+                this.state1=bracket(state);<br>
+            else<br>
+<s>                this.state2=state;</s><br>
+<b>                this.state2=bracket(state);</b><br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";<br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+<s>    public void roll(String state) {</s><br>
+<b>    public void roll(String newState) {</b><br>
+        if (this.state==null)<br>
+<s>            this.state=bracket(state);</s><br>
+<b>            this.state=bracket(newState);</b><br>
+        else<br>
+            if (this.state1==null)<br>
+<s>                this.state1=bracket(state);</s><br>
+<b>                this.state1=bracket(newState);</b><br>
+<s>            else</s><br>
+<b>            else {</b><br>
+<s>                this.state2=bracket(state);</s><br>
+<b>                this.state1 = bracket(newState);</b><br>
+<s></s><br>
+<b>            }</b><br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] FAIL <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";<br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String newState) {<br>
+        if (this.state==null)<br>
+            this.state=bracket(newState);<br>
+        else<br>
+            if (this.state1==null)<br>
+                this.state1=bracket(newState);<br>
+            else {<br>
+<s>                this.state1 = bracket(newState);</s><br>
+<b>                this.state2 = bracket(newState);</b><br>
+            }<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";<br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String newState) {<br>
+<s>        if (this.state==null)</s><br>
+<b>        if (state==null)</b><br>
+<s>            this.state=bracket(newState);</s><br>
+<b>            state=bracket(newState);</b><br>
+        else<br>
+<s>            if (this.state1==null)</s><br>
+<b>            if (state1==null)</b><br>
+<s>                this.state1=bracket(newState);</s><br>
+<b>                state1=bracket(newState);</b><br>
+            else {<br>
+<s>                this.state2 = bracket(newState);</s><br>
+<b>                state2 = bracket(newState);</b><br>
+            }<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+    private String state2;<br>
+<br>
+    public String before() {<br>
+        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";<br>
+    }<br>
+<br>
+    public String after() {<br>
+        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";<br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String newState) {<br>
+<b>        String bracketedState=bracket(newState);</b><br>
+        if (state==null)<br>
+<s>            state=bracket(newState);</s><br>
+<b>            state = bracketedState;</b><br>
+        else<br>
+            if (state1==null)<br>
+<s>                state1=bracket(newState);</s><br>
+<b>                state1 = bracketedState;</b><br>
+            else {<br>
+<s>                state2 = bracket(newState);</s><br>
+<b>                state = state1;</b><br>
+<s></s><br>
+<b>                state1 = bracketedState;</b><br>
+            }<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+package com.github.probelog;<br>
+<br>
+import org.jetbrains.annotations.NotNull;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class StateRoller {<br>
+<br>
+    private String state;<br>
+    private String state1;<br>
+<s>    private String state2;</s><br>
+<br>
+    public String before() {<br>
+<s>        return state2!=null ? state1 : state1!=null ? state : state!=null ? "Empty" : "NotExisting";</s><br>
+<b>        return state1!=null ? state : state!=null ? "Empty" : "NotExisting";</b><br>
+    }<br>
+<br>
+    public String after() {<br>
+<s>        return state2!=null ? state2 : state1!=null ? state1 : state!=null ? state : "Empty";</s><br>
+<b>        return state1!=null ? state1 : state!=null ? state : "Empty";</b><br>
+    }<br>
+<br>
+    @NotNull<br>
+    private String bracket(String state2) {<br>
+        return "(" + state2 + ")";<br>
+    }<br>
+<br>
+    public void roll(String newState) {<br>
+        String bracketedState=bracket(newState);<br>
+        if (state==null)<br>
+            state = bracketedState;<br>
+        else<br>
+            if (state1==null)<br>
+                state1 = bracketedState;<br>
+            else {<br>
+                state = state1;<br>
+                state1 = bracketedState;<br>
+            }<br>
+    }<br>
+<br>
+<br>
+<br>
+<br>
+}<br>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>
+        [roll] PASS <br>
+        <pre>
+</pre>
+        <br>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br>

@@ -1,0 +1,64 @@
+<a href="frameprobelog-1.html">Flow</a>
+<pre>
+<b>FrameBuilder frameBuilder = new FrameBuilder();</b><br>
+<b>frameBuilder.create("fileX");</b><br>
+<b>assertEquals(new HashSet(asList("fileX/NotExisting/Empty")),frameBuilder.nextFrame());</b><br>
+<b>frameBuilder.update("fileX","fileXInitialValue");</b><br>
+<b>assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")),frameBuilder.nextFrame());</b><br>
+
+
+<b>public class FrameBuilder {</b><br>
+<b></b><br>
+<b>    private String fileValue;</b><br>
+<b></b><br>
+<b>    public void create(String fileName) {</b><br>
+<b>    }</b><br>
+<br>
+<b>    public void update(String fileName, String fileValue) {</b><br>
+<b>        this.fileValue=fileValue;</b><br>
+<b>    }</b><br>
+<br>
+<b>    public Set&lt;String&gt; nextFrame() {</b><br>
+    <b>    return fileValue==null ?</b><br>
+<b>                new HashSet(asList("fileX/NotExisting/Empty")) :</b><br>
+    <b>            new HashSet(asList("fileX/Empty/("  + fileValue + ")"));</b><br>
+<b>    }</b><br>
+<b>}</b><br>
+</pre>
+<br>
+<br>
+<a href="frameprobelog-2.html">Stagger</a>
+<pre>
+FrameBuilder frameBuilder = new FrameBuilder();<br>
+frameBuilder.create("fileX");<br>
+assertEquals(new HashSet(asList("fileX/NotExisting/Empty")),frameBuilder.nextFrame());<br>
+frameBuilder.update("fileX","fileXInitialValue");<br>
+assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")),frameBuilder.nextFrame());<br>
+<b>        frameBuilder.update("fileX","fileXSecondValue");</b><br>
+<b>        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXSecondValue)")),frameBuilder.nextFrame());</b><br>
+<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    <b>private String previousFileValue="NotExisting;</b><br>
+       private String fileValue;<br>
+<br>
+    public void create(String fileName) {<br>
+<b>        fileValue="Empty";</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        this.fileValue=fileValue;</s><br>
+<b>        this.fileValue="("+fileValue+")";</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<s>        return fileValue==null ?</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + previousFileValue + "/"  + fileValue));</b><br>
+<s>                new HashSet(asList("fileX/NotExisting/Empty")) :</s><br>
+<b>        previousFileValue=fileValue;</b><br>
+<s>                new HashSet(asList("fileX/Empty/("  + fileValue + ")"));</s><br>
+<b>        return result;</b><br>
+    }<br>
+}<br>
+</pre>

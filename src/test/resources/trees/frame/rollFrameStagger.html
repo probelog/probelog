@@ -1,0 +1,172 @@
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+    public void strip() {<br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX", "fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());<br>
+<s></s><br>
+<b>        </b><br>
+    }<br>
+<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+import static org.junit.Assert.assertTrue;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+    public void strip() {<br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")), frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX", "fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")), frameBuilder.nextFrame());<br>
+<s>        </s><br>
+<b>        frameBuilder.update("fileX", "fileXSecondValue");</b><br>
+<s></s><br>
+<b>        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXSecondValue)")), frameBuilder.nextFrame());</b><br>
+<s></s><br>
+<b></b><br>
+    }<br>
+<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String fileValue;<br>
+<b>    private String fileValue1;</b><br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        this.fileValue = fileValue;</s><br>
+<b>        if (fileValue != null)</b><br>
+<s></s><br>
+<b>            fileValue1 = fileValue;</b><br>
+<s></s><br>
+<b>        else</b><br>
+<s></s><br>
+<b>            this.fileValue = fileValue;</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        return fileValue == null ?<br>
+                new HashSet(asList("fileX/NotExisting/Empty")) :<br>
+<s>                new HashSet(asList("fileX/Empty/(" + fileValue + ")"));</s><br>
+<b>                fileValue1 == null ?</b><br>
+<s></s><br>
+<b>                    new HashSet(asList("fileX/Empty/(" + fileValue + ")")) :</b><br>
+<s></s><br>
+<b>                        new HashSet(asList("fileX/(" + fileValue + ")/(" + fileValue1 + ")"));</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.*;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+    private String fileValue;<br>
+    private String fileValue1;<br>
+<br>
+    public void create(String fileName) {<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        if (fileValue != null)</s><br>
+<b>        if (this.fileValue != null)</b><br>
+            fileValue1 = fileValue;<br>
+        else<br>
+            this.fileValue = fileValue;<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        return fileValue == null ?<br>
+                new HashSet(asList("fileX/NotExisting/Empty")) :<br>
+                fileValue1 == null ?<br>
+                    new HashSet(asList("fileX/Empty/(" + fileValue + ")")) :<br>
+                        new HashSet(asList("fileX/(" + fileValue + ")/(" + fileValue1 + ")"));<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>

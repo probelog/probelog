@@ -1,0 +1,103 @@
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import org.junit.Test;<br>
+<br>
+import java.util.Arrays;<br>
+import java.util.HashSet;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+import static org.junit.Assert.assertEquals;<br>
+<br>
+public class FrameBuilderTest {<br>
+<br>
+    @Test<br>
+<s>    public void create() {</s><br>
+<b>    public void strip() {</b><br>
+<br>
+        FrameBuilder frameBuilder = new FrameBuilder();<br>
+        frameBuilder.create("fileX");<br>
+        assertEquals(new HashSet(asList("fileX/NotExisting/Empty")),frameBuilder.nextFrame());<br>
+        frameBuilder.update("fileX","fileXInitialValue");<br>
+        assertEquals(new HashSet(asList("fileX/Empty/(fileXInitialValue)")),frameBuilder.nextFrame());<br>
+<b>        frameBuilder.update("fileX","fileXSecondValue");</b><br>
+<b>        assertEquals(new HashSet(asList("fileX/(fileXInitialValue)/(fileXSecondValue)")),frameBuilder.nextFrame());</b><br>
+<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] FAIL <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.HashSet;<br>
+import java.util.Set;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+<s>    private String fileValue;</s><br>
+<b>    private String previousFileValue;</b><br>
+<s></s><br>
+<b>    private String fileValue="NotExisting";</b><br>
+<br>
+    public void create(String fileName) {<br>
+<b>        fileValue="Empty";</b><br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+<s>        this.fileValue=fileValue;</s><br>
+<b>        this.fileValue="("+fileValue+")";</b><br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+<s>        return fileValue==null ?</s><br>
+<b>        Set&lt;String&gt; result = new HashSet(asList("fileX/" + previousFileValue + "/"  + fileValue));</b><br>
+<s>                new HashSet(asList("fileX/NotExisting/Empty")) :</s><br>
+<b>        previousFileValue=fileValue;</b><br>
+<s>                new HashSet(asList("fileX/Empty/("  + fileValue + ")"));</s><br>
+<b>        return result;</b><br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
+<br>
+[strip] PASS <br>
+<pre>
+package com.github.probelog;<br>
+<br>
+import java.util.HashSet;<br>
+import java.util.Set;<br>
+<br>
+import static java.util.Arrays.asList;<br>
+<br>
+public class FrameBuilder {<br>
+<br>
+<s>    private String previousFileValue;</s><br>
+<b>    private String previousFileValue="NotExisting";</b><br>
+<s>    private String fileValue="NotExisting";</s><br>
+<b>    private String fileValue;</b><br>
+<br>
+    public void create(String fileName) {<br>
+        fileValue="Empty";<br>
+    }<br>
+<br>
+    public void update(String fileName, String fileValue) {<br>
+        this.fileValue="("+fileValue+")";<br>
+    }<br>
+<br>
+    public Set&lt;String&gt; nextFrame() {<br>
+        Set&lt;String&gt; result = new HashSet(asList("fileX/" + previousFileValue + "/"  + fileValue));<br>
+        previousFileValue=fileValue;<br>
+        return result;<br>
+    }<br>
+}<br>
+</pre>
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~
