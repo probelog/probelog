@@ -15,7 +15,7 @@ public class TestRunCursor {
     }
 
     boolean hasNext() {
-        return true;
+        return cursor<testRuns.size();
     }
 
     TestRun next() {
@@ -23,7 +23,7 @@ public class TestRunCursor {
         return testRuns.get(cursor-1);
     }
 
-    void rewind(int amount) {
-
+    void rewind(int rewind) {
+        cursor=cursor-rewind;
     }
 }

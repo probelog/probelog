@@ -132,8 +132,11 @@ public class RunningStumbling {
             addPass(runBuilder);
         });
 
-        TestRunCursor cursor = new TestRunCursor(testRuns, 2);
+        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+        assertNull(new StumbleFinder(cursor).findStumble());
+        assertEquals(testRuns.get(0), cursor.next());
 
+        cursor = new TestRunCursor(testRuns, 2);
         Episode stumble = new StumbleFinder(cursor).findStumble();
 
         assertEquals(STUMBLE, stumble.type());
@@ -141,6 +144,55 @@ public class RunningStumbling {
         assertEquals("FAIL - fail1", stumble.children().get(0).description());
         assertEquals("FAIL - fail2", stumble.children().get(1).description());
         assertEquals("PASS", stumble.children().get(2).description());
+        assertEquals(testRuns.get(5), cursor.next());
+
+        cursor = new TestRunCursor(testRuns, 6);
+        assertNull(new StumbleFinder(cursor).findStumble());
+        assertEquals(testRuns.get(6), cursor.next());
+
+    }
+
+    @Test
+    public void stumbleAtEnd() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addFail(runBuilder);
+            addFail(runBuilder);
+            addPass(runBuilder);
+        });
+
+        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+
+        Episode stumble = new StumbleFinder(cursor).findStumble();
+        assertEquals(STUMBLE, stumble.type());
+        assertEquals(3, stumble.children().size());
+        assertFalse(cursor.hasNext());
+
+    }
+
+    @Test
+    public void stumbleWithNoCorrection() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addFail(runBuilder);
+            addFail(runBuilder);
+        });
+
+        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+
+        Episode stumble = new StumbleFinder(cursor).findStumble();
+        assertEquals(STUMBLE, stumble.type());
+        assertEquals(2, stumble.children().size());
+        assertFalse(cursor.hasNext());
+
+        cursor = new TestRunCursor(testRuns, 1);
+        assertNull(new StumbleFinder(cursor).findStumble());
+        assertEquals(testRuns.get(1), cursor.next());
+
+    }
+
+    @Test
+    public void aggregateStumbleFinding() {
 
     }
 
