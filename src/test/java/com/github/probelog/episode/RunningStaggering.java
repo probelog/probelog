@@ -124,16 +124,44 @@ public class RunningStaggering {
 
     }
 
+    @Test
+    public void multipleEpisodeCreation() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            fileChangeEpisodeBuilder.create("a");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("b");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("c");
+            runBuilder.testRun(asList("passingTest"), emptyList());
+            fileChangeEpisodeBuilder.create("x");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("y");
+            runBuilder.testRun(asList("passingTest"), emptyList());
+        });
+
+        EpisodeBuilder builder = new EpisodeBuilder(testRuns);
+        Episode episode = builder.nextEpisode();
+
+        assertEquals(STAGGER, episode.type());
+        assertEquals(3, episode.children().size());
+
+
+    }
+
     private Episode createEpisode(TestRunScript testRunScript) {
+
+        return new EpisodeBuilder(createTestRuns(testRunScript)).build();
+
+    }
+
+    private List<TestRun> createTestRuns(TestRunScript testRunScript) {
 
         FileChangeEpisodeBuilder fileChangeEpisodeBuilder = new FileChangeEpisodeBuilder();
         TestRunBuilder runBuilder = new TestRunBuilder(fileChangeEpisodeBuilder);
 
         testRunScript.run(fileChangeEpisodeBuilder, runBuilder);
-        List<TestRun> testRuns = runBuilder.build();
-
-        EpisodeBuilder episodeBuilder = new EpisodeBuilder(testRuns);
-        return episodeBuilder.build();
+        return runBuilder.build();
 
     }
 
