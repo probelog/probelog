@@ -30,7 +30,7 @@ public class TestRunBuilder {
     }
 
     private boolean addTop(List<String> allTests, List<String> failingTests, FileChangeEpisode episode) {
-        return testRuns.add(new TestRun(top(), allTests, failingTests, episode));
+        return testRuns.add(new TestRun(allTests, failingTests, episode));
     }
 
     private TestRun removeTop() {
@@ -51,7 +51,7 @@ public class TestRunBuilder {
 
     public List<TestRun> build() {
         if (episodeBuilder.hasChange())
-            testRuns.add(new TestRun(top(), episodeBuilder.build()));
+            testRuns.add(new TestRun(episodeBuilder.build()));
         return testRuns;
     }
 }

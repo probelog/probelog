@@ -13,17 +13,15 @@ import static java.util.Collections.*;
 public class TestRun implements Episode, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private TestRun previous;
     private final List<String> allTests;
     private final List<String> failedTests;
     private final FileChangeEpisode fileChangeEpisode;
 
-    TestRun(TestRun previous, FileChangeEpisode fileChangeEpisode) {
-        this(previous, null, null, fileChangeEpisode);
+    TestRun(FileChangeEpisode fileChangeEpisode) {
+        this(null, null, fileChangeEpisode);
     }
 
-    TestRun(TestRun previous,List<String> allTests, List<String> failedTests, FileChangeEpisode fileChangeEpisode) {
-        this.previous=previous;
+    TestRun(List<String> allTests, List<String> failedTests, FileChangeEpisode fileChangeEpisode) {
         this.allTests=allTests;
         this.failedTests=failedTests;
         this.fileChangeEpisode=fileChangeEpisode;
@@ -67,32 +65,6 @@ public class TestRun implements Episode, Serializable {
 
     public List<String> allTests() {
         return allTests;
-    }
-
-    public TestRun previous() {
-        return previous;
-    }
-
-    public List<String> title() {
-        return isFail() ? failedTests : noDefinedPrevious() ? allTests : newTestsExist() ? newTests() : previous.findFailedTests();
-    }
-
-    private List<String> findFailedTests() {
-        return isFail() ? failedTests : noDefinedPrevious() ? emptyList() : previous.findFailedTests();
-    }
-
-    private boolean newTestsExist() {
-        return !newTests().isEmpty();
-    }
-
-    private boolean noDefinedPrevious() {
-        return previous==null || !previous.isDefined();
-    }
-
-    private List<String> newTests() {
-        List<String> result = new ArrayList<>(allTests);
-        result.removeAll(previous.allTests);
-        return result;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TestRunExporter {
     public void export() {
 
         TestRun testRun = testRunBuilder.top();
-        System.out.println(testRun.title()+ (testRun.isFail() ? " FAIL " : " PASS ") + "<br>");
+        System.out.println((testRun.isFail() ? " FAIL " : " PASS ") + "<br>");
         System.out.println("<pre>");
         for(FileChange fileChange: testRun.change().fileChanges()) {
             export(fileChange);

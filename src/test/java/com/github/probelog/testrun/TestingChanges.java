@@ -36,8 +36,6 @@ public class TestingChanges {
         TestRun run2 = testRuns.get(1);
         TestRun run3 = testRuns.get(2);
 
-        assertEquals(run1, run3.previous().previous());
-
         assertTrue(run1.isFail());
         assertTrue(run1.isDefined());
         assertEquals(asList("test1", "test2", "test3"), run1.allTests());
