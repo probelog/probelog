@@ -8,13 +8,13 @@ public interface Episode {
 
     enum Type {
         RUN,
-        STAGGER,
+        STUMBLE,
         TEST;
     }
 
     Type type();
 
-    Object description();
+    String description();
 
     FileChangeEpisode change();
 

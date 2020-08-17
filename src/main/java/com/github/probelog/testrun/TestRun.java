@@ -52,7 +52,7 @@ public class TestRun implements Serializable {
         return allTests;
     }
 
-    public Object description() {
+    public String description() {
         return failedTests.isEmpty() ? "PASS" : "FAIL - " + failedTestsString();
     }
 

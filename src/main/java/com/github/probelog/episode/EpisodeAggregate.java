@@ -1,12 +1,11 @@
 package com.github.probelog.episode;
 
 import com.github.probelog.file.FileChangeEpisode;
-import com.github.probelog.testrun.TestRun;
 
 import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.RUN;
-import static com.github.probelog.episode.Episode.Type.STAGGER;
+import static com.github.probelog.episode.Episode.Type.STUMBLE;
 
 public class EpisodeAggregate implements Episode {
 
@@ -18,11 +17,11 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public Type type() {
-        return failingTestRunsCount() >= 2 ? STAGGER : RUN;
+        return failingTestRunsCount() >= 2 ? STUMBLE : RUN;
     }
 
     @Override
-    public Object description() {
+    public String description() {
         return type()==RUN ? "RUN" : "STAGGER";
     }
 

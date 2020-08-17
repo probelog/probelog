@@ -1,17 +1,11 @@
 package com.github.probelog.episode;
 
-import com.github.probelog.episode.Episode.Type;
-import com.github.probelog.file.ChangingStories;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.testrun.TestRun;
 import com.github.probelog.testrun.TestRunBuilder;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.github.probelog.episode.Episode.Type.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
@@ -19,7 +13,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
-public class RunningStaggering {
+public class RunningStumbling {
 
     /*
 
@@ -114,7 +108,7 @@ public class RunningStaggering {
         });
 
         assertEquals("STAGGER", episode.description());
-        assertEquals(STAGGER, episode.type());
+        assertEquals(STUMBLE, episode.type());
         assertTrue(episode.hasChildren());
         assertEquals(3, episode.children().size());
         checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY",
@@ -125,43 +119,39 @@ public class RunningStaggering {
     }
 
     @Test
-    public void feeding() {
+    public void stumbleFinding() {
 
         List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
             addPass(runBuilder);
             addPass(runBuilder);
-            addFail(runBuilder);
-            addFail(runBuilder);
+            addFail(runBuilder, "fail1");
+            addFail(runBuilder, "fail2");
             addPass(runBuilder);
             addPass(runBuilder);
             addFail(runBuilder);
             addPass(runBuilder);
         });
 
-        TestRunEpisodeIterator iter = new TestRunEpisodeIterator(testRuns);
-        assertTrue(iter.hasNext());
-        Episode episode1 = iter.next();
-        assertEquals(RUN, episode1.type());
-        assertEquals(2, episode1.children().size());
+        TestRunCursor cursor = new TestRunCursor(testRuns, 2);
 
-        assertTrue(iter.hasNext());
-        Episode episode2 = iter.next();
-        assertEquals(STAGGER, episode2.type());
-        assertEquals(3, episode2.children().size());
+        Episode stumble = new StumbleFinder(cursor).findStumble();
 
-        assertTrue(iter.hasNext());
-        Episode episode3 = iter.next();
-        assertEquals(RUN, episode3.type());
-        assertEquals(3, episode3.children().size());
-
-        assertFalse(iter.hasNext());
+        assertEquals(STUMBLE, stumble.type());
+        assertEquals(3, stumble.children().size());
+        assertEquals("FAIL - fail1", stumble.children().get(0).description());
+        assertEquals("FAIL - fail2", stumble.children().get(1).description());
+        assertEquals("PASS", stumble.children().get(2).description());
 
     }
 
 
 
     private void addFail(TestRunBuilder runBuilder) {
-        runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+        addFail(runBuilder, "failingTest");
+    }
+
+    private void addFail(TestRunBuilder runBuilder, String failingTest) {
+        runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList(failingTest));
     }
 
     private void addPass(TestRunBuilder runBuilder) {

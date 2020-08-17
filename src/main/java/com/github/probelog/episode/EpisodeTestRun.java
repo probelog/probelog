@@ -22,7 +22,7 @@ public class EpisodeTestRun implements Episode {
     }
 
     @Override
-    public Object description() {
+    public String description() {
         return subject.description();
     }
 
