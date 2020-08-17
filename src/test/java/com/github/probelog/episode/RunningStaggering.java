@@ -124,6 +124,40 @@ public class RunningStaggering {
 
     }
 
+    @Test
+    public void feeding() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addPass(runBuilder);
+            addPass(runBuilder);
+            addFail(runBuilder);
+            addFail(runBuilder);
+            addPass(runBuilder);
+            addPass(runBuilder);
+            addFail(runBuilder);
+            addPass(runBuilder);
+        });
+
+        TestRunEpisodeIterator iter = new TestRunEpisodeIterator(testRuns);
+        assertTrue(iter.hasNext());
+        Episode episode1 = iter.next();
+        assertEquals(RUN, episode1.type());
+        assertEquals(2, episode1.children().size());
+
+        assertTrue(iter.hasNext());
+        Episode episode2 = iter.next();
+        assertEquals(STAGGER, episode2.type());
+        assertEquals(3, episode2.children().size());
+
+        assertTrue(iter.hasNext());
+        Episode episode3 = iter.next();
+        assertEquals(RUN, episode3.type());
+        assertEquals(3, episode3.children().size());
+
+        assertFalse(iter.hasNext());
+
+    }
+
 
 
     private void addFail(TestRunBuilder runBuilder) {
