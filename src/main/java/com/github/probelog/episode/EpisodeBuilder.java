@@ -23,18 +23,4 @@ public class EpisodeBuilder {
         return new EpisodeTestRun(testRuns.get(0));
     }
 
-    public Episode nextEpisode() {
-        List<Episode> children = new ArrayList<>();
-        boolean previousWasFail=false;
-        for (TestRun testRun: testRuns) {
-            children.add(new EpisodeTestRun(testRun));
-            if (previousWasFail && testRun.isPass())
-                return new EpisodeAggregate(children);
-            if (testRun.isFail())
-                previousWasFail=true;
-        }
-        return null;
-    }
-
-
 }

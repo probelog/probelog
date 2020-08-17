@@ -83,11 +83,11 @@ public class RunningStaggering {
 
         Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder)->{
             fileChangeEpisodeBuilder.create("x");
-            runBuilder.testRun(asList("passingTest"), emptyList());
+            addPass(runBuilder);
             fileChangeEpisodeBuilder.create("y");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            addFail(runBuilder);
             fileChangeEpisodeBuilder.create("z");
-            runBuilder.testRun(asList("passingTest"), emptyList());
+            addPass(runBuilder);
         });
 
         assertEquals("RUN", episode.description());
@@ -106,11 +106,11 @@ public class RunningStaggering {
 
         Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder)->{
             fileChangeEpisodeBuilder.create("x");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            addFail(runBuilder);
             fileChangeEpisodeBuilder.create("y");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            addFail(runBuilder);
             fileChangeEpisodeBuilder.create("z");
-            runBuilder.testRun(asList("passingTest"), emptyList());
+            addPass(runBuilder);
         });
 
         assertEquals("STAGGER", episode.description());
@@ -124,29 +124,14 @@ public class RunningStaggering {
 
     }
 
-    @Test
-    public void multipleEpisodeCreation() {
-
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            fileChangeEpisodeBuilder.create("a");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
-            fileChangeEpisodeBuilder.create("b");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
-            fileChangeEpisodeBuilder.create("c");
-            runBuilder.testRun(asList("passingTest"), emptyList());
-            fileChangeEpisodeBuilder.create("x");
-            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
-            fileChangeEpisodeBuilder.create("y");
-            runBuilder.testRun(asList("passingTest"), emptyList());
-        });
-
-        EpisodeBuilder builder = new EpisodeBuilder(testRuns);
-        Episode episode = builder.nextEpisode();
-
-        assertEquals(STAGGER, episode.type());
-        assertEquals(3, episode.children().size());
 
 
+    private void addFail(TestRunBuilder runBuilder) {
+        runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+    }
+
+    private void addPass(TestRunBuilder runBuilder) {
+        runBuilder.testRun(asList("passingTest"), emptyList());
     }
 
     private Episode createEpisode(TestRunScript testRunScript) {
