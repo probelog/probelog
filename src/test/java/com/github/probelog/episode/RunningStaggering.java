@@ -89,10 +89,8 @@ public class RunningStaggering {
 
         //assertEquals("RUN", episode.description());
         //assertTrue(episode.isRun());
-        //checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY"), episode.change());
         assertTrue(episode.hasChildren());
-        checkChange("File: x / From:NOT_EXISTING / To:EMPTY", episode.children().get(0).change());
-        checkChange("File: y / From:NOT_EXISTING / To:EMPTY", episode.children().get(1).change());
+        checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY"), episode.change());
         //assertEquals(0, episode.failingTestRunsCount());
         //assertEquals(2, episode.passingTestRunsCount());
 

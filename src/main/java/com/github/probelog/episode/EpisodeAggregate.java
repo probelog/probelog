@@ -25,7 +25,15 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public FileChangeEpisode change() {
-        return null;
+        return getFirstChild().change().join(getLastChild().change());
+    }
+
+    private Episode getLastChild() {
+        return children.get(children.size()-1);
+    }
+
+    private Episode getFirstChild() {
+        return children.get(0);
     }
 
     @Override
