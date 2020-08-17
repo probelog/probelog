@@ -1,16 +1,16 @@
 package com.github.probelog.testrun;
 
+import com.github.probelog.episode.Episode;
 import com.github.probelog.file.FileChangeEpisode;
+import com.github.probelog.util.StringBufferAutoDelimiter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import static java.util.Collections.*;
 
-public class TestRun implements Serializable {
+public class TestRun implements Episode, Serializable {
 
     private static final long serialVersionUID = 1L;
     private TestRun previous;
@@ -34,8 +34,27 @@ public class TestRun implements Serializable {
         return !failedTests.isEmpty();
     }
 
+    public boolean isPass() {
+        return !isFail();
+    }
+
     public FileChangeEpisode change() {
         return fileChangeEpisode;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return false;
+    }
+
+    @Override
+    public int failingTestRunsCount() {
+        return isFail() ? 1 : 0;
+    }
+
+    @Override
+    public int passingTestRunsCount() {
+        return isPass() ? 1 : 0;
     }
 
     public List<String> failingTests() {
@@ -74,5 +93,22 @@ public class TestRun implements Serializable {
         List<String> result = new ArrayList<>(allTests);
         result.removeAll(previous.allTests);
         return result;
+    }
+
+    @Override
+    public Object description() {
+        return failedTests.isEmpty() ? "PASS" : "FAIL - " + failedTestsString();
+    }
+
+    private String failedTestsString() {
+        StringBufferAutoDelimiter buffer = new StringBufferAutoDelimiter(", ");
+        for(String failedTest: failedTests)
+            buffer.append(failedTest);
+        return buffer.toString();
+    }
+
+    @Override
+    public boolean isRun() {
+        return true;
     }
 }

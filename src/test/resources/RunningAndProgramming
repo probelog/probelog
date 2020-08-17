@@ -1,0 +1,19 @@
+Eliud Kipchoge 2 hours, me 4 hours but we have one thing in common - cadence 180 steps a minute. Safe cadence for me i could try and go faster but that requires
+me to overstride, if you overstride in a race maybe you will finish with a better time, but you wont be up to much afterwards and dont
+ask me to run again the next day.
+
+When i program i can manage on average about 3 code line changes at a time, anymore and i mess up, i break the tests, so 3 lines of code is my programming stride length, anymore
+and i am probably overstriding - the tests start to break, keep this up and a feeling of dread starts to build, i  feel besieged and out of control - i hit the wall !
+Going downhill the stride might open up, while going uphill the stride compacts.
+
+I speculate every programmer has a stride length, some super guys are Kipchoges, in the pack there are a lot like me, but the sad truth is there are a lot of
+programmers stressed and besieged and out of control cause every step is a step too far.
+
+So to improve as a programmer i think it would be cool to be able to playback a programming session, and at glance be able to pick out the points where we are
+flowing our cadence is consistent, we are eating up the road, and also more importantly to be able to pick out the kinks in our session, the points at which
+we were struggling, where the tests stubbornly stayed red for a bit too long.  Maybe we took a wrong turn at this point, we persisted in adding in behaviour
+when we should have taken time to refactor, or we missed a trick somehow - a pattern or an idiom, maybe its time to ask for help from a buddy or God forbid go
+on that training course.  Maybe there is some systemic flaw in the way in which I code that is hobbling me on every stride, like the weakness in my lower
+back makes me drop my left shoulder when i am pushing too hard.
+
+Ok so this is where codeTail comes in - easiest to explain with example....
