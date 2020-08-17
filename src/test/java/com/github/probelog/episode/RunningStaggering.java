@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.github.probelog.file.ChangingStories.checkChange;
@@ -75,15 +76,37 @@ public class RunningStaggering {
 
     }
 
+
+    @Test
+    public void aSimpleRun() {
+
+        Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder)->{
+            fileChangeEpisodeBuilder.create("x");
+            runBuilder.testRun(asList("passingTest"), emptyList());
+            fileChangeEpisodeBuilder.create("y");
+            runBuilder.testRun(asList("passingTest"), emptyList());
+        });
+
+        //assertEquals("RUN", episode.description());
+        //assertTrue(episode.isRun());
+        //checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY"), episode.change());
+        assertTrue(episode.hasChildren());
+        checkChange("File: x / From:NOT_EXISTING / To:EMPTY", episode.children().get(0).change());
+        checkChange("File: y / From:NOT_EXISTING / To:EMPTY", episode.children().get(1).change());
+        //assertEquals(0, episode.failingTestRunsCount());
+        //assertEquals(2, episode.passingTestRunsCount());
+
+    }
+
     private Episode createEpisode(TestRunScript testRunScript) {
 
         FileChangeEpisodeBuilder fileChangeEpisodeBuilder = new FileChangeEpisodeBuilder();
         TestRunBuilder runBuilder = new TestRunBuilder(fileChangeEpisodeBuilder);
 
         testRunScript.run(fileChangeEpisodeBuilder, runBuilder);
-        TestRun testRun = runBuilder.build().get(0);
+        List<TestRun> testRuns = runBuilder.build();
 
-        EpisodeBuilder episodeBuilder = new EpisodeBuilder(testRun);
+        EpisodeBuilder episodeBuilder = new EpisodeBuilder(testRuns);
         return episodeBuilder.build();
 
     }

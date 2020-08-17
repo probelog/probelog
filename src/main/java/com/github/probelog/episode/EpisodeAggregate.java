@@ -5,48 +5,47 @@ import com.github.probelog.testrun.TestRun;
 
 import java.util.List;
 
-public class EpisodeTestRun implements Episode {
+public class EpisodeAggregate implements Episode {
 
-    private TestRun subject;
+    List<Episode> children;
 
-    EpisodeTestRun(TestRun subject) {
-        this.subject=subject;
+    public EpisodeAggregate(List<Episode> children) {
+        this.children=children;
     }
-
 
     @Override
     public Object description() {
-        return subject.description();
+        return null;
     }
 
     @Override
     public boolean isRun() {
-        return true;
-    }
-
-    @Override
-    public FileChangeEpisode change() {
-        return subject.change();
-    }
-
-    @Override
-    public boolean hasChildren() {
         return false;
     }
 
     @Override
+    public FileChangeEpisode change() {
+        return null;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return true;
+    }
+
+    @Override
     public List<Episode> children() {
-        throw new IllegalStateException();
+        return children;
     }
 
     @Override
     public int failingTestRunsCount() {
-        return subject.isFail() ? 1 : 0;
+        return 0;
     }
 
     @Override
     public int passingTestRunsCount() {
-        return subject.isPass() ? 1 : 0;
+        return 0;
     }
 
 }
