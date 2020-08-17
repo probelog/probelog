@@ -15,12 +15,12 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public Object description() {
-        return null;
+        return "RUN";
     }
 
     @Override
     public boolean isRun() {
-        return false;
+        return true;
     }
 
     @Override
@@ -48,12 +48,18 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public int failingTestRunsCount() {
-        return 0;
+        int result=0;
+        for (Episode child: children)
+            result+=child.failingTestRunsCount();
+        return result;
     }
 
     @Override
     public int passingTestRunsCount() {
-        return 0;
+        int result=0;
+        for (Episode child: children)
+            result+=child.passingTestRunsCount();
+        return result;
     }
 
 }

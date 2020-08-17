@@ -76,7 +76,6 @@ public class RunningStaggering {
 
     }
 
-
     @Test
     public void aSimpleRun() {
 
@@ -84,15 +83,19 @@ public class RunningStaggering {
             fileChangeEpisodeBuilder.create("x");
             runBuilder.testRun(asList("passingTest"), emptyList());
             fileChangeEpisodeBuilder.create("y");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("z");
             runBuilder.testRun(asList("passingTest"), emptyList());
         });
 
-        //assertEquals("RUN", episode.description());
-        //assertTrue(episode.isRun());
+        assertEquals("RUN", episode.description());
+        assertTrue(episode.isRun());
         assertTrue(episode.hasChildren());
-        checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY"), episode.change());
-        //assertEquals(0, episode.failingTestRunsCount());
-        //assertEquals(2, episode.passingTestRunsCount());
+        assertEquals(3, episode.children().size());
+        checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY",
+                "File: z / From:NOT_EXISTING / To:EMPTY"), episode.change());
+        assertEquals(1, episode.failingTestRunsCount());
+        assertEquals(2, episode.passingTestRunsCount());
 
     }
 
