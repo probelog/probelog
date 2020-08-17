@@ -5,6 +5,9 @@ import com.github.probelog.testrun.TestRun;
 
 import java.util.List;
 
+import static com.github.probelog.episode.Episode.Type.RUN;
+import static com.github.probelog.episode.Episode.Type.STAGGER;
+
 public class EpisodeAggregate implements Episode {
 
     List<Episode> children;
@@ -14,13 +17,13 @@ public class EpisodeAggregate implements Episode {
     }
 
     @Override
-    public Object description() {
-        return "RUN";
+    public Type type() {
+        return failingTestRunsCount() >= 2 ? STAGGER : RUN;
     }
 
     @Override
-    public boolean isRun() {
-        return true;
+    public Object description() {
+        return type()==RUN ? "RUN" : "STAGGER";
     }
 
     @Override

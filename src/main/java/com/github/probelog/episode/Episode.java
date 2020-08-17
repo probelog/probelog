@@ -5,9 +5,16 @@ import com.github.probelog.file.FileChangeEpisode;
 import java.util.List;
 
 public interface Episode {
-    Object description();
 
-    boolean isRun();
+    enum Type {
+        RUN,
+        STAGGER,
+        TEST;
+    }
+
+    Type type();
+
+    Object description();
 
     FileChangeEpisode change();
 

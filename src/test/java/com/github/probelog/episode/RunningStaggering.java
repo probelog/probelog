@@ -1,5 +1,6 @@
 package com.github.probelog.episode;
 
+import com.github.probelog.episode.Episode.Type;
 import com.github.probelog.file.ChangingStories;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.testrun.TestRun;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import static com.github.probelog.episode.Episode.Type.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -43,7 +45,7 @@ public class RunningStaggering {
     }
 
     @Test
-    public void singleFailingTestRunIsARun() {
+    public void singleFailingTestRun() {
 
         Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder) ->{
             fileChangeEpisodeBuilder.create("x");
@@ -51,7 +53,7 @@ public class RunningStaggering {
         });
 
         assertEquals("FAIL - failingTest1, failingTest2", episode.description());
-        assertTrue(episode.isRun());
+        assertEquals(TEST, episode.type());
         checkChange("File: x / From:NOT_EXISTING / To:EMPTY", episode.change());
         assertFalse(episode.hasChildren());
         assertEquals(1, episode.failingTestRunsCount());
@@ -60,7 +62,7 @@ public class RunningStaggering {
     }
 
     @Test
-    public void singlePassingTestRunIsARun() {
+    public void singlePassingTestRun() {
 
         Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder)->{
             fileChangeEpisodeBuilder.create("x");
@@ -68,7 +70,7 @@ public class RunningStaggering {
         });
 
         assertEquals("PASS", episode.description());
-        assertTrue(episode.isRun());
+        assertEquals(TEST, episode.type());
         checkChange("File: x / From:NOT_EXISTING / To:EMPTY", episode.change());
         assertFalse(episode.hasChildren());
         assertEquals(0, episode.failingTestRunsCount());
@@ -89,13 +91,36 @@ public class RunningStaggering {
         });
 
         assertEquals("RUN", episode.description());
-        assertTrue(episode.isRun());
+        assertEquals(RUN, episode.type());
         assertTrue(episode.hasChildren());
         assertEquals(3, episode.children().size());
         checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY",
                 "File: z / From:NOT_EXISTING / To:EMPTY"), episode.change());
         assertEquals(1, episode.failingTestRunsCount());
         assertEquals(2, episode.passingTestRunsCount());
+
+    }
+
+    @Test
+    public void aSimpleStumble() {
+
+        Episode episode = createEpisode((fileChangeEpisodeBuilder, runBuilder)->{
+            fileChangeEpisodeBuilder.create("x");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("y");
+            runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList("failingTest1"));
+            fileChangeEpisodeBuilder.create("z");
+            runBuilder.testRun(asList("passingTest"), emptyList());
+        });
+
+        assertEquals("STAGGER", episode.description());
+        assertEquals(STAGGER, episode.type());
+        assertTrue(episode.hasChildren());
+        assertEquals(3, episode.children().size());
+        checkChange(asList("File: x / From:NOT_EXISTING / To:EMPTY","File: y / From:NOT_EXISTING / To:EMPTY",
+                "File: z / From:NOT_EXISTING / To:EMPTY"), episode.change());
+        assertEquals(2, episode.failingTestRunsCount());
+        assertEquals(1, episode.passingTestRunsCount());
 
     }
 

@@ -5,6 +5,8 @@ import com.github.probelog.testrun.TestRun;
 
 import java.util.List;
 
+import static com.github.probelog.episode.Episode.Type.*;
+
 public class EpisodeTestRun implements Episode {
 
     private TestRun subject;
@@ -15,13 +17,13 @@ public class EpisodeTestRun implements Episode {
 
 
     @Override
-    public Object description() {
-        return subject.description();
+    public Type type() {
+        return TEST;
     }
 
     @Override
-    public boolean isRun() {
-        return true;
+    public Object description() {
+        return subject.description();
     }
 
     @Override
