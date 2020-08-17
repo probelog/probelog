@@ -4,13 +4,13 @@ import com.github.probelog.testrun.TestRun;
 
 public class EpisodeBuilder {
 
-    private TestRun testRun;
+    private Episode episode;
 
     public EpisodeBuilder(TestRun testRun) {
-        this.testRun=testRun;
+        this.episode=new EpisodeTestRun(testRun);
     }
 
     public Episode build() {
-        return testRun;
+        return episode;
     }
 }

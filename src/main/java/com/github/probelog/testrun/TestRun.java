@@ -10,7 +10,7 @@ import java.util.List;
 
 import static java.util.Collections.*;
 
-public class TestRun implements Episode, Serializable {
+public class TestRun implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private final List<String> allTests;
@@ -40,21 +40,6 @@ public class TestRun implements Episode, Serializable {
         return fileChangeEpisode;
     }
 
-    @Override
-    public boolean hasChildren() {
-        return false;
-    }
-
-    @Override
-    public int failingTestRunsCount() {
-        return isFail() ? 1 : 0;
-    }
-
-    @Override
-    public int passingTestRunsCount() {
-        return isPass() ? 1 : 0;
-    }
-
     public List<String> failingTests() {
         return failedTests;
     }
@@ -67,7 +52,6 @@ public class TestRun implements Episode, Serializable {
         return allTests;
     }
 
-    @Override
     public Object description() {
         return failedTests.isEmpty() ? "PASS" : "FAIL - " + failedTestsString();
     }
@@ -79,8 +63,4 @@ public class TestRun implements Episode, Serializable {
         return buffer.toString();
     }
 
-    @Override
-    public boolean isRun() {
-        return true;
-    }
 }
