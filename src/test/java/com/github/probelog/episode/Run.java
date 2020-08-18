@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
-public class Running {
+public class Run {
 
     interface TestRunScript {
         void run(FileChangeEpisodeBuilder fileChangeEpisodeBuilder, TestRunBuilder testRunBuilder);
@@ -75,40 +75,6 @@ public class Running {
         assertEquals(2, episode.passingTestRunsCount());
 
     }
-
-    @Test
-    public void aggregateFinding() {
-
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addFail(runBuilder);
-            addFail(runBuilder);
-            addPass(runBuilder);
-            addFail(runBuilder);
-            addFail(runBuilder);
-            addPass(runBuilder);
-            addPass(runBuilder);
-        });
-
-        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-
-        Episode aggregateStumble = new AggregateFinder(new StumbleFinder(cursor)).findEpisode();
-        assertEquals(STUMBLE, aggregateStumble.type());
-        assertEquals(2, aggregateStumble.children().size());
-        assertEquals(STUMBLE, aggregateStumble.children().get(0).type());
-        assertEquals(STUMBLE, aggregateStumble.children().get(1).type());
-        assertTrue(aggregateStumble.children().get(0).hasChildren());
-
-        cursor = new TestRunCursor(testRuns, 3);
-        Episode simpleStumble = new AggregateFinder(new StumbleFinder(cursor)).findEpisode();
-        assertEquals(STUMBLE, simpleStumble.type());
-        assertFalse(simpleStumble.children().get(0).hasChildren());
-
-        cursor = new TestRunCursor(testRuns, 4);
-        assertNull(new AggregateFinder(new StumbleFinder(cursor)).findEpisode());
-
-    }
-
-
 
     private void addFail(TestRunBuilder runBuilder) {
         addFail(runBuilder, "failingTest");
