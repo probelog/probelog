@@ -5,24 +5,24 @@ import java.util.List;
 
 public class AggregateFinder {
 
-    private StumbleFinder stumbleFinder;
+    private EpisodeFinder episodeFinder;
 
-    public AggregateFinder(StumbleFinder stumbleFinder) {
-        this.stumbleFinder=stumbleFinder;
+    public AggregateFinder(EpisodeFinder episodeFinder) {
+        this.episodeFinder =episodeFinder;
     }
 
     public Episode findEpisode() {
 
-        List<Episode> stumbles = getStumbles();
-        return stumbles.isEmpty() ? null : stumbles.size()==1 ? stumbles.get(0) : new EpisodeAggregate(stumbles);
+        List<Episode> episodes = getEpisodes();
+        return episodes.isEmpty() ? null : episodes.size()==1 ? episodes.get(0) : new EpisodeAggregate(episodes);
 
     }
 
-    private List<Episode> getStumbles() {
+    private List<Episode> getEpisodes() {
 
         List<Episode> stumbles = new ArrayList<>();
-        while(stumbleFinder.hasLiveCursor()) {
-            Episode stumble = stumbleFinder.findStumble();
+        while(episodeFinder.hasLiveCursor()) {
+            Episode stumble = episodeFinder.findEpisode();
             if (stumble==null)
                 return stumbles;
             else

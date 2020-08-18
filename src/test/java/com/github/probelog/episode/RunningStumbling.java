@@ -133,11 +133,11 @@ public class RunningStumbling {
         });
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        assertNull(new StumbleFinder(cursor).findStumble());
+        assertNull(new StumbleFinder(cursor).findEpisode());
         assertEquals(testRuns.get(0), cursor.next());
 
         cursor = new TestRunCursor(testRuns, 2);
-        Episode stumble = new StumbleFinder(cursor).findStumble();
+        Episode stumble = new StumbleFinder(cursor).findEpisode();
 
         assertEquals(STUMBLE, stumble.type());
         assertEquals(3, stumble.children().size());
@@ -147,7 +147,7 @@ public class RunningStumbling {
         assertEquals(testRuns.get(5), cursor.next());
 
         cursor = new TestRunCursor(testRuns, 6);
-        assertNull(new StumbleFinder(cursor).findStumble());
+        assertNull(new StumbleFinder(cursor).findEpisode());
         assertEquals(testRuns.get(6), cursor.next());
 
     }
@@ -163,7 +163,7 @@ public class RunningStumbling {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
-        Episode stumble = new StumbleFinder(cursor).findStumble();
+        Episode stumble = new StumbleFinder(cursor).findEpisode();
         assertEquals(STUMBLE, stumble.type());
         assertEquals(3, stumble.children().size());
         assertFalse(cursor.hasNext());
@@ -180,19 +180,19 @@ public class RunningStumbling {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
-        Episode stumble = new StumbleFinder(cursor).findStumble();
+        Episode stumble = new StumbleFinder(cursor).findEpisode();
         assertEquals(STUMBLE, stumble.type());
         assertEquals(2, stumble.children().size());
         assertFalse(cursor.hasNext());
 
         cursor = new TestRunCursor(testRuns, 1);
-        assertNull(new StumbleFinder(cursor).findStumble());
+        assertNull(new StumbleFinder(cursor).findEpisode());
         assertEquals(testRuns.get(1), cursor.next());
 
     }
 
     @Test
-    public void aggregateStumbleFinding() {
+    public void aggregateFinding() {
 
         List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
             addFail(runBuilder);
