@@ -194,6 +194,33 @@ public class RunningStumbling {
     @Test
     public void aggregateStumbleFinding() {
 
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addFail(runBuilder);
+            addFail(runBuilder);
+            addPass(runBuilder);
+            addFail(runBuilder);
+            addFail(runBuilder);
+            addPass(runBuilder);
+            addPass(runBuilder);
+        });
+
+        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+
+        Episode aggregateStumble = new AggregateFinder(new StumbleFinder(cursor)).findEpisode();
+        assertEquals(STUMBLE, aggregateStumble.type());
+        assertEquals(2, aggregateStumble.children().size());
+        assertEquals(STUMBLE, aggregateStumble.children().get(0).type());
+        assertEquals(STUMBLE, aggregateStumble.children().get(1).type());
+        assertTrue(aggregateStumble.children().get(0).hasChildren());
+
+        cursor = new TestRunCursor(testRuns, 3);
+        Episode simpleStumble = new AggregateFinder(new StumbleFinder(cursor)).findEpisode();
+        assertEquals(STUMBLE, simpleStumble.type());
+        assertFalse(simpleStumble.children().get(0).hasChildren());
+
+        cursor = new TestRunCursor(testRuns, 4);
+        assertNull(new AggregateFinder(new StumbleFinder(cursor)).findEpisode());
+
     }
 
 

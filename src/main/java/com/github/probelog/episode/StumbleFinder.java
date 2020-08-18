@@ -5,15 +5,19 @@ import com.github.probelog.testrun.TestRun;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StumbleFinder  {
+class StumbleFinder  {
 
     TestRunCursor cursor;
 
-    public StumbleFinder(TestRunCursor cursor) {
+    StumbleFinder(TestRunCursor cursor) {
         this.cursor=cursor;
     }
 
-    public Episode findStumble() {
+    boolean hasLiveCursor() {
+        return cursor.hasNext();
+    }
+
+    Episode findStumble() {
 
         List<TestRun> testRuns = getTestRuns();
         if (testRuns.isEmpty())
