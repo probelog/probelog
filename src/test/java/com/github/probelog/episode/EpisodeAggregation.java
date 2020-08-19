@@ -8,16 +8,13 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
+import static com.github.probelog.episode.TestRunScriptUtil.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
 public class EpisodeAggregation {
-
-    interface TestRunScript {
-        void run(FileChangeEpisodeBuilder fileChangeEpisodeBuilder, TestRunBuilder testRunBuilder);
-    }
 
     @Test
     public void aggregateFinding() {
@@ -48,30 +45,6 @@ public class EpisodeAggregation {
 
         cursor = new TestRunCursor(testRuns, 4);
         assertNull(new AggregateFinder(new StumbleFinder(cursor)).findEpisode());
-
-    }
-
-
-
-    private void addFail(TestRunBuilder runBuilder) {
-        addFail(runBuilder, "failingTest");
-    }
-
-    private void addFail(TestRunBuilder runBuilder, String failingTest) {
-        runBuilder.testRun(asList("failingTest1", "passingTest", "failingTest2"), asList(failingTest));
-    }
-
-    private void addPass(TestRunBuilder runBuilder) {
-        runBuilder.testRun(asList("passingTest"), emptyList());
-    }
-
-    private List<TestRun> createTestRuns(TestRunScript testRunScript) {
-
-        FileChangeEpisodeBuilder fileChangeEpisodeBuilder = new FileChangeEpisodeBuilder();
-        TestRunBuilder runBuilder = new TestRunBuilder(fileChangeEpisodeBuilder);
-
-        testRunScript.run(fileChangeEpisodeBuilder, runBuilder);
-        return runBuilder.build();
 
     }
 
