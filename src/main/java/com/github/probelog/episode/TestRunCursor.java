@@ -4,12 +4,16 @@ import com.github.probelog.testrun.TestRun;
 
 import java.util.List;
 
-public class TestRunCursor {
+class TestRunCursor {
 
     private List<TestRun> testRuns;
     private int cursor;
 
-    public TestRunCursor(List<TestRun> testRuns, int cursor) {
+    TestRunCursor(List<TestRun> testRuns) {
+        this(testRuns,0);
+    }
+
+    TestRunCursor(List<TestRun> testRuns, int cursor) {
         this.testRuns=testRuns;
         this.cursor=cursor;
     }

@@ -45,5 +45,41 @@ public class Run {
         assertEquals(testRuns.get(2), cursor.next());
 
     }
+/*
+
+    @Test
+    public void failPassIsARun() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addFail(runBuilder, "fail1");
+            addPass(runBuilder);
+            addPass(runBuilder);
+            addFail(runBuilder, "fail2");
+            addFail(runBuilder, "fail3");
+        });
+
+        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+        Episode run = new RunFinder(cursor).findEpisode();
+
+        assertEquals(RUN, run.type());
+        assertEquals(2, run.children().size());
+        Episode firstChild = run.children().get(0);
+        assertEquals("FAILPASS - fail1", firstChild.description());
+        assertEquals(RUN, firstChild.type());
+
+        assertEquals(2, firstChild.children().size());
+        assertEquals("FAIL - fail1", firstChild.children().get(0).description());
+        assertEquals("PASS", firstChild.children().get(1).description());
+
+
+        assertEquals("PASS", run.children().get(1).description());
+        assertEquals(testRuns.get(3), cursor.next());
+
+    }
+
+
+*/
+
+
 
 }
