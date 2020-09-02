@@ -11,7 +11,7 @@ import static com.github.probelog.episode.TestRunScriptUtil.*;
 import static com.github.probelog.episode.TestRunScriptUtil.addFail;
 import static org.junit.Assert.*;
 
-public class RunAtom {
+public class RunStep {
 
     private List<TestRun> passFailFail;
 
@@ -30,7 +30,7 @@ public class RunAtom {
     public void pass() {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 0);
-        Episode runAtom = new RunAtomFinder(cursor).findEpisode();
+        Episode runAtom = new RunStepFinder(cursor).findEpisode();
 
         assertEquals(TEST, runAtom.type());
         assertFalse(runAtom.hasChildren());
@@ -43,7 +43,7 @@ public class RunAtom {
     public void failAtEnd() {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 2);
-        Episode runAtom = new RunAtomFinder(cursor).findEpisode();
+        Episode runAtom = new RunStepFinder(cursor).findEpisode();
 
         assertEquals(TEST, runAtom.type());
         assertFalse(runAtom.hasChildren());
@@ -57,7 +57,7 @@ public class RunAtom {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 1);
 
-        assertNull(new RunAtomFinder(cursor).findEpisode());
+        assertNull(new RunStepFinder(cursor).findEpisode());
         assertEquals(passFailFail.get(1), cursor.next());
 
     }

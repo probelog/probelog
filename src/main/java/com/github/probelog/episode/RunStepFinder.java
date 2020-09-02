@@ -5,11 +5,11 @@ import com.github.probelog.testrun.TestRun;
 import java.util.ArrayList;
 import java.util.List;
 
-class RunAtomFinder implements EpisodeFinder {
+class RunStepFinder implements EpisodeFinder {
 
     TestRunCursor cursor;
 
-    RunAtomFinder(TestRunCursor cursor) {
+    RunStepFinder(TestRunCursor cursor) {
         this.cursor=cursor;
     }
 
