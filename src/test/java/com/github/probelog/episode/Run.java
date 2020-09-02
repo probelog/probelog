@@ -16,6 +16,10 @@ public class Run {
     /*
 
     Run
+
+        - See FailPassFinding and PassFinding they will cover the cases below and then this test is just the aggregation of these
+          two finders
+
         - One Green one Red returns a FailPass Episode with the 2 children (the fail and the pass)
         - A Run starts with A FailPass and continues with greens
         - A Run ends with a FailPass and starts with greens
@@ -23,29 +27,6 @@ public class Run {
         - A Run ends with the last green being also the last test
         - A Run ends with A FailPass with the green in the FailPass being the last test
 
-     */
-
-    @Test
-    public void runEndsWith2Fails() {
-
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addPass(runBuilder);
-            addPass(runBuilder);
-            addFail(runBuilder, "fail1");
-            addFail(runBuilder, "fail2");
-        });
-
-        TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        Episode run = new RunFinder(cursor).findEpisode();
-
-        assertEquals(RUN, run.type());
-        assertEquals(2, run.children().size());
-        assertEquals("PASS", run.children().get(0).description());
-        assertEquals("PASS", run.children().get(1).description());
-        assertEquals(testRuns.get(2), cursor.next());
-
-    }
-/*
 
     @Test
     public void failPassIsARun() {

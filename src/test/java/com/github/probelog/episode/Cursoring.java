@@ -33,10 +33,6 @@ public class Cursoring {
 
     }
 
-    @Test
-    public void AtTwoConsecutiveFails() {
-        // TODO
-    }
 
 
 }
