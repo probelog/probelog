@@ -56,7 +56,7 @@ public class TestRun implements Serializable {
         return failedTests.isEmpty() ? "PASS" : "FAIL - " + failedTestsString();
     }
 
-    private String failedTestsString() {
+    public String failedTestsString() {
         StringBufferAutoDelimiter buffer = new StringBufferAutoDelimiter(", ");
         for(String failedTest: failedTests)
             buffer.append(failedTest);

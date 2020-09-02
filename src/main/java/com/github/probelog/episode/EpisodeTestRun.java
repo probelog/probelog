@@ -18,7 +18,7 @@ public class EpisodeTestRun implements Episode {
 
     @Override
     public Type type() {
-        return TEST;
+        return STEP;
     }
 
     @Override
@@ -49,6 +49,11 @@ public class EpisodeTestRun implements Episode {
     @Override
     public int passingTestRunsCount() {
         return subject.isPass() ? 1 : 0;
+    }
+
+    @Override
+    public String failDescription() {
+        return subject.failedTestsString();
     }
 
 }

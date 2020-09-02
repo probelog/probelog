@@ -8,8 +8,9 @@ public interface Episode {
 
     enum Type {
         RUN,
+        JUMP,
         STUMBLE,
-        TEST;
+        STEP;
     }
 
     Type type();
@@ -25,4 +26,6 @@ public interface Episode {
     int failingTestRunsCount();
 
     int passingTestRunsCount();
+
+    String failDescription();
 }

@@ -4,8 +4,7 @@ import com.github.probelog.file.FileChangeEpisode;
 
 import java.util.List;
 
-import static com.github.probelog.episode.Episode.Type.RUN;
-import static com.github.probelog.episode.Episode.Type.STUMBLE;
+import static com.github.probelog.episode.Episode.Type.*;
 
 public class EpisodeAggregate implements Episode {
 
@@ -17,12 +16,12 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public Type type() {
-        return failingTestRunsCount() >= 2 ? STUMBLE : RUN;
+        return failingTestRunsCount() >= 2 ? STUMBLE : failingTestRunsCount()==1 ? JUMP : RUN;
     }
 
     @Override
     public String description() {
-        return type()==RUN ? "RUN" : "STAGGER";
+        return type()==RUN ? "RUN" : type()==JUMP ? "JUMP - " + failDescription() : "STAGGER";
     }
 
     @Override
@@ -62,6 +61,11 @@ public class EpisodeAggregate implements Episode {
         for (Episode child: children)
             result+=child.passingTestRunsCount();
         return result;
+    }
+
+    @Override
+    public String failDescription() {
+        return getFirstChild().failDescription();
     }
 
 }
