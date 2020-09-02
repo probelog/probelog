@@ -20,12 +20,7 @@ class RunStepFinder implements EpisodeFinder {
 
     @Override
     public Episode findEpisode() {
-
-        TestRun testRun = cursor.next();
-        if (testRun.isPass() || (!cursor.hasNext() && testRun.isFail()))
-            return new EpisodeTestRun(testRun);
-        cursor.rewind(1);
-        return null;
+        return cursor.isAtRunStepStart() ? new EpisodeTestRun(cursor.next()) : null;
     }
 
 }

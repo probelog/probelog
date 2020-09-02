@@ -21,20 +21,14 @@ class JumpFinder implements EpisodeFinder {
     @Override
     public Episode findEpisode() {
 
-        TestRun run1 = cursor.next();
-        if (!hasLiveCursor()) {
-            cursor.rewind(1);
+        if (!cursor.isAtJumpStart())
             return null;
-        }
-        TestRun run2 = cursor.next();
-        if (run1.isFail() && run2.isPass()) {
-            List<Episode> runs = new ArrayList<>();
-            runs.add(new EpisodeTestRun(run1));
-            runs.add(new EpisodeTestRun(run2));
-            return new EpisodeAggregate(runs);
-        }
-        cursor.rewind(2);
-        return null;
+
+        List<Episode> runs = new ArrayList<>();
+        runs.add(new EpisodeTestRun(cursor.next()));
+        runs.add(new EpisodeTestRun(cursor.next()));
+        return new EpisodeAggregate(runs);
+
     }
 
 }

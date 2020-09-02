@@ -20,34 +20,19 @@ class StumbleFinder implements EpisodeFinder {
 
     @Override
     public Episode findEpisode() {
-
-        List<TestRun> testRuns = getTestRuns();
-        if (testRuns.isEmpty())
-            return null;
-
-        TestRun last = testRuns.get(testRuns.size()-1);
-        if (testRuns.size()<2 || testRuns.size()==2 && last.isPass()) {
-            cursor.rewind(testRuns.size());
-            return null;
-        }
-
-        List<Episode> episodes = new ArrayList<>();
-        for (TestRun stumble: testRuns)
-            episodes.add(new EpisodeTestRun(stumble));
-        return new EpisodeAggregate(episodes);
-
+        return cursor.isAtStumbleStart() ? new EpisodeAggregate(getEpisodes()) : null;
     }
 
-    private List<TestRun> getTestRuns() {
+    private  List<Episode> getEpisodes() {
 
-        List<TestRun> children = new ArrayList<>();
-        while (cursor.hasNext()) {
+        List<Episode> episodes = new ArrayList<>();
+        while(cursor.hasNext()) {
             TestRun next = cursor.next();
-            children.add(next);
+            episodes.add(new EpisodeTestRun(next));
             if (next.isPass())
-                return children;
+                return episodes;
         }
-        return children;
+        return episodes;
 
     }
 }

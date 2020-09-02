@@ -9,10 +9,6 @@ class TestRunCursor {
     private List<TestRun> testRuns;
     private int cursor;
 
-    TestRunCursor(List<TestRun> testRuns) {
-        this(testRuns,0);
-    }
-
     TestRunCursor(List<TestRun> testRuns, int cursor) {
         this.testRuns=testRuns;
         this.cursor=cursor;
@@ -27,9 +23,32 @@ class TestRunCursor {
         return testRuns.get(cursor-1);
     }
 
-    void rewind(int rewind) {
-        cursor=cursor-rewind;
+    boolean isAtStumbleStart() {
+        return atLeastTwoNodesLeft() && peek().isFail() && peekPeek().isFail();
     }
 
+    boolean isAtRunStepStart() {
+        return hasNext() && (peek().isPass() || (peek().isFail() && isAtLastNode()));
+    }
+
+    boolean isAtJumpStart() {
+        return atLeastTwoNodesLeft() && peek().isFail() && peekPeek().isPass();
+    }
+
+    private boolean isAtLastNode() {
+        return testRuns.size()==cursor+1;
+    }
+
+    private boolean atLeastTwoNodesLeft() {
+        return testRuns.size() >= cursor + 2;
+    }
+
+    private TestRun peek() {
+        return testRuns.get(cursor);
+    }
+
+    private TestRun peekPeek() {
+        return testRuns.get(cursor+1);
+    }
 
 }
