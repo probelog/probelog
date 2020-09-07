@@ -42,9 +42,7 @@ public class Stumble {
     @Test
     public void stumbleDoesNotStartWithAPass() {
 
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addPass(runBuilder);
-        });
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addPass(runBuilder));
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
         assertNull(new StumbleFinder().findEpisode(cursor));
@@ -105,14 +103,24 @@ public class Stumble {
     @Test
     public void stumbleIsNotSingleFailAtEnd() {
 
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addFail(runBuilder);
-        });
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addFail(runBuilder));
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
         assertNull(new StumbleFinder().findEpisode(cursor));
         assertEquals(testRuns.get(0), cursor.next());
+
+    }
+
+    @Test
+    public void cursorFinishedReturnsNull() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addFail(runBuilder));
+        TestRunCursor cursor = new TestRunCursor(testRuns, 1);
+        assertFalse(cursor.hasNext());
+
+        assertNull(new StumbleFinder().findEpisode(cursor));
+        assertFalse(cursor.hasNext());
 
     }
 

@@ -62,6 +62,18 @@ public class RunStep {
 
     }
 
+    @Test
+    public void cursorFinishedReturnsNull() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addFail(runBuilder));
+        TestRunCursor cursor = new TestRunCursor(testRuns, 1);
+        assertFalse(cursor.hasNext());
+
+        assertNull(new RunStepFinder().findEpisode(cursor));
+        assertFalse(cursor.hasNext());
+
+    }
+
 
 
 }

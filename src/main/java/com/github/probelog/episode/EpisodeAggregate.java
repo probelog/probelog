@@ -16,12 +16,28 @@ public class EpisodeAggregate implements Episode {
 
     @Override
     public Type type() {
-        return failingTestRunsCount() >= 2 ? STUMBLE : failingTestRunsCount()==1 ? JUMP : RUN;
+        return (hasChildWithType(RUN) || hasChildWithType(STUMBLE)) ? CODE_TAIL :  failingTestRunsCount() >= 2 ? STUMBLE : hasTwoChildren() && firstChildIsAFailedTest() ? JUMP : RUN;
+    }
+
+    private boolean hasChildWithType(Type type) {
+        for (Episode child: children) {
+            if (child.type()==type)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean firstChildIsAFailedTest() {
+        return children.get(0).type() == STEP && children.get(0).failingTestRunsCount() == 1;
+    }
+
+    private boolean hasTwoChildren() {
+        return children.size()==2;
     }
 
     @Override
     public String description() {
-        return type()==RUN ? "RUN" : type()==JUMP ? "JUMP - " + failDescription() : "STAGGER";
+        return type()==RUN ? "RUN" : type()==JUMP ? "JUMP - " + failDescription() : "STUMBLE";
     }
 
     @Override

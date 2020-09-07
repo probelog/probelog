@@ -7,10 +7,11 @@ import java.util.List;
 public interface Episode {
 
     enum Type {
+        CODE_TAIL,
         RUN,
         JUMP,
         STUMBLE,
-        STEP;
+        STEP
     }
 
     Type type();

@@ -81,18 +81,26 @@ public class Jump {
     @Test
     public void passAtEndIsNotJump() {
 
-        notJump(createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addPass(runBuilder);
-        }));
+        notJump(createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addPass(runBuilder)));
 
     }
 
     @Test
     public void failAtEndIsNotJump() {
 
-        notJump(createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addFail(runBuilder);
-        }));
+        notJump(createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addFail(runBuilder)));
+
+    }
+
+    @Test
+    public void cursorFinishedReturnsNull() {
+
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addFail(runBuilder));
+        TestRunCursor cursor = new TestRunCursor(testRuns, 1);
+        assertFalse(cursor.hasNext());
+
+        assertNull(new JumpFinder().findEpisode(cursor));
+        assertFalse(cursor.hasNext());
 
     }
 

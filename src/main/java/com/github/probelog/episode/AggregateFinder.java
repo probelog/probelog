@@ -1,35 +1,35 @@
 package com.github.probelog.episode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class AggregateFinder {
+public class AggregateFinder implements EpisodeFinder {
 
-/*    private List<EpisodeFinder> episodeFinders;
+    private List<EpisodeFinder> episodeFinders;
 
-    public AggregateFinder(EpisodeFinder... episodeFinder) {
-        // pass in cursor here as well
-        this.episodeFinders =episodeFinders;
+    public AggregateFinder(List<EpisodeFinder> episodeFinders) {
+        this.episodeFinders= episodeFinders;
     }
 
-    public Episode findEpisode() {
+    @Override
+    public Episode findEpisode(TestRunCursor cursor) {
 
-        List<Episode> episodes = getEpisodes();
-        return episodes.isEmpty() ? null : episodes.size()==1 ? episodes.get(0) : new EpisodeAggregate(episodes);
-
-    }
-
-    private List<Episode> getEpisodes() {
-
-        List<Episode> stumbles = new ArrayList<>();
-        while(episodeFinder.hasLiveCursor()) {
-            Episode stumble = episodeFinder.findEpisode();
-            if (stumble==null)
-                return stumbles;
-            else
-                stumbles.add(stumble);
+        List<Episode> children = new ArrayList<>();
+        int oldSize=-1;
+        while (cursor.hasNext() && children.size()>oldSize)  {
+            oldSize=children.size();
+            collectChildren(children, cursor);
         }
-        return stumbles;
+        return children.isEmpty() ? null : children.size()==1 ? children.get(0) : new EpisodeAggregate(children);
+    }
 
-    }*/
+    private void collectChildren(List<Episode> children, TestRunCursor cursor) {
+        for (EpisodeFinder finder: episodeFinders) {
+            Episode child = finder.findEpisode(cursor);
+            if (child!=null)
+                children.add(child);
+        }
+    }
+
 }
