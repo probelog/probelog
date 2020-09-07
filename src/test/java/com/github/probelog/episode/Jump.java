@@ -38,7 +38,7 @@ public class Jump {
         });
 
         TestRunCursor cursor = new TestRunCursor(failPass, 0);
-        Episode jump = new JumpFinder(cursor).findEpisode();
+        Episode jump = new JumpFinder().findEpisode(cursor);
 
         assertEquals(JUMP, jump.type());
         assertEquals("JUMP - failingTest", jump.description());
@@ -99,7 +99,7 @@ public class Jump {
     private void notJump(List<TestRun> testRuns) {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        assertNull(new JumpFinder(cursor).findEpisode());
+        assertNull(new JumpFinder().findEpisode(cursor));
         assertEquals(testRuns.get(0), cursor.next());
 
     }

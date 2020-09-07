@@ -7,19 +7,8 @@ import java.util.List;
 
 class RunStepFinder implements EpisodeFinder {
 
-    TestRunCursor cursor;
-
-    RunStepFinder(TestRunCursor cursor) {
-        this.cursor=cursor;
-    }
-
     @Override
-    public boolean hasLiveCursor() {
-        return false;
-    }
-
-    @Override
-    public Episode findEpisode() {
+    public Episode findEpisode(TestRunCursor cursor) {
         return cursor.isAtRunStepStart() ? new EpisodeTestRun(cursor.next()) : null;
     }
 

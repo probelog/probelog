@@ -30,7 +30,7 @@ public class RunStep {
     public void pass() {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 0);
-        Episode runAtom = new RunStepFinder(cursor).findEpisode();
+        Episode runAtom = new RunStepFinder().findEpisode(cursor);
 
         assertEquals(STEP, runAtom.type());
         assertFalse(runAtom.hasChildren());
@@ -43,7 +43,7 @@ public class RunStep {
     public void failAtEnd() {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 2);
-        Episode runAtom = new RunStepFinder(cursor).findEpisode();
+        Episode runAtom = new RunStepFinder().findEpisode(cursor);
 
         assertEquals(STEP, runAtom.type());
         assertFalse(runAtom.hasChildren());
@@ -57,7 +57,7 @@ public class RunStep {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 1);
 
-        assertNull(new RunStepFinder(cursor).findEpisode());
+        assertNull(new RunStepFinder().findEpisode(cursor));
         assertEquals(passFailFail.get(1), cursor.next());
 
     }

@@ -5,10 +5,11 @@ import java.util.List;
 
 public class AggregateFinder {
 
-    private EpisodeFinder episodeFinder;
+/*    private List<EpisodeFinder> episodeFinders;
 
-    public AggregateFinder(EpisodeFinder episodeFinder) {
-        this.episodeFinder =episodeFinder;
+    public AggregateFinder(EpisodeFinder... episodeFinder) {
+        // pass in cursor here as well
+        this.episodeFinders =episodeFinders;
     }
 
     public Episode findEpisode() {
@@ -30,5 +31,5 @@ public class AggregateFinder {
         }
         return stumbles;
 
-    }
+    }*/
 }

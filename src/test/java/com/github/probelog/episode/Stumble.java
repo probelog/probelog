@@ -28,7 +28,7 @@ public class Stumble {
         });
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        Episode stumble = new StumbleFinder(cursor).findEpisode();
+        Episode stumble = new StumbleFinder().findEpisode(cursor);
 
         assertEquals(STUMBLE, stumble.type());
         assertEquals(3, stumble.children().size());
@@ -47,7 +47,7 @@ public class Stumble {
         });
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        assertNull(new StumbleFinder(cursor).findEpisode());
+        assertNull(new StumbleFinder().findEpisode(cursor));
         assertEquals(testRuns.get(0), cursor.next());
 
     }
@@ -61,7 +61,7 @@ public class Stumble {
         });
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
-        assertNull(new StumbleFinder(cursor).findEpisode());
+        assertNull(new StumbleFinder().findEpisode(cursor));
         assertEquals(testRuns.get(0), cursor.next());
 
     }
@@ -77,7 +77,7 @@ public class Stumble {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
-        Episode stumble = new StumbleFinder(cursor).findEpisode();
+        Episode stumble = new StumbleFinder().findEpisode(cursor);
         assertEquals(STUMBLE, stumble.type());
         assertEquals(3, stumble.children().size());
         assertFalse(cursor.hasNext());
@@ -94,7 +94,7 @@ public class Stumble {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
-        Episode stumble = new StumbleFinder(cursor).findEpisode();
+        Episode stumble = new StumbleFinder().findEpisode(cursor);
         assertEquals(STUMBLE, stumble.type());
         assertEquals(2, stumble.children().size());
         assertFalse(cursor.hasNext());
@@ -111,7 +111,7 @@ public class Stumble {
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
 
-        assertNull(new StumbleFinder(cursor).findEpisode());
+        assertNull(new StumbleFinder().findEpisode(cursor));
         assertEquals(testRuns.get(0), cursor.next());
 
     }

@@ -7,19 +7,8 @@ import java.util.List;
 
 class JumpFinder implements EpisodeFinder {
 
-    TestRunCursor cursor;
-
-    JumpFinder(TestRunCursor cursor) {
-        this.cursor=cursor;
-    }
-
     @Override
-    public boolean hasLiveCursor() {
-        return cursor.hasNext();
-    }
-
-    @Override
-    public Episode findEpisode() {
+    public Episode findEpisode(TestRunCursor cursor) {
 
         if (!cursor.isAtJumpStart())
             return null;
