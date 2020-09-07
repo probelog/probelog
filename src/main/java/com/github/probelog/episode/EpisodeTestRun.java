@@ -7,7 +7,7 @@ import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
 
-public class EpisodeTestRun implements Episode {
+class EpisodeTestRun implements Episode {
 
     private TestRun subject;
 

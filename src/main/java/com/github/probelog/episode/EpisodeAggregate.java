@@ -6,7 +6,7 @@ import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
 
-public class EpisodeAggregate implements Episode {
+class EpisodeAggregate implements Episode {
 
     List<Episode> children;
 

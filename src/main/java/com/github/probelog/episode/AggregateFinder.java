@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AggregateFinder implements EpisodeFinder {
+class AggregateFinder implements EpisodeFinder {
 
     private List<EpisodeFinder> episodeFinders;
 
-    public AggregateFinder(List<EpisodeFinder> episodeFinders) {
+    AggregateFinder(List<EpisodeFinder> episodeFinders) {
         this.episodeFinders= episodeFinders;
     }
 
