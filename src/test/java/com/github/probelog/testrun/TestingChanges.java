@@ -115,18 +115,4 @@ public class TestingChanges {
 
     }
 
-    /*
-
-    To provide a meanignfull title for each episode
-
-    - keep track of all tests run/failed tests
-    - have pointer to previous test
-    - Header is
-        if failedtests exist then its the failedtests
-        else if a all tests have one or more tests not in previous all tests then its these new test names
-        else its the first diff line that has not got @Test or void from a test file change (look for @Test in the file)
-        else if no test diff lines its a refactoring and its first diff line
-
-     */
-
 }

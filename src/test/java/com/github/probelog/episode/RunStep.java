@@ -53,7 +53,7 @@ public class RunStep {
     }
 
     @Test
-    public void failNotAtEndIsNotARunAtom() {
+    public void failNotAtEndIsNotARunStep() {
 
         TestRunCursor cursor = new TestRunCursor(passFailFail, 1);
 

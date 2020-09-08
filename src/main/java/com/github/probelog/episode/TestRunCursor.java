@@ -15,23 +15,27 @@ class TestRunCursor {
     }
 
     boolean hasNext() {
-        return cursor<testRuns.size();
+        return cursor<testRuns.size() && peek().isDefined();
     }
 
     TestRun next() {
+        assert(hasNext());
         cursor++;
         return testRuns.get(cursor-1);
     }
 
     boolean isAtStumbleStart() {
+        assert(hasNext());
         return atLeastTwoNodesLeft() && peek().isFail() && peekPeek().isFail();
     }
 
     boolean isAtRunStepStart() {
-        return hasNext() && (peek().isPass() || (peek().isFail() && isAtLastNode()));
+        assert(hasNext());
+        return peek().isPass() || (peek().isFail() && isAtLastNode());
     }
 
     boolean isAtJumpStart() {
+        assert(hasNext());
         return atLeastTwoNodesLeft() && peek().isFail() && peekPeek().isPass();
     }
 

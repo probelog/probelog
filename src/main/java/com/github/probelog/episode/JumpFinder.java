@@ -10,7 +10,7 @@ class JumpFinder implements EpisodeFinder {
     @Override
     public Episode findEpisode(TestRunCursor cursor) {
 
-        if (!cursor.isAtJumpStart())
+        if (!(cursor.hasNext() && cursor.isAtJumpStart()))
             return null;
 
         List<Episode> runs = new ArrayList<>();

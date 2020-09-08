@@ -9,7 +9,7 @@ class StumbleFinder implements EpisodeFinder {
 
     @Override
     public Episode findEpisode(TestRunCursor cursor) {
-        return cursor.isAtStumbleStart() ? new EpisodeAggregate(getEpisodes(cursor)) : null;
+        return cursor.hasNext() && cursor.isAtStumbleStart() ? new EpisodeAggregate(getEpisodes(cursor)) : null;
     }
 
     private List<Episode> getEpisodes(TestRunCursor cursor) {

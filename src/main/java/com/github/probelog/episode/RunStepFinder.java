@@ -9,7 +9,7 @@ class RunStepFinder implements EpisodeFinder {
 
     @Override
     public Episode findEpisode(TestRunCursor cursor) {
-        return cursor.isAtRunStepStart() ? new EpisodeTestRun(cursor.next()) : null;
+        return cursor.hasNext() && cursor.isAtRunStepStart() ? new EpisodeTestRun(cursor.next()) : null;
     }
 
 }
