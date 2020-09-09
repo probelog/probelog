@@ -14,23 +14,35 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
-public class UndefinedTestRun {
-
-
+public class Nexting {
 
     @Test
-    public void undefined() {
+    public void nexting() {
 
         FileChangeEpisodeBuilder episodeBuilder = new FileChangeEpisodeBuilder();
         TestRunBuilder testRunBuilder = new TestRunBuilder(episodeBuilder);
 
+        testRunBuilder.testRun(emptyList(),emptyList());
+        testRunBuilder.testRun(emptyList(),emptyList());
         episodeBuilder.create("x");
         List<TestRun> testRuns = testRunBuilder.build();
 
-        assertEquals(1, testRuns.size());
-        assertFalse(testRuns.get(0).isDefined());
+        assertEquals(3, testRuns.size());
+        assertTrue(testRuns.get(0).isDefined());
+        assertTrue(testRuns.get(1).isDefined());
+        assertFalse(testRuns.get(2).isDefined());
+
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
+        assertTrue(cursor.hasNext());
+        assertTrue(cursor.hasNextNext());
+
+        cursor.next();
+        assertTrue(cursor.hasNext());
+        assertFalse(cursor.hasNextNext());
+
+        cursor.next();
         assertFalse(cursor.hasNext());
+        assertFalse(cursor.hasNextNext());
 
     }
 
