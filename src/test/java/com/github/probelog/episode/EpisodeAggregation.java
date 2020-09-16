@@ -18,6 +18,8 @@ import static org.junit.Assert.*;
 
 public class EpisodeAggregation {
 
+    // TODO Change to CodeTailFactoryTest
+
     @Test
     public void codeTail() {
 

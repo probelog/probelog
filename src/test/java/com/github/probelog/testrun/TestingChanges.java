@@ -63,6 +63,12 @@ public class TestingChanges {
         assertEquals(asList("test1", "test2", "test3"), run3.allTests());
         checkChange(asList("File: y / From:EMPTY / To:DEFINED:yValue", "File: x / From:DEFINED:xValue / To:DEFINED:xValue1"), run3.change());
 
+        TestRunBuilder testRunBuilder1 = new TestRunBuilder(episodeBuilder, testRuns);
+        episodeBuilder.update("x", "xValue2");
+
+        testRuns = testRunBuilder1.build();
+        assertEquals(4, testRuns.size());
+
     }
 
     @Test

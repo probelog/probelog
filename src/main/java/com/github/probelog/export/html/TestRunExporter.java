@@ -1,4 +1,4 @@
-package com.github.probelog.ui.spike;
+package com.github.probelog.export.html;
 
 import com.github.difflib.algorithm.DiffException;
 import com.github.difflib.text.DiffRow;

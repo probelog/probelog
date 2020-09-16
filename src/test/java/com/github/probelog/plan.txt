@@ -1,0 +1,4 @@
+Plan Aim - Export Probelog to Html
+
+1) Add in CodeTailFactory that takes a testRunBuilder and when export is called on it - it gets list of testRuns and
+calls a codeTail configured AggregateFinder.

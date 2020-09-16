@@ -1,7 +1,7 @@
 package com.github.probelog.intellij.spike;
 
 import com.github.probelog.testrun.TestRunBuilder;
-import com.github.probelog.ui.spike.TestRunExporter;
+import com.github.probelog.export.html.TestRunExporter;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.TestStatusListener;
 import org.jetbrains.annotations.Nullable;

@@ -9,11 +9,16 @@ import java.util.List;
 
 public class TestRunBuilder {
 
-    private final List<TestRun> testRuns = new ArrayList<>();
-    private FileChangeEpisodeBuilder episodeBuilder;
+    private final FileChangeEpisodeBuilder episodeBuilder;
+    private final List<TestRun> testRuns;
 
     public TestRunBuilder(FileChangeEpisodeBuilder episodeBuilder) {
+        this(episodeBuilder, new ArrayList<>());
+    }
+
+    public TestRunBuilder(FileChangeEpisodeBuilder episodeBuilder, List<TestRun> testRuns) {
         this.episodeBuilder=episodeBuilder;
+        this.testRuns=testRuns;
     }
 
     public void testRun(List<String> allTests, List<String> failingTests) {

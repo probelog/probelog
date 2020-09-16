@@ -2,7 +2,7 @@ package com.github.probelog.intellij.spike;
 
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.testrun.TestRunBuilder;
-import com.github.probelog.ui.spike.TestRunExporter;
+import com.github.probelog.export.html.TestRunExporter;
 import com.github.probelog.util.FileUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
