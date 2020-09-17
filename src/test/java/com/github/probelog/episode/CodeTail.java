@@ -7,49 +7,35 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
 import static com.github.probelog.episode.TestRunScriptUtil.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
 import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
-public class EpisodeAggregation {
-
-    // TODO Change to CodeTailFactoryTest
+public class CodeTail {
 
     @Test
     public void codeTail() {
 
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
-            addPass(runBuilder);
-            addFail(runBuilder);
-            addPass(runBuilder);
-            addPass(runBuilder);
-            addPass(runBuilder);
-            addFail(runBuilder);
-            addFail(runBuilder);
-            addPass(runBuilder);
-            addPass(runBuilder);
-        });
+        TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
+        testRunBuilder.testRun(asList("test1", "test2"),asList("test1"));
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
+        testRunBuilder.testRun(asList("test1", "test2"),asList("test1"));
+        testRunBuilder.testRun(asList("test1", "test2"),asList("test1"));
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
+        testRunBuilder.testRun(asList("test1", "test2"), emptyList());
 
-        validateCodeTail(new TestRunCursor(testRuns, 0), new AggregateFinder(asList(new StumbleFinder(), new AggregateFinder(asList(new JumpFinder(), new RunStepFinder())))));
-        validateCodeTail(new TestRunCursor(testRuns, 0), new AggregateFinder(asList(new AggregateFinder(asList(new JumpFinder(), new RunStepFinder())),new StumbleFinder())));
+        Episode codeTail = new CodeTailFactory(testRunBuilder).createCodeTail();
 
-    }
-
-    @Test
-    public void emptyCodeTail() {
-
-        assertNull(new AggregateFinder(asList(new StumbleFinder(), new AggregateFinder(asList(new JumpFinder(), new RunStepFinder())))).
-                findEpisode(new TestRunCursor(new ArrayList<>(), 0)));
-
-    }
-
-    private void validateCodeTail(TestRunCursor cursor, EpisodeFinder codeTailFinder) {
-        Episode codeTail = codeTailFinder.findEpisode(cursor);
         assertEquals(CODE_TAIL, codeTail.type());
         assertEquals(3, codeTail.children().size());
 
@@ -69,6 +55,14 @@ public class EpisodeAggregation {
         assertEquals(STEP, stumble.children().get(2).type());
 
         assertEquals(STEP, codeTail.children().get(2).type());
+
+    }
+
+    @Test
+    public void emptyCodeTail() {
+
+        assertNull(new CodeTailFactory(new TestRunBuilder(new FileChangeEpisodeBuilder())).createCodeTail());
+
     }
 
 }
