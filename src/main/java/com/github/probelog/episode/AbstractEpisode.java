@@ -66,7 +66,6 @@ public abstract class AbstractEpisode implements Episode {
 
     @Override
     public String title() {
-        // TODO need to write a test so that isPreviousAFailStep condition becomes (isSafeStep && isPreviousAFailStep)
         return type()==STUMBLE || type()==JUMP || isFailStep() ? failDescription() : isPreviousAFailStep() ? previous.failDescription() : type()==RUN ? "Run" :  "Step";
     }
 
