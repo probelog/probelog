@@ -4,6 +4,7 @@ import com.github.probelog.episode.Episode.Colour;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.testrun.TestRun;
 import com.github.probelog.testrun.TestRunBuilder;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,15 +23,21 @@ import static org.junit.Assert.*;
 
 public class CodeTail {
 
-    // title - (failingTest if JUMP, STUMBLE or FailingSTEP) or
-    // (previous faliingTest if PassingSTEP and previous is a FailingSTEP) or
-    // Run if RUN or
-    // Step if PassingStep
+    Episode codeTail, run, stumble, jump, step;
+
+    @Before
+    public void setUp() {
+
+        codeTail = sampleCodeTail();
+        run = codeTail.children().get(0);
+        jump = run.children().get(1);
+        stumble = codeTail.children().get(1);
+        step = codeTail.children().get(2);
+
+    }
 
     @Test
     public void codeTail() {
-
-        Episode codeTail = sampleCodeTail();
 
         assertEquals(CODE_TAIL, codeTail.type());
         assertEquals(RED, codeTail.colour());
@@ -38,22 +45,41 @@ public class CodeTail {
         assertEquals("1", codeTail.index());
         assertEquals(3, codeTail.children().size());
 
-        Episode run = codeTail.children().get(0);
-        assertEquals(codeTail, run.parent());
-        assertFalse(run.hasPrevious());
+        assertEquals("1", codeTail.index());
         assertEquals("1-1", run.index());
+        assertEquals("1-2", stumble.index());
+        assertEquals("1-3", step.index());
+        assertEquals("1-1-2", jump.index());
+
+        assertEquals(codeTail, run.parent());
+        assertEquals(codeTail, stumble.parent());
+        assertEquals(codeTail, step.parent());
+        assertEquals(run, jump.parent());
+
+        assertNull(run.previous());
+        assertEquals(stumble, run.next());
+        assertEquals(run, stumble.previous());
+        assertEquals(step, stumble.next());
+        assertEquals(stumble, step.previous());
+        assertNull(step.next());
+
+
+    }
+
+    @Test
+    public void run() {
+
         assertEquals(RUN, run.type());
         assertEquals(GREEN, run.colour());
         assertEquals("Run", run.title());
         assertEquals(4, run.length());
         assertEquals(4, run.children().size());
 
-        Episode firstPassInRun = run.children().get(0);
-        assertEquals(STEP, firstPassInRun.type());
-        assertEquals(GREEN, firstPassInRun.colour());
-        assertEquals("Step", firstPassInRun.title());
+    }
 
-        Episode jump = run.children().get(1);
+    @Test
+    public void jump() {
+
         assertEquals(JUMP, jump.type());
         assertEquals(ORANGE, jump.colour());
         assertEquals(1, jump.length());
@@ -69,14 +95,11 @@ public class CodeTail {
         assertEquals(GREEN, jumpPass.colour());
         assertEquals("test1, test2", jumpPass.title());
 
-        assertEquals(STEP, run.children().get(2).type());
-        assertEquals(STEP, run.children().get(3).type());
+    }
 
-        Episode stumble = codeTail.children().get(1);
-        assertEquals(codeTail, stumble.parent());
-        assertEquals(run, stumble.previous());
-        assertEquals(stumble, run.next());
-        assertEquals("1-2", stumble.index());
+    @Test
+    public void stumble() {
+
         assertEquals(STUMBLE, stumble.type());
         assertEquals(RED, stumble.colour());
         assertEquals("test1, test2", stumble.title());
@@ -86,19 +109,24 @@ public class CodeTail {
         Episode firstFailInStumble = stumble.children().get(0);
         assertEquals(STEP, firstFailInStumble.type());
         assertEquals(RED, firstFailInStumble.colour());
-        assertEquals(STEP, stumble.children().get(1).type());
-        assertEquals(STEP, stumble.children().get(2).type());
 
-        Episode step = codeTail.children().get(2);
-        assertEquals(codeTail, step.parent());
-        assertEquals(stumble, step.previous());
-        assertFalse(step.hasNext());
-        assertEquals("1-3", step.index());
+        Episode secondFailInStumble = stumble.children().get(1);
+        assertEquals(STEP, secondFailInStumble.type());
+        assertEquals(RED, secondFailInStumble.colour());
+
+        Episode stumbleRecovery = stumble.children().get(2);
+        assertEquals(STEP, stumbleRecovery.type());
+        assertEquals(GREEN, stumbleRecovery.colour());
+
+    }
+
+    @Test
+    public void step() {
+
         assertEquals(STEP, step.type());
         assertEquals(GREEN, step.colour());
         assertEquals("Step", step.title());
-
-
+        assertFalse(step.hasChildren());
 
     }
 
@@ -130,7 +158,7 @@ public class CodeTail {
     public static Episode simplestCodeTail() {
 
         TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
-        testRunBuilder.testRun(asList("test1"), emptyList());
+        testRunBuilder.testRun(singletonList("test1"), emptyList());
         return new CodeTailFactory(testRunBuilder).createCodeTail();
 
     }
