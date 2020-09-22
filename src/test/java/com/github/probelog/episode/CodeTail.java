@@ -1,23 +1,16 @@
 package com.github.probelog.episode;
 
-import com.github.probelog.episode.Episode.Colour;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
-import com.github.probelog.testrun.TestRun;
 import com.github.probelog.testrun.TestRunBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.github.probelog.episode.Episode.Colour.*;
 import static com.github.probelog.episode.Episode.Type.*;
-import static com.github.probelog.episode.TestRunScriptUtil.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.*;
 
@@ -28,7 +21,21 @@ public class CodeTail {
     @Before
     public void setUp() {
 
-        codeTail = sampleCodeTail();
+        List<String> allTests = asList("test1", "test2","test3");
+        List<String> failedTests = asList("test1","test2");
+
+        TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, emptyList());
+
+        codeTail = new CodeTailFactory(testRunBuilder).createCodeTail();
         run = codeTail.children().get(0);
         jump = run.children().get(1);
         stumble = codeTail.children().get(1);
@@ -56,13 +63,12 @@ public class CodeTail {
         assertEquals(codeTail, step.parent());
         assertEquals(run, jump.parent());
 
-        assertNull(run.previous());
+        assertFalse(run.hasPrevious());
         assertEquals(stumble, run.next());
         assertEquals(run, stumble.previous());
         assertEquals(step, stumble.next());
         assertEquals(stumble, step.previous());
-        assertNull(step.next());
-
+        assertFalse(step.hasNext());
 
     }
 
@@ -134,32 +140,6 @@ public class CodeTail {
     public void emptyCodeTail() {
 
         assertNull(new CodeTailFactory(new TestRunBuilder(new FileChangeEpisodeBuilder())).createCodeTail());
-
-    }
-
-    public static Episode sampleCodeTail() {
-        List<String> allTests = asList("test1", "test2","test3");
-        List<String> failedTests = asList("test1","test2");
-
-        TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
-        testRunBuilder.testRun(allTests, emptyList());
-        testRunBuilder.testRun(allTests, failedTests);
-        testRunBuilder.testRun(allTests, emptyList());
-        testRunBuilder.testRun(allTests, emptyList());
-        testRunBuilder.testRun(allTests, emptyList());
-        testRunBuilder.testRun(allTests, failedTests);
-        testRunBuilder.testRun(allTests, failedTests);
-        testRunBuilder.testRun(allTests, emptyList());
-        testRunBuilder.testRun(allTests, emptyList());
-
-        return new CodeTailFactory(testRunBuilder).createCodeTail();
-    }
-
-    public static Episode simplestCodeTail() {
-
-        TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
-        testRunBuilder.testRun(singletonList("test1"), emptyList());
-        return new CodeTailFactory(testRunBuilder).createCodeTail();
 
     }
 
