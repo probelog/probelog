@@ -8,12 +8,12 @@ import java.util.List;
 class JumpFinder implements EpisodeFinder {
 
     @Override
-    public Episode findEpisode(TestRunCursor cursor) {
+    public AbstractEpisode findEpisode(TestRunCursor cursor) {
 
         if (!(cursor.hasNextNext() && cursor.isAtJumpStart()))
             return null;
 
-        List<Episode> runs = new ArrayList<>();
+        List<AbstractEpisode> runs = new ArrayList<>();
         runs.add(new EpisodeTestRun(cursor.next()));
         runs.add(new EpisodeTestRun(cursor.next()));
         return new EpisodeAggregate(runs);

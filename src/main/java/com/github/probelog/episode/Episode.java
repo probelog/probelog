@@ -6,21 +6,40 @@ import java.util.List;
 
 public interface Episode {
 
+
+    enum Colour {
+            GREEN,
+            ORANGE,
+            RED
+
+
+    }
     enum Type {
         CODE_TAIL,
         RUN,
         JUMP,
         STUMBLE,
         STEP
+
     }
 
     Type type();
 
+    Colour colour();
+
+    Episode parent();
+
+    String title();
+
+    int length();
+
+    Episode previous();
+
+    Episode next();
+
     String description();
 
     FileChangeEpisode change();
-
-    boolean hasChildren();
 
     List<Episode> children();
 
@@ -28,5 +47,14 @@ public interface Episode {
 
     int passingTestRunsCount();
 
+    boolean hasChildren();
+
     String failDescription();
+
+    boolean hasPrevious();
+
+    boolean hasNext();
+
+    String index();
+
 }

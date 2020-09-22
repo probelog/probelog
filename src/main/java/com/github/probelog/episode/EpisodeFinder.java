@@ -2,6 +2,6 @@ package com.github.probelog.episode;
 
 interface EpisodeFinder {
 
-    Episode findEpisode(TestRunCursor testRunCursor);
+    AbstractEpisode findEpisode(TestRunCursor testRunCursor);
 
 }

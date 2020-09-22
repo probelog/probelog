@@ -1,0 +1,85 @@
+package com.github.probelog.episode;
+
+
+import static com.github.probelog.episode.Episode.Colour.*;
+import static com.github.probelog.episode.Episode.Type.*;
+import static com.github.probelog.episode.Episode.Type.RUN;
+
+public abstract class AbstractEpisode implements Episode {
+
+    private AbstractEpisode parent;
+    private AbstractEpisode previous;
+    private AbstractEpisode next;
+
+    protected void setParent(AbstractEpisode parent) {
+        this.parent = parent;
+    }
+
+    public Episode parent() {
+        return parent;
+    }
+
+    protected void setPrevious(AbstractEpisode previous) {
+        this.previous = previous;
+        previous.next=this;
+    }
+
+    public Episode previous() {
+        return previous;
+    }
+
+    public Episode next() {
+        return next;
+    }
+
+    public String index() {
+        return isRoot() ? "1" : parent.index() + "-" + position();
+    }
+
+    private int position() {
+        return previousCount(0)+1;
+    }
+
+    private int previousCount(int count) {
+        return previous==null ? count : previous.previousCount(count+1);
+    }
+
+    private boolean isRoot() {
+        return parent==null;
+    }
+
+    public boolean hasPrevious() {
+        return previous!=null;
+    }
+    public boolean hasNext() {
+        return next!=null;
+    }
+
+    public Colour colour() {
+        return type()==JUMP ? ORANGE : type()== RUN  || (isSafeStep()) ? GREEN : RED;
+    }
+
+    @Override
+    public int length() {
+        return type()==JUMP ? 1 : type()==STUMBLE ? children().size()-1 : children().size();
+    }
+
+    @Override
+    public String title() {
+        // TODO need to write a test so that isPreviousAFailStep condition becomes (isSafeStep && isPreviousAFailStep)
+        return type()==STUMBLE || type()==JUMP || isFailStep() ? failDescription() : isPreviousAFailStep() ? previous.failDescription() : type()==RUN ? "Run" :  "Step";
+    }
+
+    private boolean isSafeStep() {
+        return type() == STEP && failingTestRunsCount() == 0;
+    }
+
+    private boolean isPreviousAFailStep() {
+        return previous!=null && previous.isFailStep();
+    }
+
+    private boolean isFailStep() {
+        return type() == STEP && failingTestRunsCount() > 0;
+    }
+
+}

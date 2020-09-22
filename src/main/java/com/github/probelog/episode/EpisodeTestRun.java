@@ -7,14 +7,13 @@ import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
 
-class EpisodeTestRun implements Episode {
+class EpisodeTestRun extends AbstractEpisode {
 
     private TestRun subject;
 
     EpisodeTestRun(TestRun subject) {
         this.subject=subject;
     }
-
 
     @Override
     public Type type() {

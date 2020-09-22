@@ -8,7 +8,7 @@ import java.util.List;
 class RunStepFinder implements EpisodeFinder {
 
     @Override
-    public Episode findEpisode(TestRunCursor cursor) {
+    public AbstractEpisode findEpisode(TestRunCursor cursor) {
         return cursor.hasNext() && cursor.isAtRunStepStart() ? new EpisodeTestRun(cursor.next()) : null;
     }
 

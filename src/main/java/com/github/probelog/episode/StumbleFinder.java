@@ -8,13 +8,13 @@ import java.util.List;
 class StumbleFinder implements EpisodeFinder {
 
     @Override
-    public Episode findEpisode(TestRunCursor cursor) {
+    public AbstractEpisode findEpisode(TestRunCursor cursor) {
         return cursor.hasNextNext() && cursor.isAtStumbleStart() ? new EpisodeAggregate(getEpisodes(cursor)) : null;
     }
 
-    private List<Episode> getEpisodes(TestRunCursor cursor) {
+    private List<AbstractEpisode> getEpisodes(TestRunCursor cursor) {
 
-        List<Episode> episodes = new ArrayList<>();
+        List<AbstractEpisode> episodes = new ArrayList<>();
         while(cursor.hasNext()) {
             TestRun next = cursor.next();
             episodes.add(new EpisodeTestRun(next));

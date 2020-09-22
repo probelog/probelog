@@ -1,17 +1,26 @@
 package com.github.probelog.episode;
 
+
 import com.github.probelog.file.FileChangeEpisode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.probelog.episode.Episode.Type.*;
 
-class EpisodeAggregate implements Episode {
+class EpisodeAggregate extends AbstractEpisode {
 
     List<Episode> children;
 
-    public EpisodeAggregate(List<Episode> children) {
-        this.children=children;
+    public EpisodeAggregate(List<AbstractEpisode> siblings) {
+        this.children=new ArrayList<>(siblings);
+        int i=0;
+        for (AbstractEpisode child: siblings) {
+            child.setParent(this);
+            if (i>0)
+                child.setPrevious(siblings.get(i-1));
+            i++;
+        }
     }
 
     @Override
