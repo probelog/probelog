@@ -88,7 +88,6 @@ public class CodeTail {
 
         assertEquals(JUMP, jump.type());
         assertEquals(ORANGE, jump.colour());
-        assertEquals(1, jump.length());
         assertEquals("test1, test2", jump.title());
 
         Episode jumpFail = jump.children().get(0);

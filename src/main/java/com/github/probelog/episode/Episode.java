@@ -27,9 +27,13 @@ public interface Episode {
 
     Colour colour();
 
+    boolean isRoot();
+
     Episode parent();
 
     String title();
+
+    boolean hasLength();
 
     int length();
 

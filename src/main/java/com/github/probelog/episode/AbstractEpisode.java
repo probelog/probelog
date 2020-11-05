@@ -44,7 +44,7 @@ public abstract class AbstractEpisode implements Episode {
         return previous==null ? count : previous.previousCount(count+1);
     }
 
-    private boolean isRoot() {
+    public boolean isRoot() {
         return parent==null;
     }
 
@@ -60,8 +60,14 @@ public abstract class AbstractEpisode implements Episode {
     }
 
     @Override
+    public boolean hasLength() {
+        return type()==STUMBLE || type()==RUN;
+    }
+
+    @Override
     public int length() {
-        return type()==JUMP ? 1 : type()==STUMBLE ? children().size()-1 : children().size();
+        assert hasLength();
+        return type()==STUMBLE ? children().size()-1 : children().size();
     }
 
     @Override
