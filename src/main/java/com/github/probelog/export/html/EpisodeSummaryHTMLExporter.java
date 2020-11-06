@@ -28,23 +28,13 @@ public class EpisodeSummaryHTMLExporter {
 
     public List<String> export(Episode episode) {
 
-        /*
-          <header>
-    <h1>A heading here</h1>
-    <p>Posted by John Doe</p>
-    <p>Some additional information here</p>
-  </header>
-  <p>Lorem Ipsum dolor set amet....</p>
-  <p><a href="https://www.w3schools.com/">Visit W3Schools.com!</a></p>
-
-  <h1 style="background-color:Red;">Red</h1>
-         */
         List<String> result = new ArrayList<>();
 
         result.add("<header>");
         result.add("<h1 style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + parentLinks(episode) + title(episode) + "</h1>");
         result.add("</header>");
-        // put in previous, parent, next links
+
+        if (!episode.isRoot()) result.add(siblingLinks(episode));
         if (episode.hasChildren()) {
             for (Episode child : episode.children()) {
                 result.add("<p>" + episodeLink(child) + "</p>");
@@ -52,6 +42,21 @@ public class EpisodeSummaryHTMLExporter {
         }
 
         return result;
+
+    }
+
+    private String siblingLinks(Episode episode) {
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<p>");
+        if (episode.hasPrevious()) {
+            buffer.append(siblingLink(episode.previous(), true));
+            buffer.append("   ");
+        }
+        if (episode.hasNext())
+            buffer.append(siblingLink(episode.next(), false));
+        buffer.append("</p>");
+        return buffer.toString();
 
     }
 
@@ -70,6 +75,11 @@ public class EpisodeSummaryHTMLExporter {
     @NotNull
     private String episodeLink(Episode episode) {
         return "<a href=\"$$codetailname-" + episode.index() + "\" style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + title(episode) + "</a>";
+    }
+
+    @NotNull
+    private String siblingLink(Episode episode, boolean previous) {
+        return "<a href=\"$$codetailname-" + episode.index() + "\">" + (previous ? "prev" : "next") + "</a>";
     }
 
     private String title(Episode episode) {
