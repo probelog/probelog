@@ -18,7 +18,7 @@ public class JavaParsing {
     public void javaParsing() throws Exception {
 
         JavaParser javaParser = new JavaParser();
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(new File("/Users/dave.halpin/git/dave/probelog/src/main/java/com/github/probelog/episode/JumpFinder.java"));
+        ParseResult<CompilationUnit> parseResult = javaParser.parse(new File("src/main/java/com/github/probelog/episode/JumpFinder.java"));
         CompilationUnit compilationUnit = parseResult.getResult().get();
         new MyVisitor().visit(compilationUnit, true);
 
