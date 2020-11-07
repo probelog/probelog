@@ -8,6 +8,6 @@ public class EpisodeDiffHTML {
     public void export() {
         // TODO
         new EpisodeDiffHTMLExporter();
-        assert(false);
+        //assert(false);
     }
 }

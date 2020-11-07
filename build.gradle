@@ -22,4 +22,5 @@ patchPluginXml {
 
 dependencies {
     implementation "io.github.java-diff-utils:java-diff-utils:4.5"
+    implementation "com.github.javaparser:javaparser-symbol-solver-core:3.16.2"
 }
