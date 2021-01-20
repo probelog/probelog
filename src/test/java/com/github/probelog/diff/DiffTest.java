@@ -1,4 +1,4 @@
-package com.github.probelog.util;
+package com.github.probelog.diff;
 
 import com.github.difflib.algorithm.DiffException;
 import com.github.difflib.text.DiffRow;
