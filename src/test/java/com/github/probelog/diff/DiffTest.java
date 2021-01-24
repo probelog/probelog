@@ -17,17 +17,21 @@ public class DiffTest {
 
         DiffRowGenerator generator = DiffRowGenerator.create()
                 //.showInlineDiffs(true)
-                //.inlineDiffByWord(true)
-                //.oldTag(f -> "~")
-                //.newTag(f -> "**")
+                .inlineDiffByWord(true)
+                .oldTag(f -> "--")
+                .newTag(f -> "++")
                 .build();
-        List<DiffRow> rows = generator.generateDiffRows(
+/*        List<DiffRow> rows = generator.generateDiffRows(
                 Arrays.asList("This is a test senctence.", "This is the second line.", "zoo", "test","And here is the finish."),
-                Arrays.asList("This is a test for diffutils.", "This is the second line.","third line.", "And here is the finish."));
+                Arrays.asList("This is a test for diffutils.", "This is the second line.","third line.", "And here is the finish."));     */
+        List<DiffRow> rows = generator.generateDiffRows(
+                Arrays.asList("dasd"),
+                Arrays.asList("third line."));
 
         for (DiffRow row : rows) {
-            for (String s: lines(row))
-                System.out.println(s);
+            System.out.println(row);
+/*            for (String s: lines(row))
+                System.out.println(s);*/
         }
 
     }
