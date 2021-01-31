@@ -63,7 +63,7 @@ public class ChangeMaker {
     static String createStringWithLineSeparatorDelimiters(List<String> strings) {
         StringBuffer buffer = new StringBuffer();
         for (String s: strings)
-            buffer.append(s + lineSeparator());
+            buffer.append(buffer.length()==0 ? s : lineSeparator() + s);
         return buffer.toString();
     }
 
