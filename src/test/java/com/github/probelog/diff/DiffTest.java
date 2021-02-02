@@ -36,6 +36,13 @@ public class DiffTest {
 
     }
 
+    @Test
+    public void lineInserted() {
+
+
+
+    }
+
     List<String> lines(DiffRow row) {
 
         if (row.getTag()==DiffRow.Tag.EQUAL)
