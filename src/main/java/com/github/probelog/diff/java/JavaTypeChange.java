@@ -3,6 +3,8 @@ package com.github.probelog.diff.java;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import java.util.List;
 class JavaTypeChange {
 
 
+    private static final String TEST = "@Test";
     private TypeDeclaration before;
     private TypeDeclaration after;
 
@@ -58,4 +61,17 @@ class JavaTypeChange {
         return result;
 
     }
+
+    public boolean isTest() {
+        for (Iterator<BodyDeclaration> iter = after.getMembers().iterator(); iter.hasNext();) {
+            BodyDeclaration node = iter.next();
+            for (Iterator<AnnotationExpr> annotationIter = node.getAnnotations().iterator(); annotationIter.hasNext();) {
+                AnnotationExpr annotationExpr = annotationIter.next();
+                if (annotationExpr.toString().equals(TEST))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }

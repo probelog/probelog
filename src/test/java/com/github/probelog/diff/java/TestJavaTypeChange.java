@@ -118,8 +118,31 @@ public class TestJavaTypeChange {
     }
 
     @Test
-    public void isTest() {
-        // TODO find junit @Test method annotation
+    public void changeIsTestOnlyIfAfterIsTest() {
+        String beforeIsTest = new ChangeMaker(before).replace("   public void parse() {","@Test").
+                insert("@Test","   public void parse() {").changed();
+        String afterIsNotTest = new ChangeMaker(before).remove("@Test").changed();
+
+
+        JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(beforeIsTest), getTypeDeclaration(afterIsNotTest));
+        assertFalse(change.isTest());
+
+        String afterIsTest =beforeIsTest;
+
+        change = new JavaTypeChange(getTypeDeclaration(beforeIsTest), getTypeDeclaration(afterIsTest));
+        assertTrue(change.isTest());
+
+    }
+
+    @Test
+    public void isTestOnlyTrueIfTestAnnotationFound() {
+
+        String after = new ChangeMaker(before).replace("   public void parse() {","//@Test").
+                insert("//@Test","   public void parse() {").changed();
+
+        JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
+        assertFalse(change.isTest());
+
     }
 
     private static TypeDeclaration getTypeDeclaration(String s) {
