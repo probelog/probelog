@@ -5,17 +5,25 @@ import static com.github.probelog.diff.LineChange.Type.*;
 class LineChange {
 
     enum Type {
-        INSERT;
-
+        INSERT,
+        DELETE,
+        NOCHANGE
     }
-    private Type type;
 
-    LineChange(Type type) {
+    private Type type;
+    private String line;
+
+    LineChange(Type type, String line) {
         this.type = type;
+        this.line=line;
     }
 
     Type type() {
-        return INSERT;
+        return type;
+    }
+
+    public String line() {
+        return line;
     }
 
 }

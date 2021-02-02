@@ -5,13 +5,17 @@ import com.github.difflib.text.DiffRow;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.probelog.diff.LineChange.Type.*;
 import static java.util.Arrays.asList;
 
 class LineChangesFromDiffRowFactory {
 
     public List<LineChange> createLineChanges(DiffRow diffRow) {
-        return asList(new LineChange(INSERT));
+        LineChange.Type type = diffRow.getTag()==DiffRow.Tag.EQUAL ? LineChange.Type.NOCHANGE :
+                diffRow.getTag()==DiffRow.Tag.INSERT ? LineChange.Type.INSERT : LineChange.Type.DELETE;
+        return asList(new LineChange(type,
+                type.equals(LineChange.Type.NOCHANGE) ? diffRow.getOldLine() :
+                type.equals(LineChange.Type.INSERT) ? diffRow.getNewLine() :
+                diffRow.getOldLine().split(DiffRowsFactory.DELETED_DELIMITER)[1]));
     }
 
 }
