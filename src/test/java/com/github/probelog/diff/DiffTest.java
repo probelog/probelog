@@ -17,7 +17,7 @@ public class DiffTest {
 
         DiffRowGenerator generator = DiffRowGenerator.create()
                 .showInlineDiffs(true)
-                .mergeOriginalRevised(true)
+                //.mergeOriginalRevised(true)
                 .inlineDiffByWord(true)
                 .oldTag(f -> "--")
                 .newTag(f -> "++")
