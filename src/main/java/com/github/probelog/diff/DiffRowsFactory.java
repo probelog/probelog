@@ -11,8 +11,8 @@ import static java.util.Arrays.asList;
 
 public class DiffRowsFactory {
 
-    public static final String DELETED_DELIMITER = "-~";
-    public static final String INSERTED_DELIMITER = "+~";
+    public static final String DELETED_DELIMITER = "~~D~~";
+    public static final String INSERTED_DELIMITER = "~~I~~";
 
     DiffRowGenerator diffRowGenerator = DiffRowGenerator.create()
             .ignoreWhiteSpaces(true)
