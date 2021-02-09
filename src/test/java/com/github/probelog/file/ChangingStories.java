@@ -52,6 +52,27 @@ public class ChangingStories {
     }
 
     @Test
+    public void beforeStateIsPasted() {
+
+        builder.create("x");
+        builder.update("x", "xvalue1");
+        builder.buildAll();
+        builder.notExisting("y");
+        builder.cutPaste("x","y");
+        builder.update("y", "yvalue1");
+        builder.notExisting("z");
+        builder.cutPaste("y","z");
+
+        FileChangeEpisode change = builder.buildAll();
+        // TODO !!!
+        // Is this
+        //checkChange(asList("File: x / No Change","File: y / No Change","File: z / From:NOT_EXISTING / To:DEFINED:yvalue1"), change);
+        // should be this
+        //checkChange(asList("File: x / From:DEFINED:xValue1 / To:NOT_EXISTING","File: y / No Change","File: z / From:NOT_EXISTING / To:DEFINED:yvalue1"), change);
+
+    }
+
+    @Test
     public void pastingToANewFile() {
 
         builder.create("x");

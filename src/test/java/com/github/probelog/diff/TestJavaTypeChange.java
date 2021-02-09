@@ -1,18 +1,18 @@
-package com.github.probelog.diff.java;
+package com.github.probelog.diff;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.StringReader;
 
-import static com.github.probelog.diff.java.ChangeMaker.createStringWithLineSeparatorDelimiters;
-import static java.lang.System.lineSeparator;
+import static com.github.probelog.diff.ChangeMaker.createStringWithLineSeparatorDelimiters;
+import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
 public class TestJavaTypeChange {
 
-    private String before = createStringWithLineSeparatorDelimiters(
+    private String before = ChangeMaker.createStringWithLineSeparatorDelimiters(
             "package com.foo; ",
             "import org.junit.Test; ",
             "@MyAnnotation",
@@ -31,13 +31,10 @@ public class TestJavaTypeChange {
 
         JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
 
-        assertTrue(change.hasMemberChanges());
+        assertTrue(change.hasChanges());
 
-        assertEquals(1, change.deletedMembers().size());
-        assertEquals("public void parse() {"+ lineSeparator()+"}",change.deletedMembers().get(0).toString());
-
-        assertEquals(1, change.addMembers().size());
-        assertEquals("public void parse(String arg) {"+ lineSeparator()+"}",change.addMembers().get(0).toString());
+        assertEquals(asList("public void parse() {","}"), change.beforeDiff());
+        assertEquals(asList("public void parse(String arg) {","}"),change.afterDiff());
 
     }
 
@@ -49,13 +46,10 @@ public class TestJavaTypeChange {
 
         JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
 
-        assertTrue(change.hasMemberChanges());
+        assertTrue(change.hasChanges());
 
-        assertEquals(2, change.deletedMembers().size());
-        assertEquals("private int field1;",change.deletedMembers().get(0).toString());
-        assertEquals("private int field2;",change.deletedMembers().get(1).toString());
-
-        assertEquals(0, change.addMembers().size());
+        assertEquals(asList("private int field1;","private int field2;"),change.beforeDiff());
+        assertTrue(change.afterDiff().isEmpty());
 
     }
 
@@ -67,28 +61,11 @@ public class TestJavaTypeChange {
 
         JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
 
-        assertTrue(change.hasMemberChanges());
-
-        assertEquals(0, change.deletedMembers().size());
-
-        assertEquals(2, change.addMembers().size());
-        assertEquals("private int field3;",change.addMembers().get(0).toString());
-        assertEquals("private int field4;",change.addMembers().get(1).toString());
+        assertTrue(change.hasChanges());
+        assertTrue(change.beforeDiff().isEmpty());
+        assertEquals(asList("private int field3;","private int field4;"),change.afterDiff());
 
     }
-
-    @Test
-    public void noBodyChange() {
-
-        String after = new ChangeMaker(before).replace("public class ClassA {",
-                "class ClassA {").changed();
-
-        JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
-
-        assertFalse(change.hasMemberChanges());
-
-    }
-
 
     @Test
     public void headerChange() {
@@ -98,22 +75,10 @@ public class TestJavaTypeChange {
 
         JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
 
-        assertTrue(change.hasHeaderChange());
+        assertTrue(change.hasChanges());
 
-        assertEquals(createStringWithLineSeparatorDelimiters( "@MyAnnotation","public class ClassA"), change.beforeHeader());
-        assertEquals(createStringWithLineSeparatorDelimiters( "@MyAnnotation","class ClassA"), change.afterHeader());
-
-    }
-
-    @Test
-    public void noHeaderChange() {
-
-        String after = new ChangeMaker(before).insert("   private int field2;",
-                "   private int field3;","   private int field4;").changed();
-
-        JavaTypeChange change = new JavaTypeChange(getTypeDeclaration(before), getTypeDeclaration(after));
-
-        assertFalse(change.hasHeaderChange());
+        Assert.assertEquals(asList( "@MyAnnotation","public class ClassA"), change.beforeDiff());
+        Assert.assertEquals(asList( "@MyAnnotation","class ClassA"), change.afterDiff());
 
     }
 
@@ -146,6 +111,6 @@ public class TestJavaTypeChange {
     }
 
     private static TypeDeclaration getTypeDeclaration(String s) {
-        return new JavaParser().parse(new StringReader(s)).getResult().get().getType(0);
+        return new JavaTypeFactory().getTypeDeclaration(new StringReader(s));
     }
 }

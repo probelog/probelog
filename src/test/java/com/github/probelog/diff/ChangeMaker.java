@@ -1,4 +1,4 @@
-package com.github.probelog.diff.java;
+package com.github.probelog.diff;
 
 import java.util.ArrayList;
 import java.util.Arrays;

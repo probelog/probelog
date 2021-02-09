@@ -66,6 +66,34 @@ public class DiffBuilderLearningTests {
     }
 
     @Test
+    public void removeOneLine() {
+
+        List<DiffRow> diffRows = expectSixDiffRows(asList("1","2","3","4","5","6"),
+                asList("1","2","4","5","6"));
+        assertEquals("[EQUAL,1,1]", diffRows.get(0).toString());
+        assertEquals("[EQUAL,2,2]", diffRows.get(1).toString());
+        assertEquals("[DELETE,~~D~~3~~D~~,]", diffRows.get(2).toString());
+        assertEquals("[EQUAL,4,4]", diffRows.get(3).toString());
+        assertEquals("[EQUAL,5,5]", diffRows.get(4).toString());
+        assertEquals("[EQUAL,6,6]", diffRows.get(5).toString());
+
+    }
+
+    @Test
+    public void insertOneLine() {
+
+        List<DiffRow> diffRows = expectSixDiffRows(asList("1","2","4","5","6"),
+                asList("1","2","3","4","5","6"));
+        assertEquals("[EQUAL,1,1]", diffRows.get(0).toString());
+        assertEquals("[EQUAL,2,2]", diffRows.get(1).toString());
+        assertEquals("[INSERT,,~~I~~3~~I~~]", diffRows.get(2).toString());
+        assertEquals("[EQUAL,4,4]", diffRows.get(3).toString());
+        assertEquals("[EQUAL,5,5]", diffRows.get(4).toString());
+        assertEquals("[EQUAL,6,6]", diffRows.get(5).toString());
+
+    }
+
+    @Test
     public void javaExamples() {
 
         DiffRow diffRow = expectOneDiffRow(asList("private int field1;"),asList("private int field2;"));

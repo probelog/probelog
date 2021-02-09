@@ -1,13 +1,5 @@
-Plan Aim - Export Probelog to Html
+Possibele CodeTail examples
 
-1) Add in CodeTailFactory that takes a testRunBuilder and when export is called on it - it gets list of testRuns and
-calls a codeTail configured AggregateFinder.
-
-2) Use JavaParser to add semantics to EpisodeBuilder - anything that does not have a story change (i.e. no test change) is considered
-a refactoring step - a red refactoring step breaks a codeTail - i.e. its a stagger
-
-3) Use JavaParser for less fussy diffs
-
-for 2 and 3 see CodeOracle
+* Refactor JavaTypeChange
 
 
