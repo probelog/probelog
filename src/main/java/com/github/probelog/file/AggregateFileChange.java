@@ -6,7 +6,7 @@ public class AggregateFileChange implements FileChange {
     private AtomicFileChange beforeEvent, afterEvent;
 
     public AggregateFileChange(AtomicFileChange sinceThis, AtomicFileChange afterEvent) {
-        this.beforeEvent = afterEvent.previousSibling(sinceThis);
+        this.beforeEvent = afterEvent.closestAncestorInPreviousEpisode(sinceThis);
         this.afterEvent = afterEvent;
     }
 

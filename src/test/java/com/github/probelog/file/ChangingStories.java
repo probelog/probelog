@@ -56,19 +56,70 @@ public class ChangingStories {
 
         builder.create("x");
         builder.update("x", "xvalue1");
-        builder.buildAll();
+        builder.build();
+
         builder.notExisting("y");
         builder.cutPaste("x","y");
-        builder.update("y", "yvalue1");
         builder.notExisting("z");
         builder.cutPaste("y","z");
+        FileChangeEpisode change = builder.build();
 
-        FileChangeEpisode change = builder.buildAll();
-        // TODO !!!
-        // Is this
-        //checkChange(asList("File: x / No Change","File: y / No Change","File: z / From:NOT_EXISTING / To:DEFINED:yvalue1"), change);
-        // should be this
-        //checkChange(asList("File: x / From:DEFINED:xValue1 / To:NOT_EXISTING","File: y / No Change","File: z / From:NOT_EXISTING / To:DEFINED:yvalue1"), change);
+        checkChange(asList("File: x / From:DEFINED:xvalue1 / To:NOT_EXISTING",
+                "File: y / From:DEFINED:xvalue1 / To:NOT_EXISTING",
+                "File: z / From:NOT_EXISTING / To:DEFINED:xvalue1"), change);
+
+    }
+
+    @Test
+    public void beforeStateIsPastedOverACreate() {
+
+        builder.create("x");
+        builder.create("y");
+        builder.update("x", "xvalue1");
+        builder.build();
+
+        builder.cutPaste("x","y");
+        builder.update("y", "yvalue1");
+        FileChangeEpisode change = builder.build();
+
+        checkChange(asList("File: x / From:DEFINED:xvalue1 / To:NOT_EXISTING",
+                "File: y / From:DEFINED:xvalue1 / To:DEFINED:yvalue1"), change);
+
+    }
+
+    @Test
+    public void beforeStateIsPastedOverADelete() {
+
+        builder.create("x");
+        builder.create("y");
+        builder.delete("y");
+        builder.update("x", "xvalue1");
+        builder.build();
+
+        builder.cutPaste("x","y");
+        builder.update("y", "yvalue1");
+        FileChangeEpisode change = builder.build();
+
+        checkChange(asList("File: x / From:DEFINED:xvalue1 / To:NOT_EXISTING",
+                "File: y / From:DEFINED:xvalue1 / To:DEFINED:yvalue1"), change);
+
+    }
+
+    @Test
+    public void IgnorePasteBeforeEpisode() {
+
+        builder.create("x");
+        builder.create("y");
+        builder.update("x", "xvalue1");
+        builder.cutPaste("x","y");
+        builder.delete("y");
+        builder.build();
+
+        builder.create("y");
+        builder.update("y", "yvalue1");
+        FileChangeEpisode change = builder.build();
+
+        checkChange(asList("File: y / From:NOT_EXISTING / To:DEFINED:yvalue1"), change);
 
     }
 

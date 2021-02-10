@@ -52,7 +52,7 @@ public class FileChangeEpisode implements Serializable {
 
     private FileChange getFileChange(AtomicFileChange to) {
 
-        return to.previousSibling(fromAfterThis).equals(to.previousSibling())
+        return to.closestAncestorInPreviousEpisode(fromAfterThis).equals(to.closestAncestor())
                 ? to : new AggregateFileChange(fromAfterThis, to);
 
     }

@@ -40,7 +40,7 @@ public class AtomicFileChange implements FileChange {
     public FileState after() { return fileState(); }
 
     @Override
-    public FileState before() { return previousSibling().fileState();}
+    public FileState before() { return closestAncestor().fileState();}
 
     @Override
     public boolean isReal() { return !after().toString().equals(before().toString());}
@@ -49,12 +49,37 @@ public class AtomicFileChange implements FileChange {
         return action;
     }
 
-    AtomicFileChange previousSibling() {
+    AtomicFileChange closestAncestor() {
         return previous.findPrevious(fileName);
     }
 
-    AtomicFileChange previousSibling(AtomicFileChange thisOrBefore) {
-        return previous.findPreviousInPreviousEpisodes(fileName, thisOrBefore);
+    AtomicFileChange closestAncestorInPreviousEpisode(AtomicFileChange previousEpisodeEnd) {
+        return closestAncestorInPreviousEpisode(previousEpisodeEnd, null);
+    }
+
+    private AtomicFileChange closestAncestorInPreviousEpisode(AtomicFileChange previousEpisodeEnd, AtomicFileChange fallBack) {
+
+        AtomicFileChange previousSibling = previous.findPreviousInPreviousEpisodes(fileName, previousEpisodeEnd);
+        if (previousSibling.hasFileContent())
+            return previousSibling;
+
+        fallBack = (fallBack==null) ? previousSibling : fallBack;
+
+        AtomicFileChange previousCutOrCopy = previous.closestAncestorCutOrCopyInThisEpisode(fileName, previousEpisodeEnd);
+        return previousCutOrCopy==null ? fallBack : previousCutOrCopy.closestAncestorInPreviousEpisode(previousEpisodeEnd, fallBack);
+
+    }
+
+    private boolean hasFileContent() {
+        return !(action==NOT_EXISTING || action==CREATED || action==DELETED);
+    }
+
+    private AtomicFileChange closestAncestorCutOrCopyInThisEpisode(String fileName, AtomicFileChange previousEpisodeEnd) {
+        if (this.equals(previousEpisodeEnd))
+            return null;
+        if (this.fileName.equals(fileName) && action==PASTED)
+            return previous;
+        return previous.closestAncestorCutOrCopyInThisEpisode(fileName, previousEpisodeEnd);
     }
 
     private AtomicFileChange findPrevious(String fileName) {
