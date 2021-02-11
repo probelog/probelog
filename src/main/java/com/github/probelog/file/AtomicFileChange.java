@@ -70,7 +70,12 @@ public class AtomicFileChange implements FileChange {
 
     }
 
-    private boolean hasFileContent() {
+    @Override
+    public boolean needsDiff() {
+        return hasFileContent() && closestAncestor().hasFileContent() && isReal();
+    }
+
+    boolean hasFileContent() {
         return !(action==NOT_EXISTING || action==CREATED || action==DELETED);
     }
 

@@ -25,21 +25,27 @@ import static org.junit.Assert.assertTrue;
 public class FileChangeDiffing {
 
     private File dir;
+    private FileChangeEpisodeBuilder episodeBuilder;
+    private JavaDiffFactory javaDiffFactory;
 
     @Before
     public void setUp() {
+
+        episodeBuilder = new FileChangeEpisodeBuilder();
 
         dir = new File("src/test/resources/fileValuesDiffDirectory");
         delete(dir);
         dir.mkdir();
         assertTrue(dir.isDirectory());
 
+        javaDiffFactory = new JavaDiffFactory(dir.getAbsolutePath() + "/");
+
     }
 
     @After
     public void tearDown() {
 
-        //delete(dir);
+        delete(dir);
 
     }
 
@@ -55,7 +61,6 @@ public class FileChangeDiffing {
         file.delete();
 
     }
-
 
     @Test
     public void fileChangeDiff() throws IOException {
@@ -77,32 +82,36 @@ public class FileChangeDiffing {
         Files.write(Paths.get(dir + "/before.probelog"), before.getBytes());
         Files.write(Paths.get(dir + "/after.probelog"), after.getBytes());
 
-        FileChangeEpisodeBuilder episodeBuilder = new FileChangeEpisodeBuilder();
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
 
         FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
 
-        FileUtil fileUtil = new FileUtil(dir.getAbsolutePath());
-
-        JavaDiffFactory javaDiffFactory = new JavaDiffFactory(fileUtil);
-
         JavaDiff javaDiff = javaDiffFactory.getDiff(fileChange);
-
-/*      TODO
-
         List<DiffRow> diffRows = javaDiff.diff();
 
         assertEquals(2, diffRows.size());
-        assertEquals("CHANGE,public void ~~D~~parse()~~D~~ {,public void ~~I~~parse(String arg)~~I~~ {", diffRows.get(0).toString());
-        assertEquals("EQUAL,},}", diffRows.get(1).toString());
-*/
+        assertEquals("[CHANGE,public void parse() {,public void parse(~~I~~String arg~~I~~) {]", diffRows.get(0).toString());
+        assertEquals("[CHANGE,},}]", diffRows.get(1).toString());
 
     }
 
-    // TODO tests
+    @Test
+    public void unparseable() throws IOException {
 
-    // test were before or after state is undefined
-    // test
+        Files.write(Paths.get(dir + "/before.probelog"), "this is not valid java".getBytes());
+        Files.write(Paths.get(dir + "/after.probelog"), "this is still  not valid java".getBytes());
+
+        episodeBuilder.initialize("ClassA.java", "before");
+        episodeBuilder.update("ClassA.java", "after");
+
+        FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
+
+        JavaDiff javaDiff = javaDiffFactory.getDiff(fileChange);
+
+        assertTrue(javaDiff.isUnParsable());
+        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", javaDiff.unParsableMessage());
+
+    }
 
 }

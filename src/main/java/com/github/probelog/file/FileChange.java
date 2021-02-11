@@ -8,5 +8,6 @@ public interface FileChange extends Serializable {
     FileState before();
     FileState after();
     boolean isReal();
+    boolean needsDiff();
 
 }
