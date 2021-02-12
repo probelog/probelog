@@ -41,29 +41,29 @@ public class SortingSemanticDiffs {
                 new DiffRow(EQUAL,"unchanged","unchanged")
         );
 
-        FileSemanticDiff first= new FileSemanticDiff();
-        first.setUnDiffable("undiffable !");
+        FileSemanticDiff unDiffable= new FileSemanticDiff();
+        unDiffable.setUnDiffable("undiffable !");
 
-        FileSemanticDiff second = new FileSemanticDiff();
-        second.setTest(true);
-        second.setDiff(twoChangesinFiveDiffLines);
+        FileSemanticDiff testWithTwoChanges = new FileSemanticDiff();
+        testWithTwoChanges.setTest(true);
+        testWithTwoChanges.setDiff(twoChangesinFiveDiffLines);
 
-        FileSemanticDiff third = new FileSemanticDiff();
-        third.setTest(true);
-        third.setDiff(noChangesinFiveDiffLines);
+        FileSemanticDiff testWithNoChanges = new FileSemanticDiff();
+        testWithNoChanges.setTest(true);
+        testWithNoChanges.setDiff(noChangesinFiveDiffLines);
 
-        FileSemanticDiff fourth = new FileSemanticDiff();
-        fourth.setTest(false);
-        fourth.setDiff(threeChangesinFiveDiffLines);
+        FileSemanticDiff noTestWithThreeChanges = new FileSemanticDiff();
+        noTestWithThreeChanges.setTest(false);
+        noTestWithThreeChanges.setDiff(threeChangesinFiveDiffLines);
 
-        FileSemanticDiff fifth= new FileSemanticDiff();
-        fifth.setTest(false);
-        fifth.setDiff(twoChangesinFiveDiffLines);
+        FileSemanticDiff noTestWithTwoChanges= new FileSemanticDiff();
+        noTestWithTwoChanges.setTest(false);
+        noTestWithTwoChanges.setDiff(twoChangesinFiveDiffLines);
 
-        List<FileSemanticDiff> semanticDiffs = asList(fourth, first, fifth, third, second);
+        List<FileSemanticDiff> semanticDiffs = asList(noTestWithThreeChanges, unDiffable, noTestWithTwoChanges, testWithNoChanges, testWithTwoChanges);
         Collections.sort(semanticDiffs);
 
-        assertEquals(asList(first, second, third, fourth, fifth), semanticDiffs);
+        assertEquals(asList(unDiffable, testWithTwoChanges, testWithNoChanges, noTestWithThreeChanges, noTestWithTwoChanges), semanticDiffs);
 
     }
 
