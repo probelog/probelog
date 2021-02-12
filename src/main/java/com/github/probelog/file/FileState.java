@@ -10,7 +10,6 @@ public class FileState implements Serializable {
 
     public static final FileState NOT_EXISTING = new FileState(State.NOT_EXISTING);
     public static final FileState EMPTY = new FileState(State.EMPTY);
-    public static final FileState EXISTING_UNDEFINED = new FileState(State.EXISTING_UNDEFINED);
 
     private FileState(State state) {
         this.state=state;
@@ -33,4 +32,7 @@ public class FileState implements Serializable {
         return value;
     }
 
+    public boolean isEmpty() {
+        return value==null;
+    }
 }

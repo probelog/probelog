@@ -33,7 +33,7 @@ public class AggregateFileChange implements FileChange {
 
     @Override
     public boolean needsDiff() {
-        return beforeEvent.hasFileContent() && afterEvent.hasFileContent() && isReal();
+        return afterEvent.hasFileContent() && isReal();
     }
 
     @Override

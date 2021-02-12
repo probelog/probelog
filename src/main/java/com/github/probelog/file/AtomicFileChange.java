@@ -59,11 +59,11 @@ public class AtomicFileChange implements FileChange {
 
     private AtomicFileChange closestAncestorInPreviousEpisode(AtomicFileChange previousEpisodeEnd, AtomicFileChange fallBack) {
 
-        AtomicFileChange previousSibling = previous.findPreviousInPreviousEpisodes(fileName, previousEpisodeEnd);
-        if (previousSibling.hasFileContent())
-            return previousSibling;
+        AtomicFileChange ancestor = previous.findPreviousInPreviousEpisodes(fileName, previousEpisodeEnd);
+        if (ancestor.hasFileContent())
+            return ancestor;
 
-        fallBack = (fallBack==null) ? previousSibling : fallBack;
+        fallBack = (fallBack==null) ? ancestor : fallBack;
 
         AtomicFileChange previousCutOrCopy = previous.closestAncestorCutOrCopyInThisEpisode(fileName, previousEpisodeEnd);
         return previousCutOrCopy==null ? fallBack : previousCutOrCopy.closestAncestorInPreviousEpisode(previousEpisodeEnd, fallBack);
@@ -72,11 +72,11 @@ public class AtomicFileChange implements FileChange {
 
     @Override
     public boolean needsDiff() {
-        return hasFileContent() && closestAncestor().hasFileContent() && isReal();
+        return hasFileContent() && isReal();
     }
 
     boolean hasFileContent() {
-        return !(action==NOT_EXISTING || action==CREATED || action==DELETED);
+        return !fileState().isEmpty();
     }
 
     private AtomicFileChange closestAncestorCutOrCopyInThisEpisode(String fileName, AtomicFileChange previousEpisodeEnd) {

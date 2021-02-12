@@ -14,13 +14,13 @@ import java.util.List;
 
 public class JavaDiffFactory {
 
-    private String codeTailDirectory;
+    private FileUtil fileUtil;
     private JavaTypeFactory javaTypeFactory = new JavaTypeFactory();
     private DiffRowsFactory diffRowsFactory = new DiffRowsFactory();
     private DiffRowNormalizer diffRowNormalizer = new DiffRowNormalizer();
 
-    public JavaDiffFactory(String codeTailDirectory) {
-        this.codeTailDirectory=codeTailDirectory;
+    public JavaDiffFactory(FileUtil fileUtil) {
+        this.fileUtil=fileUtil;
     }
 
     public JavaDiff getDiff(FileChange fileChange) {
@@ -48,7 +48,7 @@ public class JavaDiffFactory {
     }
 
     private TypeDeclaration getTypeDeclaration(String fileName) throws IOException {
-        return javaTypeFactory.getTypeDeclaration(new FileReader(new File(codeTailDirectory + fileName + ".probelog")));
+        return javaTypeFactory.getTypeDeclaration(new FileReader(fileUtil.file(fileName)));
     }
 
     @NotNull

@@ -4,7 +4,6 @@ import com.github.difflib.text.DiffRow;
 import com.github.probelog.file.FileChange;
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.util.FileUtil;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,15 +11,11 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.github.probelog.diff.ChangeMaker.createStringWithLineSeparatorDelimiters;
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FileChangeDiffing {
 
@@ -33,12 +28,12 @@ public class FileChangeDiffing {
 
         episodeBuilder = new FileChangeEpisodeBuilder();
 
-        dir = new File("src/test/resources/fileValuesDiffDirectory");
+        dir = new File("src/test/resources/fileValuesDiffDirectory/");
         delete(dir);
         dir.mkdir();
         assertTrue(dir.isDirectory());
 
-        javaDiffFactory = new JavaDiffFactory(dir.getAbsolutePath() + "/");
+        javaDiffFactory = new JavaDiffFactory(new FileUtil("src/test/resources/fileValuesDiffDirectory/"));
 
     }
 
@@ -63,7 +58,7 @@ public class FileChangeDiffing {
     }
 
     @Test
-    public void fileChangeDiff() throws IOException {
+    public void fileChangeDiff()  {
 
         String before = createStringWithLineSeparatorDelimiters(
                 "package com.foo; ",
@@ -79,8 +74,8 @@ public class FileChangeDiffing {
         String after = new ChangeMaker(before).
                 replace("   public void parse() {","   public void parse(String arg) {").changed();
 
-        Files.write(Paths.get(dir + "/before.probelog"), before.getBytes());
-        Files.write(Paths.get(dir + "/after.probelog"), after.getBytes());
+        writeCodeTailFile("before", before);
+        writeCodeTailFile("after", after);
 
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
@@ -90,6 +85,7 @@ public class FileChangeDiffing {
         JavaDiff javaDiff = javaDiffFactory.getDiff(fileChange);
         List<DiffRow> diffRows = javaDiff.diff();
 
+        assertFalse(javaDiff.isUnParsable());
         assertEquals(2, diffRows.size());
         assertEquals("[CHANGE,public void parse() {,public void parse(~~I~~String arg~~I~~) {]", diffRows.get(0).toString());
         assertEquals("[CHANGE,},}]", diffRows.get(1).toString());
@@ -99,8 +95,8 @@ public class FileChangeDiffing {
     @Test
     public void unparseable() throws IOException {
 
-        Files.write(Paths.get(dir + "/before.probelog"), "this is not valid java".getBytes());
-        Files.write(Paths.get(dir + "/after.probelog"), "this is still  not valid java".getBytes());
+        writeCodeTailFile("before", "this is not valid java");
+        writeCodeTailFile("after", "this is still not valid java");
 
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
@@ -112,6 +108,15 @@ public class FileChangeDiffing {
         assertTrue(javaDiff.isUnParsable());
         assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", javaDiff.unParsableMessage());
 
+    }
+
+    private void writeCodeTailFile(String checksum, String value) {
+        try {
+            Files.write(Paths.get(dir.getAbsolutePath() + "/" + checksum), value.getBytes());
+        }
+        catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
