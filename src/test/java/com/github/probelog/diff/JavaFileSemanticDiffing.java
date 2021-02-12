@@ -121,8 +121,8 @@ public class JavaFileSemanticDiffing {
     @Test
     public void unDiffable() throws IOException {
 
-        writeCodeTailFile("before", "this is not valid java");
-        writeCodeTailFile("after", "this is still not valid java");
+        writeCodeTailFile( "before", "this is not valid java");
+        writeCodeTailFile( "after", "this is still not valid java");
 
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
@@ -155,7 +155,26 @@ public class JavaFileSemanticDiffing {
 
     }
 
-    private void writeCodeTailFile(String checksum, String value) {
+    @Test
+    public void episodeSemanticDiffing()  {
+
+        writeCodeTailFile("afterForFileA", createStringWithLineSeparatorDelimiters("line1"));
+        writeCodeTailFile("afterForFileB", createStringWithLineSeparatorDelimiters("line1", "line2"));
+
+        episodeBuilder.create("fileA");
+        episodeBuilder.create("fileB");
+        episodeBuilder.update("fileA", "afterForFileA");
+        episodeBuilder.update("fileB", "afterForFileB");
+
+        List<FileSemanticDiff> semanticDiffs = new EpisodeSemanticDiffFactory(javaDiffFactory).getFileSemanticDiffs(episodeBuilder.build());
+        assertEquals(2, semanticDiffs.size());
+
+        assertEquals(2, semanticDiffs.get(0).diff().size());
+        assertEquals(1, semanticDiffs.get(1).diff().size());
+
+    }
+
+    void writeCodeTailFile(String checksum, String value) {
         try {
             Files.write(Paths.get(dir.getAbsolutePath() + "/" + checksum), value.getBytes());
         }

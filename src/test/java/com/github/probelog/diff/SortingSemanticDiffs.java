@@ -10,6 +10,7 @@ import java.util.List;
 
 import static com.github.difflib.text.DiffRow.Tag.*;
 import static java.util.Arrays.asList;
+import static java.util.Collections.sort;
 import static org.junit.Assert.assertEquals;
 
 public class SortingSemanticDiffs {
@@ -61,7 +62,7 @@ public class SortingSemanticDiffs {
         noTestWithTwoChanges.setDiff(twoChangesinFiveDiffLines);
 
         List<FileSemanticDiff> semanticDiffs = asList(noTestWithThreeChanges, unDiffable, noTestWithTwoChanges, testWithNoChanges, testWithTwoChanges);
-        Collections.sort(semanticDiffs);
+        sort(semanticDiffs);
 
         assertEquals(asList(unDiffable, testWithTwoChanges, testWithNoChanges, noTestWithThreeChanges, noTestWithTwoChanges), semanticDiffs);
 
