@@ -45,6 +45,11 @@ public class AtomicFileChange implements FileChange {
     @Override
     public boolean isReal() { return !after().toString().equals(before().toString());}
 
+    @Override
+    public boolean fromNothing() {
+        return !closestAncestor().hasFileContent();
+    }
+
     Action action() {
         return action;
     }

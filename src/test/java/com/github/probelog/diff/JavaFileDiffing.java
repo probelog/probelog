@@ -85,7 +85,7 @@ public class JavaFileDiffing {
         FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
         List<DiffRow> diffRows = fileSemanticDiff.diff();
 
-        assertFalse(fileSemanticDiff.isUnParsable());
+        assertFalse(fileSemanticDiff.isUnDiffable());
         assertEquals(2, diffRows.size());
         assertEquals("[CHANGE,public void parse() {,public void parse(~~I~~String arg~~I~~) {]", diffRows.get(0).toString());
         assertEquals("[CHANGE,},}]", diffRows.get(1).toString());
@@ -93,7 +93,31 @@ public class JavaFileDiffing {
     }
 
     @Test
-    public void unparseable() throws IOException {
+    public void fromNothing()  {
+
+        String after = createStringWithLineSeparatorDelimiters(
+                "line1", "line2", "line3");
+
+        writeCodeTailFile("after", after);
+
+        episodeBuilder.create("fileA");
+        episodeBuilder.update("fileA", "after");
+
+        FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
+
+        FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
+        List<DiffRow> diffRows = fileSemanticDiff.diff();
+
+        assertFalse(fileSemanticDiff.isUnDiffable());
+        assertEquals(3, diffRows.size());
+        assertEquals("[INSERT,,~~I~~line1~~I~~]", diffRows.get(0).toString());
+        assertEquals("[INSERT,,~~I~~line2~~I~~]", diffRows.get(1).toString());
+        assertEquals("[INSERT,,~~I~~line3~~I~~]", diffRows.get(2).toString());
+
+    }
+
+    @Test
+    public void unDiffable() throws IOException {
 
         writeCodeTailFile("before", "this is not valid java");
         writeCodeTailFile("after", "this is still not valid java");
@@ -105,8 +129,26 @@ public class JavaFileDiffing {
 
         FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
 
-        assertTrue(fileSemanticDiff.isUnParsable());
-        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", fileSemanticDiff.unParsableMessage());
+        assertTrue(fileSemanticDiff.isUnDiffable());
+        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", fileSemanticDiff.unDiffableMessage());
+
+    }
+
+    @Test
+    public void unDiffableForCreateCase() throws IOException {
+
+        String notExistingFile = "thisFileNameDoesNotExist";
+
+        delete(new File(dir.getAbsolutePath() +"/" + notExistingFile));
+
+        episodeBuilder.create("fileA");
+        episodeBuilder.update("fileA", notExistingFile);
+
+        FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
+
+        FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
+
+        assertTrue(fileSemanticDiff.isUnDiffable());
 
     }
 

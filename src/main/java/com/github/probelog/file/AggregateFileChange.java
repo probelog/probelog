@@ -37,6 +37,11 @@ public class AggregateFileChange implements FileChange {
     }
 
     @Override
+    public boolean fromNothing() {
+        return !beforeEvent.hasFileContent();
+    }
+
+    @Override
     public boolean isReal() {
         return !before().toString().equals(after().toString());
     }

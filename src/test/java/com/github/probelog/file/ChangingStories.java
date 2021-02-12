@@ -283,15 +283,4 @@ public class ChangingStories {
 
     }
 
-
-
-    /*
-
-    1) Add in intellij wiring - which also saves files and stores checksum in model
-
-    2) Add in save - which writes to HTML page and uses third party diff package
-
-
-     */
-
 }

@@ -59,9 +59,6 @@ public class FileUtil {
 
     }
 
-
-
-    // TODO Remove once TestRunExporter is dumped
     public List<String> fileLines(String fileName) {
 
         List<String> result = new ArrayList<>();

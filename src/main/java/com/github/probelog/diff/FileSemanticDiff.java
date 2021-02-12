@@ -8,15 +8,15 @@ import java.util.List;
 public class FileSemanticDiff {
 
     private final FileChange fileChange;
-    private String unParsableMessage;
+    private String unDiffable;
     private List<DiffRow> diffRows;
 
     public FileSemanticDiff(FileChange fileChange) {
         this.fileChange = fileChange;
     }
 
-    public void setUnparsable(String unParsableMessage) {
-        this.unParsableMessage = unParsableMessage;
+    public void setUnDiffable(String unDiffableMessage) {
+        this.unDiffable = unDiffableMessage;
     }
 
     public void setDiff(List<DiffRow> diffRows) {
@@ -27,11 +27,11 @@ public class FileSemanticDiff {
         return diffRows;
     }
 
-    public String unParsableMessage() {
-        return unParsableMessage;
+    public String unDiffableMessage() {
+        return unDiffable;
     }
 
-    public boolean isUnParsable() {
-        return unParsableMessage!=null;
+    public boolean isUnDiffable() {
+        return unDiffable !=null;
     }
 }
