@@ -17,7 +17,7 @@ import java.util.List;
 import static com.github.probelog.diff.ChangeMaker.createStringWithLineSeparatorDelimiters;
 import static org.junit.Assert.*;
 
-public class JavaFileDiffing {
+public class JavaFileSemanticDiffing {
 
     private File dir;
     private FileChangeEpisodeBuilder episodeBuilder;
@@ -86,6 +86,7 @@ public class JavaFileDiffing {
         List<DiffRow> diffRows = fileSemanticDiff.diff();
 
         assertFalse(fileSemanticDiff.isUnDiffable());
+        assertFalse(fileSemanticDiff.isTest());
         assertEquals(2, diffRows.size());
         assertEquals("[CHANGE,public void parse() {,public void parse(~~I~~String arg~~I~~) {]", diffRows.get(0).toString());
         assertEquals("[CHANGE,},}]", diffRows.get(1).toString());
@@ -109,6 +110,7 @@ public class JavaFileDiffing {
         List<DiffRow> diffRows = fileSemanticDiff.diff();
 
         assertFalse(fileSemanticDiff.isUnDiffable());
+        assertFalse(fileSemanticDiff.isTest());
         assertEquals(3, diffRows.size());
         assertEquals("[INSERT,,~~I~~line1~~I~~]", diffRows.get(0).toString());
         assertEquals("[INSERT,,~~I~~line2~~I~~]", diffRows.get(1).toString());
@@ -130,7 +132,7 @@ public class JavaFileDiffing {
         FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
 
         assertTrue(fileSemanticDiff.isUnDiffable());
-        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", fileSemanticDiff.unDiffableMessage());
+        assertTrue(fileSemanticDiff.unDiffableMessage().startsWith("ClassA.java is undiffable / "));
 
     }
 
@@ -149,6 +151,7 @@ public class JavaFileDiffing {
         FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
 
         assertTrue(fileSemanticDiff.isUnDiffable());
+        assertTrue(fileSemanticDiff.unDiffableMessage().startsWith("fileA is undiffable / "));
 
     }
 

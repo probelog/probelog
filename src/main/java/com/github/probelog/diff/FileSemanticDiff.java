@@ -7,20 +7,24 @@ import java.util.List;
 
 public class FileSemanticDiff {
 
-    private final FileChange fileChange;
+
     private String unDiffable;
     private List<DiffRow> diffRows;
+    private boolean isTest=false;
 
-    public FileSemanticDiff(FileChange fileChange) {
-        this.fileChange = fileChange;
-    }
-
-    public void setUnDiffable(String unDiffableMessage) {
+    void setUnDiffable(String unDiffableMessage) {
+        assert diffRows==null && isTest==false;
         this.unDiffable = unDiffableMessage;
     }
 
-    public void setDiff(List<DiffRow> diffRows) {
+    void setDiff(List<DiffRow> diffRows) {
+        assert !isUnDiffable();
         this.diffRows = diffRows;
+    }
+
+    void setTest(boolean isTest) {
+        assert !isUnDiffable();
+        this.isTest=isTest;
     }
 
     public List<DiffRow> diff() {
@@ -32,6 +36,11 @@ public class FileSemanticDiff {
     }
 
     public boolean isUnDiffable() {
-        return unDiffable !=null;
+        return unDiffable != null;
     }
+
+    public boolean isTest() {
+        return isTest;
+    }
+
 }

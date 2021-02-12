@@ -26,34 +26,34 @@ public class JavaFileSemanticDiffFactory {
     public FileSemanticDiff getDiff(FileChange fileChange) {
 
         assert (fileChange.needsDiff());
+        try {
+            return (fileChange.fromNothing()) ?
+                    getDiffWithEmptyBefore(fileChange) :
+                    getDiffWithNonEmptyBefore(fileChange);
+        } catch (Exception exception) {
+            FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+            fileSemanticDiff.setUnDiffable(fileChange.fileName() + " is undiffable / " + exception.toString());
+            return fileSemanticDiff;
+        }
 
-        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff(fileChange);
+    }
 
-        fileSemanticDiff.setDiff(fileChange.fromNothing() ?
-                getDiffWithEmptyBefore(fileSemanticDiff, fileChange) :
-                getDiffRows(getJavaTypeChange(fileSemanticDiff, fileChange)));
+    private FileSemanticDiff getDiffWithEmptyBefore(FileChange fileChange) {
 
+        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+        fileSemanticDiff.setDiff(diffRowsFactory.generateDiffRows(emptyList(), fileUtil.fileLines(fileChange.after().value())));
+        return fileSemanticDiff;
+    }
+
+    private FileSemanticDiff getDiffWithNonEmptyBefore(FileChange fileChange) throws IOException {
+
+        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+        JavaTypeChange javaTypeChange = new JavaTypeChange(getTypeDeclaration(fileChange.before().value()),
+                getTypeDeclaration(fileChange.after().value()));
+        fileSemanticDiff.setDiff(getDiffRows(javaTypeChange));
+        fileSemanticDiff.setTest(javaTypeChange.isTest());
         return fileSemanticDiff;
 
-    }
-
-    private List<DiffRow> getDiffWithEmptyBefore(FileSemanticDiff fileSemanticDiff, FileChange fileChange) {
-        try {
-            return diffRowsFactory.generateDiffRows(emptyList(), fileUtil.fileLines(fileChange.after().value()));
-        } catch (Exception e) {
-            fileSemanticDiff.setUnDiffable(e.toString());
-        }
-        return null;
-    }
-
-    private JavaTypeChange getJavaTypeChange(FileSemanticDiff fileSemanticDiff, FileChange fileChange) {
-        try {
-            return new JavaTypeChange(getTypeDeclaration(fileChange.before().value()),
-                    getTypeDeclaration(fileChange.after().value()));
-        } catch (Exception e) {
-            fileSemanticDiff.setUnDiffable(e.toString());
-        }
-        return null;
     }
 
     private TypeDeclaration getTypeDeclaration(String fileName) throws IOException {
@@ -61,8 +61,7 @@ public class JavaFileSemanticDiffFactory {
     }
 
     private List<DiffRow> getDiffRows(JavaTypeChange javaTypeChange) {
-        if (javaTypeChange==null)
-            return null;
+
         List<DiffRow> diffRows = diffRowsFactory.generateDiffRows(javaTypeChange.beforeDiff(), javaTypeChange.afterDiff());
         List<DiffRow> normalized = new ArrayList<>();
         for (DiffRow diffRow : diffRows)
