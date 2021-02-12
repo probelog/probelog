@@ -17,11 +17,11 @@ import java.util.List;
 import static com.github.probelog.diff.ChangeMaker.createStringWithLineSeparatorDelimiters;
 import static org.junit.Assert.*;
 
-public class FileChangeDiffing {
+public class JavaFileDiffing {
 
     private File dir;
     private FileChangeEpisodeBuilder episodeBuilder;
-    private JavaDiffFactory javaDiffFactory;
+    private JavaFileSemanticDiffFactory javaDiffFactory;
 
     @Before
     public void setUp() {
@@ -33,7 +33,7 @@ public class FileChangeDiffing {
         dir.mkdir();
         assertTrue(dir.isDirectory());
 
-        javaDiffFactory = new JavaDiffFactory(new FileUtil("src/test/resources/fileValuesDiffDirectory/"));
+        javaDiffFactory = new JavaFileSemanticDiffFactory(new FileUtil("src/test/resources/fileValuesDiffDirectory/"));
 
     }
 
@@ -82,10 +82,10 @@ public class FileChangeDiffing {
 
         FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
 
-        JavaDiff javaDiff = javaDiffFactory.getDiff(fileChange);
-        List<DiffRow> diffRows = javaDiff.diff();
+        FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
+        List<DiffRow> diffRows = fileSemanticDiff.diff();
 
-        assertFalse(javaDiff.isUnParsable());
+        assertFalse(fileSemanticDiff.isUnParsable());
         assertEquals(2, diffRows.size());
         assertEquals("[CHANGE,public void parse() {,public void parse(~~I~~String arg~~I~~) {]", diffRows.get(0).toString());
         assertEquals("[CHANGE,},}]", diffRows.get(1).toString());
@@ -103,10 +103,10 @@ public class FileChangeDiffing {
 
         FileChange fileChange = episodeBuilder.build().fileChanges().get(0);
 
-        JavaDiff javaDiff = javaDiffFactory.getDiff(fileChange);
+        FileSemanticDiff fileSemanticDiff = javaDiffFactory.getDiff(fileChange);
 
-        assertTrue(javaDiff.isUnParsable());
-        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", javaDiff.unParsableMessage());
+        assertTrue(fileSemanticDiff.isUnParsable());
+        assertEquals("java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0", fileSemanticDiff.unParsableMessage());
 
     }
 

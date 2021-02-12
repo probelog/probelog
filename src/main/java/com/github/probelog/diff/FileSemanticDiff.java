@@ -5,13 +5,13 @@ import com.github.probelog.file.FileChange;
 
 import java.util.List;
 
-public class JavaDiff {
+public class FileSemanticDiff {
 
     private final FileChange fileChange;
     private String unParsableMessage;
     private List<DiffRow> diffRows;
 
-    public JavaDiff(FileChange fileChange) {
+    public FileSemanticDiff(FileChange fileChange) {
         this.fileChange = fileChange;
     }
 

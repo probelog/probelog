@@ -6,43 +6,42 @@ import com.github.probelog.file.FileChange;
 import com.github.probelog.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaDiffFactory {
+public class JavaFileSemanticDiffFactory {
 
     private FileUtil fileUtil;
     private JavaTypeFactory javaTypeFactory = new JavaTypeFactory();
     private DiffRowsFactory diffRowsFactory = new DiffRowsFactory();
     private DiffRowNormalizer diffRowNormalizer = new DiffRowNormalizer();
 
-    public JavaDiffFactory(FileUtil fileUtil) {
+    public JavaFileSemanticDiffFactory(FileUtil fileUtil) {
         this.fileUtil=fileUtil;
     }
 
-    public JavaDiff getDiff(FileChange fileChange) {
+    public FileSemanticDiff getDiff(FileChange fileChange) {
 
         assert(fileChange.needsDiff());
 
-        JavaDiff javaDiff = new JavaDiff(fileChange);
-        JavaTypeChange javaTypeChange = getJavaTypeChange(javaDiff, fileChange);
+        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff(fileChange);
+        JavaTypeChange javaTypeChange = getJavaTypeChange(fileSemanticDiff, fileChange);
         if (javaTypeChange!=null)
-            javaDiff.setDiff(getDiffRows(javaTypeChange));
+            fileSemanticDiff.setDiff(getDiffRows(javaTypeChange));
 
-        return javaDiff;
+        return fileSemanticDiff;
 
     }
 
-    private JavaTypeChange getJavaTypeChange(JavaDiff javaDiff, FileChange fileChange) {
+    private JavaTypeChange getJavaTypeChange(FileSemanticDiff fileSemanticDiff, FileChange fileChange) {
         try {
             return new JavaTypeChange(getTypeDeclaration(fileChange.before().value()),
                     getTypeDeclaration(fileChange.after().value()));
         }
         catch(Exception e) {
-            javaDiff.setUnparsable(e.toString());
+            fileSemanticDiff.setUnparsable(e.toString());
         }
         return null;
     }
