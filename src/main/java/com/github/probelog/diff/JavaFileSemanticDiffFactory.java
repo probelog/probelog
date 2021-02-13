@@ -17,7 +17,6 @@ public class JavaFileSemanticDiffFactory {
     private FileUtil fileUtil;
     private JavaTypeFactory javaTypeFactory = new JavaTypeFactory();
     private DiffRowsFactory diffRowsFactory = new DiffRowsFactory();
-    private DiffRowNormalizer diffRowNormalizer = new DiffRowNormalizer();
 
     public JavaFileSemanticDiffFactory(FileUtil fileUtil) {
         this.fileUtil = fileUtil;
@@ -31,7 +30,7 @@ public class JavaFileSemanticDiffFactory {
                     getDiffWithEmptyBefore(fileChange) :
                     getDiffWithNonEmptyBefore(fileChange);
         } catch (Exception exception) {
-            FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+            FileSemanticDiff fileSemanticDiff = new FileSemanticDiff(fileChange.fileName());
             fileSemanticDiff.setUnDiffable(fileChange.fileName() + " is undiffable / " + exception.toString());
             return fileSemanticDiff;
         }
@@ -40,14 +39,14 @@ public class JavaFileSemanticDiffFactory {
 
     private FileSemanticDiff getDiffWithEmptyBefore(FileChange fileChange) {
 
-        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff(fileChange.fileName());
         fileSemanticDiff.setDiff(diffRowsFactory.generateDiffRows(emptyList(), fileUtil.fileLines(fileChange.after().value())));
         return fileSemanticDiff;
     }
 
     private FileSemanticDiff getDiffWithNonEmptyBefore(FileChange fileChange) throws IOException {
 
-        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff();
+        FileSemanticDiff fileSemanticDiff = new FileSemanticDiff(fileChange.fileName());
         JavaTypeChange javaTypeChange = new JavaTypeChange(getTypeDeclaration(fileChange.before().value()),
                 getTypeDeclaration(fileChange.after().value()));
         fileSemanticDiff.setDiff(getDiffRows(javaTypeChange));
@@ -62,10 +61,7 @@ public class JavaFileSemanticDiffFactory {
 
     private List<DiffRow> getDiffRows(JavaTypeChange javaTypeChange) {
 
-        List<DiffRow> diffRows = diffRowsFactory.generateDiffRows(javaTypeChange.beforeDiff(), javaTypeChange.afterDiff());
-        List<DiffRow> normalized = new ArrayList<>();
-        for (DiffRow diffRow : diffRows)
-            normalized.addAll(diffRowNormalizer.normalize(diffRow));
-        return normalized;
+        return diffRowsFactory.generateDiffRows(javaTypeChange.beforeDiff(), javaTypeChange.afterDiff());
+
     }
 }

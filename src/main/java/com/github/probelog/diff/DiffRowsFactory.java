@@ -15,6 +15,7 @@ public class DiffRowsFactory {
     public static final String INSERTED_DELIMITER = "~~I~~";
 
     DiffRowGenerator diffRowGenerator = DiffRowGenerator.create()
+            .mergeOriginalRevised(true)
             .ignoreWhiteSpaces(true)
             .showInlineDiffs(true)
             .inlineDiffByWord(true)

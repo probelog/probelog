@@ -11,23 +11,32 @@ import static com.github.difflib.text.DiffRow.Tag.*;
 public class FileSemanticDiff implements Comparable<FileSemanticDiff> {
 
 
+    private String fileName;
     private String unDiffable;
     private List<DiffRow> diffRows;
     private boolean isTest=false;
 
-    void setUnDiffable(String unDiffableMessage) {
+    public FileSemanticDiff(String fileName) {
+        this.fileName=fileName;
+    }
+
+    public void setUnDiffable(String unDiffableMessage) {
         assert diffRows==null && isTest==false;
         this.unDiffable = unDiffableMessage;
     }
 
-    void setDiff(List<DiffRow> diffRows) {
+    public void setDiff(List<DiffRow> diffRows) {
         assert !isUnDiffable();
         this.diffRows = diffRows;
     }
 
-    void setTest(boolean isTest) {
+    public void setTest(boolean isTest) {
         assert !isUnDiffable();
         this.isTest=isTest;
+    }
+
+    public String fileName() {
+        return fileName;
     }
 
     public List<DiffRow> diff() {

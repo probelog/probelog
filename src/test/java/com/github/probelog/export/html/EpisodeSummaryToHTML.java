@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 
-public class EpisodeSummaryHTML {
+public class EpisodeSummaryToHTML {
 
     private Episode root;
     private Episode landing;

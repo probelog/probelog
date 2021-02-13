@@ -42,22 +42,22 @@ public class SortingSemanticDiffs {
                 new DiffRow(EQUAL,"unchanged","unchanged")
         );
 
-        FileSemanticDiff unDiffable= new FileSemanticDiff();
+        FileSemanticDiff unDiffable= new FileSemanticDiff("f1");
         unDiffable.setUnDiffable("undiffable !");
 
-        FileSemanticDiff testWithTwoChanges = new FileSemanticDiff();
+        FileSemanticDiff testWithTwoChanges = new FileSemanticDiff("f2");
         testWithTwoChanges.setTest(true);
         testWithTwoChanges.setDiff(twoChangesinFiveDiffLines);
 
-        FileSemanticDiff testWithNoChanges = new FileSemanticDiff();
+        FileSemanticDiff testWithNoChanges = new FileSemanticDiff("f3");
         testWithNoChanges.setTest(true);
         testWithNoChanges.setDiff(noChangesinFiveDiffLines);
 
-        FileSemanticDiff noTestWithThreeChanges = new FileSemanticDiff();
+        FileSemanticDiff noTestWithThreeChanges = new FileSemanticDiff("f4");
         noTestWithThreeChanges.setTest(false);
         noTestWithThreeChanges.setDiff(threeChangesinFiveDiffLines);
 
-        FileSemanticDiff noTestWithTwoChanges= new FileSemanticDiff();
+        FileSemanticDiff noTestWithTwoChanges= new FileSemanticDiff("f5");
         noTestWithTwoChanges.setTest(false);
         noTestWithTwoChanges.setDiff(twoChangesinFiveDiffLines);
 
