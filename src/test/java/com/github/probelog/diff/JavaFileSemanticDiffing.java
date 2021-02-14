@@ -44,7 +44,7 @@ public class JavaFileSemanticDiffing {
 
     }
 
-    void delete(File file) {
+    public static void delete(File file) {
 
         if (!(file.isDirectory())) {
             file.delete();
@@ -74,8 +74,8 @@ public class JavaFileSemanticDiffing {
         String after = new ChangeMaker(before).
                 replace("   public void parse() {","   public void parse(String arg) {").changed();
 
-        writeCodeTailFile("before", before);
-        writeCodeTailFile("after", after);
+        writeCodeTailFile("before", before, dir);
+        writeCodeTailFile("after", after, dir);
 
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
@@ -100,7 +100,7 @@ public class JavaFileSemanticDiffing {
         String after = createStringWithLineSeparatorDelimiters(
                 "line1", "line2", "line3");
 
-        writeCodeTailFile("after", after);
+        writeCodeTailFile("after", after, dir);
 
         episodeBuilder.create("fileA");
         episodeBuilder.update("fileA", "after");
@@ -123,8 +123,8 @@ public class JavaFileSemanticDiffing {
     @Test
     public void unDiffable() throws IOException {
 
-        writeCodeTailFile( "before", "this is not valid java");
-        writeCodeTailFile( "after", "this is still not valid java");
+        writeCodeTailFile( "before", "this is not valid java", dir);
+        writeCodeTailFile( "after", "this is still not valid java", dir);
 
         episodeBuilder.initialize("ClassA.java", "before");
         episodeBuilder.update("ClassA.java", "after");
@@ -162,15 +162,16 @@ public class JavaFileSemanticDiffing {
     @Test
     public void episodeSemanticDiffing()  {
 
-        writeCodeTailFile("afterForFileA", createStringWithLineSeparatorDelimiters("line1"));
-        writeCodeTailFile("afterForFileB", createStringWithLineSeparatorDelimiters("line1", "line2"));
+        writeCodeTailFile("afterForFileA", createStringWithLineSeparatorDelimiters("line1"), dir);
+        writeCodeTailFile("afterForFileB", createStringWithLineSeparatorDelimiters("line1", "line2"), dir);
 
         episodeBuilder.create("fileA");
         episodeBuilder.create("fileB");
+        episodeBuilder.create("fileC");
         episodeBuilder.update("fileA", "afterForFileA");
         episodeBuilder.update("fileB", "afterForFileB");
 
-        List<FileSemanticDiff> semanticDiffs = new EpisodeSemanticDiffFactory(javaDiffFactory).getFileSemanticDiffs(episodeBuilder.build());
+        List<FileSemanticDiff> semanticDiffs = new EpisodeSemanticDiffFactory(new FileUtil("src/test/resources/fileValuesDiffDirectory/")).getFileSemanticDiffs(episodeBuilder.build());
         assertEquals(2, semanticDiffs.size());
 
         assertEquals(2, semanticDiffs.get(0).diff().size());
@@ -178,7 +179,7 @@ public class JavaFileSemanticDiffing {
 
     }
 
-    void writeCodeTailFile(String checksum, String value) {
+    public static void writeCodeTailFile(String checksum, String value, File dir) {
         try {
             Files.write(Paths.get(dir.getAbsolutePath() + "/" + checksum), value.getBytes());
         }

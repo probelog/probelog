@@ -56,7 +56,7 @@ public class ChangeMaker {
         return createStringWithLineSeparatorDelimiters(strings);
     }
 
-    static String createStringWithLineSeparatorDelimiters(String... strings) {
+    public static String createStringWithLineSeparatorDelimiters(String... strings) {
         return createStringWithLineSeparatorDelimiters(asList(strings));
     }
 

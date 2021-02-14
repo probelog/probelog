@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.github.probelog.diff.DiffRowsFactory.*;
 
-public class HTMLFromFileSemanticDiffFactory {
+public class FileSemanticDiffHTMLExporter {
 
     public List<String> export(FileSemanticDiff semanticDiff) {
 

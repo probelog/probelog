@@ -17,6 +17,7 @@ public class EpisodeSummaryHTMLExporter {
     private static final String htmlRed = "Red";
     private static final String htmlGreen = "Green";
     private static final String htmlOrange = "Orange";
+    public static final String codeTailNamePlaceHolder="$$codetailname";
 
     private static Map<Episode.Colour, String> htmlColoursMap = new HashMap<>();
 
@@ -74,16 +75,16 @@ public class EpisodeSummaryHTMLExporter {
 
     @NotNull
     private String episodeLink(Episode episode) {
-        return "<a href=\"$$codetailname-" + episode.index() + "\" style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + title(episode) + "</a>";
+        return "<a href=\"" + codeTailNamePlaceHolder +"-" + episode.index() + "\" style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + title(episode) + "</a>";
     }
 
     @NotNull
     private String siblingLink(Episode episode, boolean previous) {
-        return "<a href=\"$$codetailname-" + episode.index() + "\">" + (previous ? "prev" : "next") + "</a>";
+        return "<a href=\"" + codeTailNamePlaceHolder +"-" + episode.index() + "\">" + (previous ? "prev" : "next") + "</a>";
     }
 
     private String title(Episode episode) {
-        String title = episode.isRoot() ? "$$codetailname" : episode.title();
+        String title = episode.isRoot() ? codeTailNamePlaceHolder : episode.title();
         return doTitle(title) + doLength(episode);
     }
 

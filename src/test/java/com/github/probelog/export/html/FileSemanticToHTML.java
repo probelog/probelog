@@ -2,11 +2,6 @@ package com.github.probelog.export.html;
 
 import com.github.difflib.text.DiffRow;
 import com.github.probelog.diff.FileSemanticDiff;
-import com.github.probelog.episode.CodeTailFactory;
-import com.github.probelog.episode.Episode;
-import com.github.probelog.file.FileChangeEpisodeBuilder;
-import com.github.probelog.testrun.TestRunBuilder;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,7 +9,6 @@ import java.util.List;
 
 import static com.github.difflib.text.DiffRow.Tag.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 
 public class FileSemanticToHTML {
@@ -24,7 +18,7 @@ public class FileSemanticToHTML {
 
         FileSemanticDiff semanticDiff = new FileSemanticDiff("fileA");
         semanticDiff.setUnDiffable("File is Undiffable");
-        List<String> html = new HTMLFromFileSemanticDiffFactory().export(semanticDiff);
+        List<String> html = new FileSemanticDiffHTMLExporter().export(semanticDiff);
         assertEquals(asList("<p></p>",
                 "<p>fileA</p>",
                 "<p></p>",
@@ -44,7 +38,7 @@ public class FileSemanticToHTML {
         diffRows.add(new DiffRow(INSERT,"~~I~~line5~~I~~","ignored"));
         semanticDiff.setDiff(diffRows);
 
-        List<String> html = new HTMLFromFileSemanticDiffFactory().export(semanticDiff);
+        List<String> html = new FileSemanticDiffHTMLExporter().export(semanticDiff);
         assertEquals(asList("<p></p>",
                 "<p>fileA</p>",
                 "<p></p>",
