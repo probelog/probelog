@@ -39,7 +39,7 @@ public class EpisodeToHTML {
     @After
     public void tearDown() {
 
-        delete(dir);
+        //delete(dir);
 
     }
 

@@ -3,6 +3,7 @@ package com.github.probelog.export.html;
 import com.github.difflib.algorithm.DiffException;
 import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
+import com.github.probelog.episode.CodeTailFactory;
 import com.github.probelog.file.FileChange;
 import com.github.probelog.file.FileState;
 import com.github.probelog.file.State;
@@ -21,13 +22,22 @@ public class TestRunExporter {
 
     private TestRunBuilder testRunBuilder;
     private FileUtil fileUtil;
+    private EpisodeHTMLExporter episodeHTMLExporter;
+    private CodeTailFactory codeTailFactory;
 
     public TestRunExporter(TestRunBuilder testRunBuilder, FileUtil fileUtil) {
         this.testRunBuilder = testRunBuilder;
         this.fileUtil = fileUtil;
+        episodeHTMLExporter = new EpisodeHTMLExporter("/Users/dave.halpin/codetails/",
+                new FileChangeEpisodeHTMLExporter(fileUtil));
+        codeTailFactory = new CodeTailFactory(testRunBuilder);
     }
 
     public void export() {
+        episodeHTMLExporter.export("BubbleSort", codeTailFactory.createCodeTail());
+    }
+
+    public void export1() {
 
         TestRun testRun = testRunBuilder.top();
         System.out.println((testRun.isFail() ? " FAIL " : " PASS ") + "<br>");

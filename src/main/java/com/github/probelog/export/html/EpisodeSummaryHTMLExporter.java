@@ -1,7 +1,6 @@
 package com.github.probelog.export.html;
 
 import com.github.probelog.episode.Episode;
-import com.github.probelog.file.FileChange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class EpisodeSummaryHTMLExporter {
     private static final String htmlRed = "Red";
     private static final String htmlGreen = "Green";
     private static final String htmlOrange = "Orange";
-    public static final String codeTailNamePlaceHolder="$$codetailname";
+    public static final String codeTailNamePlaceHolder="~~codetailname~~";
 
     private static Map<Episode.Colour, String> htmlColoursMap = new HashMap<>();
 
@@ -75,12 +74,16 @@ public class EpisodeSummaryHTMLExporter {
 
     @NotNull
     private String episodeLink(Episode episode) {
-        return "<a href=\"" + codeTailNamePlaceHolder +"-" + episode.index() + "\" style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + title(episode) + "</a>";
+        return "<a href=\"" + codeTailNamePlaceHolder +"-" + getLinkSuffix(episode) + "\" style=\"color:" + htmlColoursMap.get(episode.colour()) + ";\">" + title(episode) + "</a>";
     }
 
     @NotNull
     private String siblingLink(Episode episode, boolean previous) {
-        return "<a href=\"" + codeTailNamePlaceHolder +"-" + episode.index() + "\">" + (previous ? "prev" : "next") + "</a>";
+        return "<a href=\"" + codeTailNamePlaceHolder +"-" + getLinkSuffix(episode) + "\">" + (previous ? "prev" : "next") + "</a>";
+    }
+
+    private String getLinkSuffix(Episode episode) {
+        return episode.index() + ".html";
     }
 
     private String title(Episode episode) {

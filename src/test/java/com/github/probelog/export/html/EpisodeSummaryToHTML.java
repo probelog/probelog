@@ -42,11 +42,11 @@ public class EpisodeSummaryToHTML {
 
         List<String> html = new EpisodeSummaryHTMLExporter().export(root);
         assertEquals(asList("<header>",
-                "<h1 style=\"color:Red;\">$$codetailname (2)</h1>",
+                "<h1 style=\"color:Red;\">~~codetailname~~ (2)</h1>",
                 "</header>",
-                "<p><a href=\"$$codetailname-1-1\" style=\"color:Green;\">Step</a></p>",
-                "<p><a href=\"$$codetailname-1-2\" style=\"color:Orange;\">test1, test2</a></p>",
-                "<p><a href=\"$$codetailname-1-3\" style=\"color:Red;\">test1, test2</a></p>"), html);
+                "<p><a href=\"~~codetailname~~-1-1.html\" style=\"color:Green;\">Step</a></p>",
+                "<p><a href=\"~~codetailname~~-1-2.html\" style=\"color:Orange;\">test1, test2</a></p>",
+                "<p><a href=\"~~codetailname~~-1-3.html\" style=\"color:Red;\">test1, test2</a></p>"), html);
 
     }
 
@@ -55,11 +55,11 @@ public class EpisodeSummaryToHTML {
 
         List<String> html = new EpisodeSummaryHTMLExporter().export(middleChild);
         assertEquals(asList("<header>",
-                "<h1 style=\"color:Orange;\"><a href=\"$$codetailname-1\" style=\"color:Red;\">$$codetailname (2)</a>test1, test2</h1>",
+                "<h1 style=\"color:Orange;\"><a href=\"~~codetailname~~-1.html\" style=\"color:Red;\">~~codetailname~~ (2)</a>test1, test2</h1>",
                 "</header>",
-                "<p><a href=\"$$codetailname-1-1\">prev</a>   <a href=\"$$codetailname-1-3\">next</a></p>",
-                "<p><a href=\"$$codetailname-1-2-1\" style=\"color:Red;\">test1, test2</a></p>",
-                "<p><a href=\"$$codetailname-1-2-2\" style=\"color:Green;\">test1, test2</a></p>"), html);
+                "<p><a href=\"~~codetailname~~-1-1.html\">prev</a>   <a href=\"~~codetailname~~-1-3.html\">next</a></p>",
+                "<p><a href=\"~~codetailname~~-1-2-1.html\" style=\"color:Red;\">test1, test2</a></p>",
+                "<p><a href=\"~~codetailname~~-1-2-2.html\" style=\"color:Green;\">test1, test2</a></p>"), html);
 
     }
 
@@ -68,9 +68,9 @@ public class EpisodeSummaryToHTML {
 
         List<String> html = new EpisodeSummaryHTMLExporter().export(landing);
         assertEquals(asList("<header>",
-                "<h1 style=\"color:Green;\"><a href=\"$$codetailname-1\" style=\"color:Red;\">$$codetailname (2)</a>/<a href=\"$$codetailname-1-2\" style=\"color:Orange;\">test1, test2</a>test1, test2</h1>",
+                "<h1 style=\"color:Green;\"><a href=\"~~codetailname~~-1.html\" style=\"color:Red;\">~~codetailname~~ (2)</a>/<a href=\"~~codetailname~~-1-2.html\" style=\"color:Orange;\">test1, test2</a>test1, test2</h1>",
                 "</header>",
-                "<p><a href=\"$$codetailname-1-2-1\">prev</a>   </p>"), html);
+                "<p><a href=\"~~codetailname~~-1-2-1.html\">prev</a>   </p>"), html);
 
     }
 
