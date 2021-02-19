@@ -25,7 +25,7 @@ class EpisodeAggregate extends AbstractEpisode {
 
     @Override
     public Type type() {
-        return (hasChildWithType(RUN) || hasChildWithType(STUMBLE)) ? CODE_TAIL :  failingTestRunsCount() >= 2 ? STUMBLE : hasTwoChildren() && firstChildIsAFailedTest() ? JUMP : RUN;
+        return (hasChildWithType(RUN) || hasChildWithType(STUMBLE)) ? CODE_TAIL :  firstAndSecondChildrenAreFailedTests() ? STUMBLE : hasTwoChildren() && firstChildIsAFailedTest() ? JUMP : RUN;
     }
 
     private boolean hasChildWithType(Type type) {
@@ -36,8 +36,16 @@ class EpisodeAggregate extends AbstractEpisode {
         return false;
     }
 
+    private boolean firstAndSecondChildrenAreFailedTests() {
+        return childIsAFailedTest(0) && childIsAFailedTest(1);
+    }
+
     private boolean firstChildIsAFailedTest() {
-        return children.get(0).type() == STEP && children.get(0).failingTestRunsCount() == 1;
+        return childIsAFailedTest(0);
+    }
+
+    private boolean childIsAFailedTest(int index) {
+        return children.get(index).type() == STEP && children.get(index).failingTestRunsCount() == 1;
     }
 
     private boolean hasTwoChildren() {

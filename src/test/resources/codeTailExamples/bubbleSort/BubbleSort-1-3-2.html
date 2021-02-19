@@ -1,0 +1,16 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-3.html" style="color:Green;">Run</a>/Step</h1>
+</header>
+<p><a href="BubbleSort-1-3-1.html"><<<</a>   </p>
+<p></p>
+<p>Sorting</p>
+<pre>
+@Test
+public void sortNumbers() {
+<b>    assertEquals(asList(1, 2), Sorter.sort(1, 2));</b>
+    assertEquals(asList(1, 2), Sorter.sort(2, 1));
+    assertEquals(asList(<s>3, 4), Sorter.sort(4, 3));
+    assertEquals(asList(3, 4), Sorter.sort(3, 4));
+    assertEquals(asList(<s>1, 2, 3</s>, 4, 5<s>), Sorter.sort(2, 1, 3</s>, 4, 5<s>));
+}
+</pre>

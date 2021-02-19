@@ -37,7 +37,7 @@ public class EpisodeHTMLExporter {
 
     private void writeFile(String codeTailName, String index, List<String> html) {
         try {
-            write(Paths.get(exportDir + codeTailName + "-" + index),html);
+            write(Paths.get(exportDir + codeTailName + "-" + index + ".html"),html);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

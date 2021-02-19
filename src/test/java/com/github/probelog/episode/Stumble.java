@@ -42,7 +42,12 @@ public class Stumble {
     @Test
     public void stumbleDoesNotStartWithAPass() {
 
-        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)-> addPass(runBuilder));
+        List<TestRun> testRuns = createTestRuns((fileChangeEpisodeBuilder, runBuilder)->{
+            addPass(runBuilder);
+            addFail(runBuilder, "fail1");
+            addFail(runBuilder, "fail2");
+            addPass(runBuilder);
+        });
 
         TestRunCursor cursor = new TestRunCursor(testRuns, 0);
         assertNull(new StumbleFinder().findEpisode(cursor));

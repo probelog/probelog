@@ -17,18 +17,31 @@ public class FileSemanticDiffHTMLExporter {
         List<String> result = new ArrayList<>();
 
         result.add("<p></p>");
-        result.add("<p>" + semanticDiff.fileName() + "</p>");
-        result.add("<p></p>");
+        result.add("<p>" + simpleName(semanticDiff.fileName()) + "</p>");
 
         if (semanticDiff.isUnDiffable())
             result.add("<p>" + semanticDiff.unDiffableMessage() + "</p>");
         else {
+            result.add("<pre>");
             for(DiffRow row: semanticDiff.diff())
-                result.add("<p>" + (replace(replace(row.getOldLine(), "<b>","</b>", INSERTED_DELIMITER, 0),
-                        "<s>","</s>", DELETED_DELIMITER, 0)) + "</p>");
+                result.add((replace(replace(row.getOldLine(), "<b>","</b>", INSERTED_DELIMITER, 0),
+                        "<s>","</s>", DELETED_DELIMITER, 0)));
+            result.add("</pre>");
         }
 
         return result;
+    }
+
+    private String simpleName(String fileName) {
+        return removePath(removeExtension(fileName));
+    }
+
+    private String removePath(String fileName) {
+        return fileName.contains("/") ? fileName.substring(fileName.lastIndexOf("/")+1) : fileName;
+    }
+
+    private String removeExtension(String fileName) {
+        return fileName.contains(".") ? fileName.substring(0,fileName.lastIndexOf(".")) : fileName;
     }
 
     private String replace(String line, String start, String end, String delimiter, int count) {

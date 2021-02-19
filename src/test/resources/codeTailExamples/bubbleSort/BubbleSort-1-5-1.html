@@ -1,0 +1,26 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
+</header>
+<p><a href="BubbleSort-1-5-2.html">>>></a></p>
+<p></p>
+<p>Sorter</p>
+<pre>
+public static List&lt;Integer&gt; sort(Integer... numbers) {
+    if (numbers[1] &lt; numbers[0]) {
+        <s>int temp = </s><b>swap(</b>numbers<s>[</s><b>, </b>1<s>];
+        numbers[1]<s><b>,</b> </s>= numbers[<s>0</s>]<s><b>)</b>;</s>
+        numbers[0] = temp;<s>
+    }
+    if (numbers.length &gt; 2 && numbers[2] &lt; numbers[1]) {
+        <s>int temp = </s><b>swap(</b>numbers<s>[</s><b>, </b>2<s>];
+        numbers[2]<s><b>,</b> </s>= numbers[<s>1</s>]<s><b>)</b>;</s>
+        numbers[1] = temp;<s>
+    }
+    return asList(numbers);
+}
+<b>private static void swap(Integer[] numbers, int i, int i2) {</b>
+<b>    int temp = numbers[i];</b>
+<b>    numbers[i] = numbers[i2];</b>
+<b>    numbers[i2] = temp;</b>
+<b>}</b>
+</pre>

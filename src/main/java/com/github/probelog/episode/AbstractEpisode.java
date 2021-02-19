@@ -60,14 +60,8 @@ public abstract class AbstractEpisode implements Episode {
     }
 
     @Override
-    public boolean hasLength() {
-        return type()==STUMBLE || type()==RUN;
-    }
-
-    @Override
     public int length() {
-        assert hasLength();
-        return type()==STUMBLE ? children().size()-1 : children().size();
+        return failingTestRunsCount() + passingTestRunsCount();
     }
 
     @Override

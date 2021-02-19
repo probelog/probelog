@@ -1,0 +1,21 @@
+<header>
+<h1 style="color:Red;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-4.html" style="color:Red;">Sorting.sortNumbers</a>/Sorting.sortNumbers</h1>
+</header>
+<p><a href="BubbleSort-1-4-1.html"><<<</a>   <a href="BubbleSort-1-4-3.html">>>></a></p>
+<p></p>
+<p>Sorter</p>
+<pre>
+public static List&lt;Integer&gt; sort(Integer... numbers) {
+    if (numbers[1] &lt; numbers[0]) {
+        int temp = numbers[1];
+        numbers[1] = numbers[0];
+        numbers[0] = temp;
+    }
+<b>    if (numbers[2] &lt; numbers[1]) {</b>
+<b>        int temp = numbers[2];</b>
+<b>        numbers[2] = numbers[1];</b>
+<b>        numbers[1] = temp;</b>
+<b>    }</b>
+    return asList(numbers);
+}
+</pre>

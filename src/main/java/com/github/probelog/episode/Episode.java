@@ -33,8 +33,6 @@ public interface Episode {
 
     String title();
 
-    boolean hasLength();
-
     int length();
 
     Episode previous();

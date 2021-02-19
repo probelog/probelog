@@ -29,6 +29,7 @@ public class CodeTail {
         testRunBuilder.testRun(allTests, failedTests);
         testRunBuilder.testRun(allTests, emptyList());
         testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, failedTests);
         testRunBuilder.testRun(allTests, emptyList());
         testRunBuilder.testRun(allTests, failedTests);
         testRunBuilder.testRun(allTests, failedTests);
@@ -78,7 +79,7 @@ public class CodeTail {
         assertEquals(RUN, run.type());
         assertEquals(GREEN, run.colour());
         assertEquals("Run", run.title());
-        assertEquals(4, run.length());
+        assertEquals(6, run.length());
         assertEquals(4, run.children().size());
 
     }
@@ -108,7 +109,7 @@ public class CodeTail {
         assertEquals(STUMBLE, stumble.type());
         assertEquals(RED, stumble.colour());
         assertEquals("test1, test2", stumble.title());
-        assertEquals(2, stumble.length());
+        assertEquals(3, stumble.length());
         assertEquals(3, stumble.children().size());
 
         Episode firstFailInStumble = stumble.children().get(0);

@@ -1,0 +1,18 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
+</header>
+<p><a href="BubbleSort-1-5-2.html"><<<</a>   <a href="BubbleSort-1-5-4.html">>>></a></p>
+<p></p>
+<p>Sorter</p>
+<pre>
+public static List&lt;Integer&gt; sort(Integer... numbers) {
+    if (needsSwap(numbers, 1, 0))<s> {</s>
+        swap(numbers, 1, 0);
+    <s>}
+    <s>if (numbers.length &gt; 2<b>)
+        if<b> <s>&& </s></b>(<b>needsSwap(numbers, 2, 1))<s> {</s>
+        swap(numbers, 2, 1);
+<s>    }</s>
+    return asList(numbers);
+}
+</pre>

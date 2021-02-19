@@ -21,7 +21,6 @@ public class FileSemanticToHTML {
         List<String> html = new FileSemanticDiffHTMLExporter().export(semanticDiff);
         assertEquals(asList("<p></p>",
                 "<p>fileA</p>",
-                "<p></p>",
                 "<p>File is Undiffable</p>"), html);
 
     }
@@ -29,7 +28,7 @@ public class FileSemanticToHTML {
     @Test
     public void diffableToHtml() {
 
-        FileSemanticDiff semanticDiff = new FileSemanticDiff("fileA");
+        FileSemanticDiff semanticDiff = new FileSemanticDiff("/path/path/fileA.Name.txt");
         List<DiffRow> diffRows = new ArrayList<>();
         diffRows.add(new DiffRow(EQUAL,"line1","ignored"));
         diffRows.add(new DiffRow(CHANGE,"line2","ignored"));
@@ -40,13 +39,14 @@ public class FileSemanticToHTML {
 
         List<String> html = new FileSemanticDiffHTMLExporter().export(semanticDiff);
         assertEquals(asList("<p></p>",
-                "<p>fileA</p>",
-                "<p></p>",
-                "<p>line1</p>",
-                "<p>line2</p>",
-                "<p>line3<s>remove1</s><b>insert1</b><s>remove2</s><b>insert2</b></p>",
-                "<p><s>line4</s></p>",
-                "<p><b>line5</b></p>"), html);
+                "<p>fileA.Name</p>",
+                "<pre>",
+                "line1",
+                "line2",
+                "line3<s>remove1</s><b>insert1</b><s>remove2</s><b>insert2</b>",
+                "<s>line4</s>",
+                "<b>line5</b>",
+                "</pre>"), html);
 
     }
 
