@@ -1,5 +1,5 @@
 <header>
-<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/Run</h1>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Green;">BubbleSort</a>/Run</h1>
 </header>
 <p><a href="BubbleSort-1-4.html"><<<</a>   </p>
 <p><a href="BubbleSort-1-5-1.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-2.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-3.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-4.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-5.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-6.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-7.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-8.html" style="color:Orange;">2</a> - <a href="BubbleSort-1-5-9.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-10.html" style="color:Green;">1</a> - <a href="BubbleSort-1-5-11.html" style="color:Green;">1</a></p>
@@ -18,22 +18,32 @@ public void sortNumbers() {
 <p></p>
 <p>Sorter</p>
 <pre>
-public static List&lt;Integer&gt; sort(Integer... numbers) {
-    <s>if</s><b>for</b> (<s>numbers[1]</s><b>int</b> <b>outer = 1; outer </b>&lt; numbers<s>[0]</s><b>.length; outer++</b>) <s>{
-        <s><b>for (</b>int </s>temp<s><b>inner</b> = <b>outer; inner &gt; 0; inner--) sortTwoNumbers(</b>numbers</s>[<s><b>, inner, inner - </b>1</s>]<s><b>)</b>;</s>
-        numbers[1]<s><b>
-    return<b> <s>= </s></b>asList(<b>numbers<s>[0]</s></b>)<b>;<s>
-        numbers[0] = temp;<s>
+public static List<Integer> sort(Integer... numbers) {
+    <s>if (numbers[1] < numbers[0]) {
+        int temp = numbers[1];
+        numbers[1] = numbers[0];
+        numbers[0] = temp;
     }
-<s>    if</s><b>private</b> <s>(numbers.length</s><b>static</b> <s>&gt;</s><b>void</b> <s>2 && numbers</s><b>sortTwoNumbers(Integer</b>[<s>2</s>] <s>&lt; </s>numbers<s>[1])</s><b>,</b> <s>{
-        <s>int </s>temp<s><b>higherPosition,</b> </s>=<s><b>int</b> <b>lowerPosition) {
-    if (<b>numbers[<s>2</s></b>higherPosition<b>]<s>;
-        numbers[2]<s> </s>=<s><b>&lt;</b> numbers[</s>1<s><b>lowerPosition</b>]</s>;<s><b>)</b>
-        <b>swapPlaces(</b>numbers<s>[1]</s><b>,</b> <s>=</s><b>higherPosition,</b> <s>temp;</s><b>lowerPosition);</b>
-    }
-<s>    return</s><b>private</b> <s>asList</s><b>static void swapPlaces</b>(<b>Integer[] </b>numbers<b>, int higherPosition, int lowerPosition</b>)<b> {
-    int temp = numbers[higherPosition]<b>;</b>
-    numbers[higherPosition] = numbers[lowerPosition];
-    numbers[lowerPosition] = temp;<b>
+    if (numbers.length > 2 && numbers[2] < numbers[1]) {
+        int temp = numbers[2];
+        numbers[2] = numbers[1];
+        numbers[1] = temp;
+    }</s>
+    <b>for (int outer = 1; outer < numbers.length; outer++) 
+        for (int inner = outer; inner > 0; inner--) 
+            sortTwoNumbers(numbers, inner, inner - 1);</b>
+    return asList(numbers);
 }
+
+<b>private static void sortTwoNumbers(Integer[] numbers, int higherPosition, int lowerPosition) {
+    if (numbers[higherPosition] < numbers[lowerPosition])
+        swapPlaces(numbers, higherPosition, lowerPosition);
+}
+
+private static void swapPlaces(Integer[] numbers, int higherPosition, int lowerPosition) {
+        int temp = numbers[higherPosition];
+        numbers[higherPosition] = numbers[lowerPosition];
+        numbers[lowerPosition] = temp;
+    }
+}</b>
 </pre>

@@ -9,6 +9,7 @@ import java.util.List;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DiffBuilderLearningTests {
 
@@ -135,6 +136,65 @@ public class DiffBuilderLearningTests {
         assertEquals("[CHANGE,~~D~~not blank~~D~~~~I~~ , ]", diffRows.get(0).toString());
         assertEquals("[CHANGE, , ]", diffRows.get(1).toString());
         assertEquals("[CHANGE, ~~I~~, ]", diffRows.get(2).toString());
+
+    }
+
+    @Test
+    public void inTheWild() {
+        /*
+        So write learning test for diffing these
+
+public static List<Integer> sort(Integer... numbers) {
+    List<Integer> result = new ArrayList<Integer>(asList(numbers));
+    if (numbers[1] < numbers[0]) {
+        result.remove(0);
+        result.remove(0);
+        result.add(0, numbers[1]);
+        result.add(1, numbers[0]);
+    }
+    return result;
+}
+
+
+public static List<Integer> sort(Integer... numbers) {
+    if (numbers[1] < numbers[0]) {
+        int temp = numbers[1];
+        numbers[1] = numbers[0];
+        numbers[0] = temp;
+    }
+    return asList(numbers);
+}
+         */
+
+        List<String> before = asList(
+                "public static List<Integer> sort(Integer... numbers) {",
+                "  List<Integer> result = new ArrayList<Integer>(asList(numbers));",
+                "  if (numbers[1] < numbers[0]) {",
+                "      result.remove(0);",
+                "      result.remove(0);",
+                "      result.add(0, numbers[1]);",
+                "      result.add(1, numbers[0]);",
+                "}",
+                "return result;",
+                "}"
+        );
+
+        List<String> after = asList(
+                "public static List<Integer> sort(Integer... numbers) {",
+                "    if (numbers[1] < numbers[0]) {",
+                "      int temp = numbers[1];",
+                "      numbers[1] = numbers[0];",
+                "      numbers[0] = temp;",
+                "}",
+                "return asList(numbers);",
+                "}"
+        );
+
+        List<DiffRow> rows = new DiffRowsFactory().generateDiffRows(before, after);
+
+        for (DiffRow row: rows) {
+            System.out.println(row);
+        }
 
     }
 

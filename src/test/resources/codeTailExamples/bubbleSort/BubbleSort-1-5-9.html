@@ -1,18 +1,21 @@
 <header>
-<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Green;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
 </header>
 <p><a href="BubbleSort-1-5-8.html"><<<</a>   <a href="BubbleSort-1-5-10.html">>>></a></p>
 <p></p>
 <p>Sorter</p>
 <pre>
 public static List&lt;Integer&gt; sort(Integer... numbers) {
-    <s>sortTwoNumbers</s><b>for </b>(<s>numbers,</s><b>int</b> <s>1,</s><b>outer</b> <s>0);
-    if<s><b>=</b> </s>(<s><b>1; outer &lt; </b>numbers.</s>length<s><b>length;</b> </s>&gt; 2<s><b>outer++</b>)<b> {</b>
-        <s>sortTwoNumbers</s><b>for </b>(<s>numbers,</s><b>int</b> <s>2,</s><b>inner</b> <s>1</s><b>= outer; inner &gt; 0; inner--</b>)<s>;
-    <s><b> {
-            <b>sortTwoNumbers(numbers, <s>1</s></b>inner<b>, <s>0</s></b>inner - 1<b>);</b>
-        }
-    }<b>
+
+    <s>sortTwoNumbers(numbers, 1, 0);
+    if (numbers.length &gt; 2)
+        sortTwoNumbers(numbers, 2, 1);
+      sortTwoNumbers(numbers, 1, 0);</s>
+    <b>for (int outer=1;outer&lt;numbers.length;outer++) {
+       for (int inner = outer; inner &gt; 0; inner--) {
+          sortTwoNumbers(numbers, inner, inner - 1);
+       }
+    }</b>
     return asList(numbers);
 }
 </pre>

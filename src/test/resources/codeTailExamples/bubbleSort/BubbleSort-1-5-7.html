@@ -1,18 +1,24 @@
 <header>
-<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Green;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
 </header>
 <p><a href="BubbleSort-1-5-6.html"><<<</a>   <a href="BubbleSort-1-5-8.html">>>></a></p>
 <p></p>
 <p>Sorter</p>
 <pre>
 private static void sortTwoNumbers(Integer[] numbers, int higherPosition, int lowerPosition) {
-    if (numbers[higherPosition] &lt; numbers[lowerPosition])<b>
+
+    <s>if (number[higherPosition] &lt; numbers[lowerPosition]) {
+        int temp = numbers[higherPosition];
+        numbers[higherPosition= numbers[lowerPosition];
+        numbers[lowerPosition] = temp;
+    }</s>
+    <b>if (numbers[higherPosition] &lt; numbers[lowerPosition])
         swapPlaces(numbers,<b> </b>higherPosition, lowerPosition);<b>
-<b>}</b>
-<b>private static void swapPlaces(Integer[] numbers, int higherPosition, int lowerPosition) </b>{
+}
+<b>private static void swapPlaces(Integer[] numbers, int higherPosition, int lowerPosition) {
         int temp = numbers[higherPosition];
         numbers[higherPosition] = numbers[lowerPosition];
         numbers[lowerPosition] = temp;
     }
-<s>}</s>
+}</b>
 </pre>

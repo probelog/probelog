@@ -1,23 +1,28 @@
 <header>
-<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Red;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
+<h1 style="color:Green;"><a href="BubbleSort-1.html" style="color:Green;">BubbleSort</a>/<a href="BubbleSort-1-5.html" style="color:Green;">Run</a>/Step</h1>
 </header>
 <p><a href="BubbleSort-1-5-3.html"><<<</a>   <a href="BubbleSort-1-5-5.html">>>></a></p>
 <p></p>
 <p>Sorter</p>
 <pre>
 public static List&lt;Integer&gt; sort(Integer... numbers) {
-    <s>if </s><b>sortTwoNumbers</b>(<s>needsSwap(</s>numbers, 1, 0)<s>)
-        swap(numbers, 1, 0)<s>;
-    if (numbers.length &gt; 2)
-        if (needsSwap(numbers, 2, 1))
-            swap(numbers, 2, 1);
+
+    <s>if (needsSwap(numbers, 1, 0)) {
+        swap(numbers, 1, 0);
+    }</s>
+    <b>sortTwoNumbers(numbers, 1, 0)</b>
+
+    if (numbers.length &gt; 2) 
+      if (needsSwap(numbers, 2, 1)) {
+          swap(numbers, 2, 1);
+      }
     return asList(numbers);
+
 }
-private static <s>boolean</s><b>void</b> <s>needsSwap</s><b>sortTwoNumbers</b>(Integer[] numbers, int <s>i</s><b>higherPosition</b>, int <s>i2</s><b>lowerPosition</b>) {
-    <s>return</s><b>if</b> <b>(needsSwap(</b>numbers<s>[i]</s><b>,</b> <s>&lt;</s><b>higherPosition,</b> <b>lowerPosition))
-        swap(<b>numbers<s>[i2]</s></b>, higherPosition, lowerPosition)<b>;
-}
-<b>private static boolean needsSwap(Integer[] numbers, int num2position, int num1position) {</b>
-<b>    return numbers[num2position] &lt; numbers[num1position];</b>
-<b>}</b>
+
+<b>private static void sortTwoNumbers(Integer[] numbers, int higherPosition, int lowerPosition) {
+    if (needsSwap(numbers, higherPosition, lowerPosition))
+        swap(numbers, higherPosition, lowerPosition);
+}</b>
+
 </pre>
