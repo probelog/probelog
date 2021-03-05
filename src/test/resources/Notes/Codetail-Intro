@@ -1,0 +1,13 @@
+Codetail - The Why and What
+
+I think it would be very useful to be able to at glance pick out the kinks in a programming session, the points at which
+i struggled, where the tests stubbornly stayed red for a bit too long.  Maybe I took a wrong turn at this point - persisted in adding in behaviour
+when I should have taken time to refactor, or missed a pattern or an idiom, it could even be i need to address some systemic flaw in the way in which I code ?
+
+We dont learn much from our victories, its our defeats, big and small, that give us the real chances to learn - but we need the wherewithall to recognize and fix the small
+mistakes and the capacity to face into and take apart the monsters of our creation - to coin a phrase - we need to crush our weaknesses.
+
+Time for an example....
+
+Here are the test run graphs from two programming sessions - both sessions tackled the exact same problem and produced very similar code
+at the end - but as can be seen from the graphs the first session looks wobblier than the second - why ?
