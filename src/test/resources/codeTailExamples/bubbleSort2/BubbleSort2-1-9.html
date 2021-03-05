@@ -1,0 +1,42 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort2-1.html" style="color:Green;">BubbleSort2</a>/Step</h1>
+</header>
+<p><a href="BubbleSort2-1-8.html"><<<</a>   <a href="BubbleSort2-1-10.html">>>></a></p>
+<p></p>
+<p>Sorting</p>
+<pre>
+@Test
+<s>public void sortingThreeNumbers() {</s>
+<b>public void sortingNumbers() {</b>
+<s>    assertEquals(asList(1, 2, 3), Sorter.sort(1, 2, 3));</s>
+<b></b>
+<s>    assertEquals(asList(1, 2, 3), Sorter.sort(2, 1, 3));</s>
+<b></b>
+<s>    assertEquals(asList(1, 2, 3), Sorter.sort(1, 3, 2));</s>
+<b></b>
+<s>    assertEquals(asList(1, 2, 3), Sorter.sort(3, 2, 1));</s>
+<b></b>
+<s>}</s>
+<b></b>
+<s>@Test</s>
+<b></b>
+<s>public void sortingFourNumbers() {</s>
+<b></b>
+    assertEquals(asList(1, 2, 3, 4), Sorter.sort(4, 3, 2, 1));
+}
+</pre>
+<p></p>
+<p>Sorter</p>
+<pre>
+static List&lt;Integer&gt; sort(Integer... numbers) {
+    sortTwoNeighbours(numbers, 0, 1);
+    sortTwoNeighbours(numbers, 1, 2);
+    sortTwoNeighbours(numbers, 0, 1);
+<s>    if (numbers.length == 4) {</s>
+        sortTwoNeighbours(numbers, 2, 3);
+        sortTwoNeighbours(numbers, 1, 2);
+        sortTwoNeighbours(numbers, 0, 1);
+<s>    }</s>
+    return asList(numbers);
+}
+</pre>

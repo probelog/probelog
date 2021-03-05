@@ -1,0 +1,20 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort2-1.html" style="color:Green;">BubbleSort2</a>/Step</h1>
+</header>
+<p><a href="BubbleSort2-1-9.html"><<<</a>   <a href="BubbleSort2-1-11.html">>>></a></p>
+<p></p>
+<p>Sorter</p>
+<pre>
+static List&lt;Integer&gt; sort(Integer... numbers) {
+    sortTwoNeighbours(numbers, 0, 1);
+    sortTwoNeighbours(numbers, 1, 2);
+    sortTwoNeighbours(numbers, 0, 1);
+<s>    sortTwoNeighbours(numbers, 2, 3);</s>
+<b>    for (int right = 3; right &gt; 0; right--) sortTwoNeighbours(numbers, right - 1, right);</b>
+<s>    sortTwoNeighbours(numbers, 1, 2);</s>
+<b></b>
+<s>    sortTwoNeighbours(numbers, 0, 1);</s>
+<b></b>
+    return asList(numbers);
+}
+</pre>

@@ -1,0 +1,19 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort2-1.html" style="color:Green;">BubbleSort2</a>/<a href="BubbleSort2-1-8.html" style="color:Orange;">Sorting.sortingFourNumbers</a>/Sorting.sortingFourNumbers</h1>
+</header>
+<p><a href="BubbleSort2-1-8-1.html"><<<</a>   </p>
+<p></p>
+<p>Sorter</p>
+<pre>
+static List&lt;Integer&gt; sort(Integer... numbers) {
+    sortTwoNeighbours(numbers, 0, 1);
+    sortTwoNeighbours(numbers, 1, 2);
+    sortTwoNeighbours(numbers, 0, 1);
+<b>    if (numbers.length == 4) {</b>
+<b>        sortTwoNeighbours(numbers, 2, 3);</b>
+<b>        sortTwoNeighbours(numbers, 1, 2);</b>
+<b>        sortTwoNeighbours(numbers, 0, 1);</b>
+<b>    }</b>
+    return asList(numbers);
+}
+</pre>
