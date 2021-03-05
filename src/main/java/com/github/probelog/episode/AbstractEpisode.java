@@ -56,7 +56,7 @@ public abstract class AbstractEpisode implements Episode {
     }
 
     public Colour colour() {
-        return type()==JUMP ? ORANGE : type()== RUN  || (isSafeStep()) ? GREEN : RED;
+        return type()==CODE_TAIL ? lastChild().colour() : type()==JUMP ? ORANGE : type()== RUN  || (isSafeStep()) ? GREEN : RED;
     }
 
     @Override

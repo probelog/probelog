@@ -14,10 +14,6 @@ import static java.nio.file.Files.write;
 
 public class EpisodeHTMLExporter {
 
-    //TODO
-    // Exports Episode and recursively calls itself to export episode children
-    // Write to html files
-
     private String exportDir;
     private EpisodeSummaryHTMLExporter episodeSummaryHTMLExporter = new EpisodeSummaryHTMLExporter();
     private FileChangeEpisodeHTMLExporter fileChangeEpisodeHTMLExporter;
@@ -51,7 +47,5 @@ public class EpisodeHTMLExporter {
         html.addAll(fileChangeEpisodeHTMLExporter.export(episode.change()));
         return html;
     }
-
-
 
 }

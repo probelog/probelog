@@ -81,6 +81,11 @@ class EpisodeAggregate extends AbstractEpisode {
     }
 
     @Override
+    public Episode lastChild() {
+        return children.get(children.size()-1);
+    }
+
+    @Override
     public int failingTestRunsCount() {
         int result=0;
         for (Episode child: children)

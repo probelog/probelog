@@ -45,6 +45,8 @@ public interface Episode {
 
     List<Episode> children();
 
+    Episode lastChild();
+
     int failingTestRunsCount();
 
     int passingTestRunsCount();

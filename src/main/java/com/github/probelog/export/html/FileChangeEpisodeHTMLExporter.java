@@ -11,7 +11,6 @@ import java.util.List;
 public class FileChangeEpisodeHTMLExporter {
 
     private EpisodeSemanticDiffFactory episodeSemanticDiffFactory;
-    private FileSemanticDiffHTMLExporter fileSemanticDiffHTMLExporter = new FileSemanticDiffHTMLExporter();
 
     public FileChangeEpisodeHTMLExporter(FileUtil fileUtil) {
         this.episodeSemanticDiffFactory=new EpisodeSemanticDiffFactory(fileUtil);
@@ -22,7 +21,7 @@ public class FileChangeEpisodeHTMLExporter {
         List<String> result = new ArrayList<>();
         List<FileSemanticDiff> semanticDiffs = episodeSemanticDiffFactory.getFileSemanticDiffs(fileChangeEpisode);
         for (FileSemanticDiff semanticDiff: semanticDiffs)
-            result.addAll(fileSemanticDiffHTMLExporter.export(semanticDiff));
+            result.addAll(semanticDiff.html());
         return result;
 
     }

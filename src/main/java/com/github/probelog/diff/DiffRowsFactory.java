@@ -11,16 +11,8 @@ import static java.util.Arrays.asList;
 
 public class DiffRowsFactory {
 
-    public static final String DELETED_DELIMITER = "~~D~~";
-    public static final String INSERTED_DELIMITER = "~~I~~";
-
     DiffRowGenerator diffRowGenerator = DiffRowGenerator.create()
-            .mergeOriginalRevised(true)
             .ignoreWhiteSpaces(true)
-            .showInlineDiffs(true)
-            .inlineDiffByWord(true)
-            .oldTag(f -> DELETED_DELIMITER)
-            .newTag(f -> INSERTED_DELIMITER)
             .build();
 
     List<DiffRow> generateDiffRows(List<String> before, List<String> after)  {

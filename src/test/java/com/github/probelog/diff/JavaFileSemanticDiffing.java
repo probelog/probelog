@@ -89,7 +89,7 @@ public class JavaFileSemanticDiffing {
         assertFalse(fileSemanticDiff.isUnDiffable());
         assertFalse(fileSemanticDiff.isTest());
         assertEquals(2, diffRows.size());
-        assertEquals("[CHANGE,public void parse(~~I~~String arg~~I~~) {,public void parse(String arg) {]", diffRows.get(0).toString());
+        assertEquals("[CHANGE,public void parse() {,public void parse(String arg) {]", diffRows.get(0).toString());
         assertEquals("[EQUAL,},}]", diffRows.get(1).toString());
 
     }
@@ -114,9 +114,9 @@ public class JavaFileSemanticDiffing {
         assertFalse(fileSemanticDiff.isUnDiffable());
         assertFalse(fileSemanticDiff.isTest());
         assertEquals(3, diffRows.size());
-        assertEquals("[INSERT,~~I~~line1~~I~~,line1]", diffRows.get(0).toString());
-        assertEquals("[INSERT,~~I~~line2~~I~~,line2]", diffRows.get(1).toString());
-        assertEquals("[INSERT,~~I~~line3~~I~~,line3]", diffRows.get(2).toString());
+        assertEquals("[INSERT,,line1]", diffRows.get(0).toString());
+        assertEquals("[INSERT,,line2]", diffRows.get(1).toString());
+        assertEquals("[INSERT,,line3]", diffRows.get(2).toString());
 
     }
 

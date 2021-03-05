@@ -2,11 +2,13 @@ package com.github.probelog.episode;
 
 import com.github.probelog.file.FileChangeEpisodeBuilder;
 import com.github.probelog.testrun.TestRunBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
+import static com.github.probelog.episode.Episode.*;
 import static com.github.probelog.episode.Episode.Colour.*;
 import static com.github.probelog.episode.Episode.Type.*;
 import static com.github.probelog.file.ChangingStories.checkChange;
@@ -16,13 +18,15 @@ import static org.junit.Assert.*;
 
 public class CodeTail {
 
-    Episode codeTail, run, stumble, jump, step;
+    private Episode codeTail, run, stumble, jump, step;
+    private List<String> allTests;
+    private List<String> failedTests;
 
     @Before
     public void setUp() {
 
-        List<String> allTests = asList("test1", "test2","test3");
-        List<String> failedTests = asList("test1","test2");
+        allTests = asList("test1", "test2","test3");
+        failedTests = asList("test1","test2");
 
         TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
         testRunBuilder.testRun(allTests, emptyList());
@@ -48,7 +52,7 @@ public class CodeTail {
     public void codeTail() {
 
         assertEquals(CODE_TAIL, codeTail.type());
-        assertEquals(RED, codeTail.colour());
+        assertEquals(GREEN, codeTail.colour());
         assertTrue(codeTail.hasChildren());
         assertEquals("1", codeTail.index());
         assertEquals(3, codeTail.children().size());
@@ -141,6 +145,33 @@ public class CodeTail {
 
         assertNull(new CodeTailFactory(new TestRunBuilder(new FileChangeEpisodeBuilder())).createCodeTail());
 
+    }
+
+    @Test
+    public void codeTailTakesOnColourOfLastChild() {
+
+        TestRunBuilder testRunBuilder = new TestRunBuilder(new FileChangeEpisodeBuilder());
+
+        testRunBuilder.testRun(allTests, emptyList());
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, emptyList());
+        checkCodeTailColour(testRunBuilder, RED);
+
+        testRunBuilder.testRun(allTests, failedTests);
+        testRunBuilder.testRun(allTests, emptyList());
+        checkCodeTailColour(testRunBuilder, ORANGE);
+
+        testRunBuilder.testRun(allTests, emptyList());
+        checkCodeTailColour(testRunBuilder, GREEN);
+
+    }
+
+    @NotNull
+    private void checkCodeTailColour(TestRunBuilder testRunBuilder, Colour colour) {
+        codeTail = new CodeTailFactory(testRunBuilder).createCodeTail();
+        assertEquals(CODE_TAIL,codeTail.type());
+        assertEquals(colour, codeTail.colour());
     }
 
 }

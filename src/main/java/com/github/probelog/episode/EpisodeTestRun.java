@@ -41,6 +41,11 @@ class EpisodeTestRun extends AbstractEpisode {
     }
 
     @Override
+    public Episode lastChild() {
+        throw new IllegalStateException();
+    }
+
+    @Override
     public int failingTestRunsCount() {
         return subject.isFail() ? 1 : 0;
     }
