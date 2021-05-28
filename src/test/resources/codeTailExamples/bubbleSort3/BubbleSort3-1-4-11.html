@@ -1,0 +1,13 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort3-1.html" style="color:Green;">BubbleSort3</a>/<a href="BubbleSort3-1-4.html" style="color:Green;">Run</a>/Step</h1>
+</header>
+<p><a href="BubbleSort3-1-4-10.html"><<<</a>   <a href="BubbleSort3-1-4-12.html">>>></a></p>
+<p></p>
+<p>Sorter</p>
+<pre>
+public static void sort(List&lt;Integer&gt; numbers) {
+    for (int i = 1; i &lt; numbers.size(); i++) sort(numbers, i - 1, i);
+<s>    sort(numbers, 0, 1);</s>
+<b>    for (int i = 1; i &lt; numbers.size() - 1; i++) sort(numbers, i - 1, i);</b>
+}
+</pre>

@@ -1,0 +1,23 @@
+<header>
+<h1 style="color:Green;"><a href="BubbleSort3-1.html" style="color:Green;">BubbleSort3</a>/<a href="BubbleSort3-1-4.html" style="color:Green;">Run</a>/Step</h1>
+</header>
+<p><a href="BubbleSort3-1-4-1.html"><<<</a>   <a href="BubbleSort3-1-4-3.html">>>></a></p>
+<p></p>
+<p>Sorting</p>
+<pre>
+@After
+public void threeNumbersAreSorted() {
+<b>    Sorter.sort(threeNumbers);</b>
+    assertEquals(asList(1, 2, 3), threeNumbers);
+}
+@Test
+public void sort_213() {
+    threeNumbers = createModifiableList(2, 1, 3);
+<s>    Sorter.sort(threeNumbers);</s>
+}
+@Test
+public void sort_123() {
+    threeNumbers = createModifiableList(1, 2, 3);
+<s>    Sorter.sort(threeNumbers);</s>
+}
+</pre>
