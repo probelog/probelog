@@ -34,7 +34,7 @@ public class TestRunExporter {
     }
 
     public void export() {
-        episodeHTMLExporter.export("BubbleSort3", codeTailFactory.createCodeTail());
+        episodeHTMLExporter.export("BubbleSort", codeTailFactory.createCodeTail());
     }
 
     public void export1() {
